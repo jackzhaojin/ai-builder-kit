@@ -1,0 +1,16 @@
+{
+  "name": "ai-builder-kit",
+  "owner": { "name": "jackzhaojin" },
+  "plugins": [
+    {
+      "name": "hlx-admin-api-executor-guarded",
+      "source": {
+        "source": "git-subdir",
+        "url": "jackzhaojin/ai-builder-kit",
+        "path": "plugins/hlx-admin-api-executor-guarded"
+      },
+      "description": "AEM EDS Admin API executor with PreToolUse guardrails that block destructive curl commands to admin.hlx.page",
+      "version": "1.0.0"
+    }
+  ]
+}
