@@ -1,0 +1,11 @@
+# Sensitive authentication tokens
+auth-token.sh
+*.token
+*.key
+
+# Environment-specific config
+.env.local
+.env.*.local
+
+# Response files with sensitive data (optional - review before adding)
+# execution-files/*.json
