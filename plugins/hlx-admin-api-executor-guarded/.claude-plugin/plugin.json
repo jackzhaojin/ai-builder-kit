@@ -1,0 +1,8 @@
+{
+  "name": "hlx-admin-api-executor-guarded",
+  "description": "AEM Edge Delivery Services (Helix 5) Admin API executor with enforced guardrails. Bundles the hlx-admin-api-executor skill with a PreToolUse hook that intercepts destructive curl commands (POST/PUT/DELETE/PATCH) targeting admin.hlx.page and blocks execution until the user explicitly approves.",
+  "version": "1.0.0",
+  "author": {
+    "name": "jackzhaojin"
+  }
+}
