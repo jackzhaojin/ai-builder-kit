@@ -1,0 +1,11 @@
+# Local
+local-only/
+
+# IDE
+*.code-workspace
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
