@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # guard-admin-api.sh
-# PreToolUse hook: blocks curl POST/PUT/DELETE/PATCH to admin.hlx.page
-# Returns deny decision so Claude Code prompts user for confirmation.
+# PreToolUse hook: guards curl POST/PUT/DELETE/PATCH to admin.hlx.page
+# Returns "ask" decision so Claude Code prompts user for yes/no approval.
 #
 # Fails open: if parsing fails, the command is allowed through.
 
@@ -36,13 +36,16 @@ fi
 if [ "$IS_DESTRUCTIVE" = true ]; then
   METHOD=$(echo "$COMMAND" | grep -oiE '(--request|-X)\s+(POST|PUT|DELETE|PATCH)' | head -1 | awk '{print toupper($NF)}')
 
+  # Extract the URL target for the reason message
+  URL_TARGET=$(echo "$COMMAND" | grep -oiE '(admin\.hlx\.page|BASE_URL)[^ ]*' | head -1)
+
   cat <<EOF
 {
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
-    "permissionDecision": "deny"
-  },
-  "systemMessage": "[HLX Admin API Guard] Blocked ${METHOD} request to admin.hlx.page. Present the Change Justification (WHY/WHAT/HOW) as described in the skill workflow, then ask for explicit user approval before retrying."
+    "permissionDecision": "ask",
+    "permissionDecisionReason": "[HLX Admin API Guard] ${METHOD} request to ${URL_TARGET:-admin.hlx.page}. This is a destructive admin API operation. Approve?"
+  }
 }
 EOF
   exit 0
