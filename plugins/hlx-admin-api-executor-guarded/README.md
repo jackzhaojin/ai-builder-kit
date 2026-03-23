@@ -1,39 +1,91 @@
 # hlx-admin-api-executor-guarded
 
-AEM Edge Delivery Services (Helix 5) Admin API executor with enforced guardrails.
+A [Claude Code plugin](https://docs.anthropic.com/en/docs/claude-code) for executing AEM Edge Delivery Services (Helix 5) Admin API operations with enforced guardrails.
 
 ## What This Does
 
-Bundles the `hlx-admin-api-executor` skill with a `PreToolUse` hook that **blocks** any destructive `curl` command targeting `admin.hlx.page` before it executes. Claude must present a Change Justification (WHY/WHAT/HOW) and get explicit user approval before the command can run.
+Bundles two things into a single installable plugin:
 
-## Plugin vs Standalone Skill
+1. **`hlx-admin-api-executor` skill** — interactive workflow for planning, executing, and documenting Admin API operations one step at a time (GET/SET/GET pattern, full request/response traceability)
+2. **PreToolUse guard hook** — intercepts any destructive `curl` command targeting `admin.hlx.page` and requires explicit user approval before execution
 
-| | Standalone Skill | This Plugin |
-|---|---|---|
-| Workflow guidance | Yes | Yes |
-| Endpoint reference | Yes | Yes |
-| Execution templates | Yes | Yes |
-| **Enforced guardrails** | No (soft instructions only) | **Yes (PreToolUse hook)** |
+The skill provides the workflow structure. The hook enforces it — destructive operations are blocked at the tool level regardless of what the model decides.
 
-Use the **standalone skill** when you trust the workflow instructions alone.
-Use this **plugin** when you want deterministic enforcement — destructive operations are blocked at the tool level regardless of what the model decides.
+## What Gets Guarded
 
-## What Gets Blocked
+Any `Bash` tool call containing:
+- `curl` with `--request` or `-X` set to **POST**, **PUT**, **DELETE**, or **PATCH**
+- Targeting `admin.hlx.page` or `${BASE_URL}`
 
-Any `Bash` command containing:
-- `curl` with `--request` or `-X` set to `POST`, `PUT`, `DELETE`, or `PATCH`
-- Targeting `admin.hlx.page` or `${BASE_URL}` (the standard env var from the skill's `.env-setup.sh`)
-
-GET requests are never blocked.
+GET requests pass through without prompting. The hook fails open — if JSON parsing fails, the command is allowed.
 
 ## Installation
 
-```bash
-claude plugin add /path/to/hlx-admin-api-executor-guarded
+### From the ai-builder-kit marketplace
+
+Add the marketplace to your Claude Code settings (global `~/.claude/settings.json`):
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "ai-builder-kit": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/jackzhaojin/ai-builder-kit.git"
+      }
+    }
+  }
+}
 ```
 
-Or copy the entire directory into your project's `.claude/plugins/`.
+Then install via the Claude Code UI:
+
+```
+/plugin
+```
+
+Select **Discover**, find `hlx-admin-api-executor-guarded`, and install. Run `/reload-plugins` to activate.
+
+### From a local clone
+
+```bash
+claude plugin add /path/to/ai-builder-kit/plugins/hlx-admin-api-executor-guarded
+```
+
+## Usage
+
+Invoke the skill with:
+
+```
+/hlx-admin-api-executor-guarded:hlx-admin-api-executor
+```
+
+Or describe what you want to do and Claude will pick it up automatically when working with the AEM Admin API.
+
+The skill guides you through:
+- Planning operations with full endpoint details
+- Executing one API call at a time with human review
+- Documenting every request/response in an `EXECUTION.md` log
+- Verifying changes with the GET/SET/GET pattern
 
 ## Requirements
 
-- `python3` (used by the guard hook for JSON parsing; ships on macOS and most Linux)
+- `jq` (used by the guard hook for JSON parsing)
+- `curl` (for API requests)
+- An AEM Admin API auth token (see skill instructions for setup)
+
+## Plugin Structure
+
+```
+hlx-admin-api-executor-guarded/
+  .claude-plugin/
+    plugin.json
+  hooks/
+    hooks.json          # PreToolUse hook registration
+    guard-admin-api.sh  # Guard script
+  skills/
+    hlx-admin-api-executor/
+      SKILL.md          # Skill instructions
+      assets/           # Templates for execution logs, env setup, auth
+      references/       # Full endpoint catalog
+```
