@@ -7,18 +7,10 @@
 
 set -euo pipefail
 
-INPUT=$(cat)
-
-# Extract command from tool_input using python3 (ships on macOS/Linux)
-COMMAND=$(echo "$INPUT" | python3 -c "
-import sys, json
-data = json.load(sys.stdin)
-print(data.get('tool_input', {}).get('command', ''))
-" 2>/dev/null || echo "")
+COMMAND=$(jq -r '.tool_input.command // ""')
 
 # If extraction failed, allow (fail-open)
 if [ -z "$COMMAND" ]; then
-  echo '{}'
   exit 0
 fi
 
@@ -35,22 +27,20 @@ fi
 
 if [ "$IS_DESTRUCTIVE" = true ]; then
   METHOD=$(echo "$COMMAND" | grep -oiE '(--request|-X)\s+(POST|PUT|DELETE|PATCH)' | head -1 | awk '{print toupper($NF)}')
-
-  # Extract the URL target for the reason message
   URL_TARGET=$(echo "$COMMAND" | grep -oiE '(admin\.hlx\.page|BASE_URL)[^ ]*' | head -1)
 
-  cat <<EOF
-{
-  "hookSpecificOutput": {
-    "hookEventName": "PreToolUse",
-    "permissionDecision": "ask",
-    "permissionDecisionReason": "[HLX Admin API Guard] ${METHOD} request to ${URL_TARGET:-admin.hlx.page}. This is a destructive admin API operation. Approve?"
-  }
-}
-EOF
+  jq -n \
+    --arg method "$METHOD" \
+    --arg target "${URL_TARGET:-admin.hlx.page}" \
+    '{
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "ask",
+        permissionDecisionReason: ("[HLX Admin API Guard] " + $method + " request to " + $target + ". This is a destructive admin API operation. Approve?")
+      }
+    }'
   exit 0
 fi
 
 # Not a destructive admin API call - allow
-echo '{}'
 exit 0
