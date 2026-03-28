@@ -1,12 +1,31 @@
 ---
 name: conversation-logger
-description: Log Claude Code conversation sessions with timestamps in structured markdown. Use when the user says "log this session", "convo log", or wants to create a record of prompts and responses for a project.
-context: fork
+description: "Log AI coding agent conversation sessions with timestamps in structured markdown. Supports Claude Code, OpenAI Codex CLI, and GitHub Copilot. Use when the user says 'log this session', 'convo log', or wants to create a record of prompts and responses for a project. Auto-detects which agent is running and reads timestamps from the correct history file."
+
 ---
 
 # Conversation Logger
 
-Log Claude Code sessions as timestamped markdown for project documentation.
+Log AI coding agent sessions as timestamped markdown for project documentation.
+
+## Agent Detection
+
+Detect the invoking agent to determine where history/timestamps live. Check in order:
+
+| Check | Agent | History Source |
+|-------|-------|---------------|
+| `$CLAUDECODE == 1` | Claude Code | `~/.claude/history.jsonl` |
+| `~/.codex/` directory exists | OpenAI Codex CLI | `~/.codex/history.jsonl` |
+| Neither | Unknown / Copilot | Fall back to `date` for current time |
+
+**Detection command:**
+```bash
+if [ "$CLAUDECODE" = "1" ]; then echo "claude-code"
+elif [ -d "$HOME/.codex" ]; then echo "codex"
+else echo "unknown"; fi
+```
+
+Record the detected agent in the log header as `**Agent**: {agent-name}`.
 
 ## Why This Skill Exists
 
@@ -52,16 +71,12 @@ Each prompt gets a timestamp at the H3 level:
 
 ## Timestamps — Use Real Data from History File
 
-**CRITICAL: Do NOT guess timestamps.** Claude Code records every user prompt with an exact millisecond timestamp in `~/.claude/history.jsonl`.
+**CRITICAL: Do NOT guess timestamps.** Read them from the detected agent's history file.
 
-### How to extract timestamps
+### Claude Code (`~/.claude/history.jsonl`)
 
-1. Read `~/.claude/history.jsonl` (one JSON object per line)
-2. Filter entries by the current `project` path (matches the working directory)
-3. For the current session, filter by the most recent `sessionId`
-4. Each entry has: `timestamp` (epoch ms), `display` (prompt text), `sessionId`, `project`
+One JSON object per line. Fields: `timestamp` (epoch ms), `display` (prompt text), `sessionId`, `project`.
 
-**Use this Bash command to extract timestamps for the current session:**
 ```bash
 tail -100 ~/.claude/history.jsonl | python3 -c "
 import sys, json
@@ -77,13 +92,45 @@ for line in sys.stdin:
 
 Replace `PROJECT_PATH_HERE` with the actual project path. Adjust `tail -100` if the session is longer.
 
+### OpenAI Codex CLI (`~/.codex/history.jsonl`)
+
+One JSON object per line. Fields: `ts` (epoch seconds), `session_id`, `text` (prompt text).
+
+```bash
+tail -100 ~/.codex/history.jsonl | python3 -c "
+import sys, json
+from datetime import datetime
+for line in sys.stdin:
+    d = json.loads(line)
+    ts = datetime.fromtimestamp(d['ts'])
+    prompt = d.get('text','')[:100].replace('\n',' ')
+    print(f'{ts.strftime(\"%I:%M %p\")}  {prompt}')
+"
+```
+
+**Note:** `history.jsonl` is only written in interactive mode. For headless (`codex exec`) sessions, read timestamps from session transcripts instead:
+
+```bash
+# Find the latest session transcript for today
+LATEST=$(ls -t ~/.codex/sessions/$(date +%Y/%m/%d)/rollout-*.jsonl 2>/dev/null | head -1)
+# Each line has ISO timestamp: {"timestamp":"2026-03-28T22:59:25Z","type":"response_item",...}
+# User prompts have payload.role == "user" and type == "response_item"
+```
+
+Codex session index: `~/.codex/session_index.jsonl`.
+
+### GitHub Copilot
+
+Copilot chat history is stored inside VS Code's internal `state.vscdb` SQLite databases under workspace storage paths. It is not exposed as standalone files. Extracting timestamps is possible but fragile — fall back to `date` for current time and note timestamps are approximate.
+
 ### Format
 
 Use 12-hour format with AM/PM: `(10:07 AM)`, `(2:15 PM)`
 
 ### Notes
-- AskUserQuestion responses (multiple-choice answers) are NOT in history.jsonl — only text prompts are recorded
-- If history.jsonl is unavailable or empty, fall back to calling `date` for the current time and note that earlier timestamps are approximate
+- AskUserQuestion responses (multiple-choice answers) are NOT in Claude Code's history.jsonl — only text prompts are recorded
+- Codex history may use different field names across versions — inspect the first line of the file if parsing fails
+- If history file is unavailable or empty, fall back to calling `date` for the current time and note that earlier timestamps are approximate
 
 ## What to Capture
 

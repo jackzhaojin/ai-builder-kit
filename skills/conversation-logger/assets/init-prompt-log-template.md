@@ -1,6 +1,7 @@
 # {Project Name} - Prompt Log
 
 **Date**: {YYYY-MM-DD}
+**Agent**: {claude-code / codex / copilot / unknown}
 **Status**: {Planning / In Progress / Complete} {emoji}
 **Deliverable**: [{deliverable-name}](./{deliverable-path})
 
