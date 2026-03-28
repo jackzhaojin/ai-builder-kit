@@ -62,6 +62,7 @@ find "{source_repo}" -path "*/src/prompts/*.md" 2>/dev/null
 ### Exclusions
 
 - `node_modules/`, `.git/`, `dist/`, `build/`, `output/`
+- `docs/` directories — these are integral project documentation, not AI-only docs. Even if AI-generated, they belong with the project and should never be harvested.
 - Files already in the knowledge repo
 - README.md files (public documentation, not AI docs)
 - `.env` files, lock files, generated files
@@ -177,3 +178,35 @@ Harvested: {today's date}"
 ```
 
 **Never run git push. Never run git commit automatically. Always stop here.**
+
+## Step 7: Offer source cleanup (after commit)
+
+**Only after the user has committed the harvest in the knowledge repo**, offer to clean up
+the source files. This is optional — the user decides.
+
+```
+Harvest committed. Would you like me to clean up the source AI docs?
+
+For each harvested file, I can:
+  - Delete it from the source repo (if it's NOT gitignored — will show in git diff)
+  - Leave gitignored files as-is (they're already hidden from git)
+
+I'll stage the deletions as a separate commit in the source repo for your review.
+You review the diff before committing. I never push.
+```
+
+**Cleanup rules:**
+- Only offer cleanup after the harvest is committed (not just staged)
+- Gitignored files (e.g., in `local-only/`): ask if user wants them deleted, but note they're already hidden from git
+- Non-gitignored files: delete and stage the removal as a new commit in the source repo
+- Never delete and harvest in the same commit — these are separate operations
+- Never push the cleanup commit — user reviews first
+- Present the list of files to be deleted before doing anything
+
+```bash
+# In the source repo, after user confirms:
+cd "{source_repo}"
+git rm "{file1}" "{file2}" ...
+git status
+# Show what will be committed, but DO NOT commit
+```

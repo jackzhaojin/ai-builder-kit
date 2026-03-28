@@ -90,6 +90,7 @@ For full README templates and frontmatter spec, see [references/taxonomy.md](ref
 5. Create project folder structure, write files with frontmatter
 6. Create/update README.md files at each level (1 level deep)
 7. Stage changes, show user the diff command — **stop before committing**
+8. After user commits harvest, offer to clean up source files (optional, separate commit)
 
 For detailed steps, scan patterns, and exclusion rules:
 see [references/repo-scan.md](references/repo-scan.md).
@@ -124,7 +125,8 @@ see [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
 ## Safety Rules
 
 - **Never push.** Never commit automatically. Always stop at staging.
-- **Never modify source files.** Read-only access to source repos.
+- **Never modify source files during harvest.** Read-only access to source repos during harvest.
+- **Cleanup is separate.** Only offer source file deletion after harvest is committed. Stage deletions as a separate commit in the source repo. Never push.
 - **Never silently overwrite.** Report every file action.
 - **Ask when uncertain.** Project, type, and title must be confirmed when ambiguous.
 
