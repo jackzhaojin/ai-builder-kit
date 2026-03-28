@@ -21,6 +21,11 @@ ls "{knowledge_repo}"
 
 If either doesn't exist, stop and tell the user clearly.
 
+**Determine project name** (in priority order):
+1. User-provided `project_name` parameter
+2. GitHub remote repo name: `git -C "{source_repo}" remote get-url origin` → extract repo name
+3. Fall back to local folder name
+
 ## Step 2: Discover AI documents
 
 Scan these locations (in priority order):
@@ -67,10 +72,14 @@ Wait for confirmation before copying.
 
 ## Step 3: Prepare the destination
 
+Only create type folders that will actually contain files. Do not create empty folders.
+
 ```bash
-mkdir -p "{knowledge_repo}/projects/{project_name}/specs"
-mkdir -p "{knowledge_repo}/projects/{project_name}/prompt-logs"
-mkdir -p "{knowledge_repo}/projects/{project_name}/working-docs"
+mkdir -p "{knowledge_repo}/projects/{project_name}"
+# Then for each type that has documents:
+mkdir -p "{knowledge_repo}/projects/{project_name}/specs"        # only if specs exist
+mkdir -p "{knowledge_repo}/projects/{project_name}/prompt-logs"  # only if prompt-logs exist
+mkdir -p "{knowledge_repo}/projects/{project_name}/working-docs" # only if working-docs exist
 mkdir -p "{knowledge_repo}/shared/skills"
 ```
 
@@ -79,13 +88,18 @@ mkdir -p "{knowledge_repo}/shared/skills"
 Follow the README templates in [taxonomy.md](taxonomy.md). Create missing READMEs;
 update existing ones by appending new entries (never remove existing entries).
 
+**Always update the Harvest Log** in the project README — append a new row with today's
+date, document counts by type, and the source. This lets re-runs see what was already
+harvested and when.
+
 ## Step 5: Copy and add frontmatter
 
 For each file:
 
-1. **Determine destination path**: `YYYY-MM-DD-{original-slug}.md`
+1. **Determine destination path**: `YYYY-MM-DD-{seq}-{original-slug}.md`
    - Use git commit date: `git log -1 --format="%as" -- "{file}"`
    - Fall back to today's date if no git history
+   - `{seq}` is a two-digit sequence number (`01`, `02`) for chronological ordering within the same date
 
 2. **Read the file content**
 

@@ -25,7 +25,7 @@ same output: classified, frontmattered markdown in a project-first taxonomy.
 |-----------|----------|---------|-------------|
 | `source_repo` | Mode 1 only | — | Path to the repo with AI docs |
 | `knowledge_repo` | No | `{source_repo}/../ai-knowledge` | Path to the private ai-knowledge repo |
-| `project_name` | No | Repo folder name (Mode 1) or ask user (Mode 2) | Project name in the taxonomy |
+| `project_name` | No | GitHub remote repo name (Mode 1) or ask user (Mode 2) | Project name in the taxonomy |
 
 For Mode 2 (ad-hoc), also determine `doc_type`, `title`, `source_tool`, and `why_private`
 from content or by asking the user. See [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
@@ -96,6 +96,7 @@ see [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
 | File already exists in destination | Compare dates — newer overwrites (with note), older skips |
 | Ambiguous file type | Default to `working-doc`, tell the user |
 | Monorepo with sub-projects | Ask: one project or separate projects? |
+| Multiple docs on same date | Use sequence numbers in filename (`01`, `02`) to preserve chronological order |
 | No git history for date | Use today's date, add `date_note` in frontmatter |
 | Binary files / images / PDFs | Skip, mention them, ask if user wants to handle separately |
 | Pasted content with no context | Ask project and type — don't assume |

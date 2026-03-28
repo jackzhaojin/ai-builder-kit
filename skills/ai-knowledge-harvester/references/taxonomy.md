@@ -77,7 +77,15 @@ If they say "just use a placeholder," infer from the source files.
 
 {one sentence: what makes this private — unpublished architecture, internal tooling, credentials, etc.}
 
+## Harvest Log
+
+| Date | Documents Added | Source |
+|------|----------------|--------|
+| YYYY-MM-DD | {N} specs, {N} prompt-logs, {N} working-docs | {source_repo or "ad-hoc"} |
+
 ## Contents
+
+Only list type folders that contain documents. Do not list empty folders.
 
 - `specs/` — Stable reference documents ({N} files)
 - `prompt-logs/` — Session transcripts ({N} files)
@@ -90,6 +98,13 @@ If they say "just use a placeholder," infer from the source files.
 
 ### Type folder READMEs (`specs/README.md`, `prompt-logs/README.md`, `working-docs/README.md`)
 
+Only create type folder READMEs when the folder contains documents. Do not create empty
+type folders or their READMEs.
+
+**Documents must be listed in chronological order.** This is critical for prompt logs
+where the sequence of sessions tells a story (e.g., a design chat precedes the build session).
+Include the `Source` column so readers can tell at a glance where each document came from.
+
 ```markdown
 # {Type Name}
 
@@ -97,9 +112,10 @@ If they say "just use a placeholder," infer from the source files.
 
 ## Documents
 
-| Date | Title | Status |
-|------|-------|--------|
-| YYYY-MM-DD | [{title}](./{filename}) | {status} |
+| # | Date | Title | Source | Status |
+|---|------|-------|--------|--------|
+| 1 | YYYY-MM-DD | [{title}](./{filename}) | claude-web | stable |
+| 2 | YYYY-MM-DD | [{title}](./{filename}) | claude-code | stable |
 ```
 
 Type descriptions:
@@ -123,7 +139,7 @@ tags: []
 why_private: {one phrase — e.g., "contains unpublished architecture decisions"}
 status: stable | active | archived
 source_repo: {github URL or local path — "n/a" for ad-hoc ingests}
-source_tool: {ad-hoc only: chatgpt | claude-web | clo-ai | copilot | other}
+source_tool: {always include: claude-code | claude-web | chatgpt | clo-ai | copilot | other}
 harvested: YYYY-MM-DD
 ---
 ```
@@ -133,15 +149,15 @@ harvested: YYYY-MM-DD
 | Field | Mode 1 (Repo Scan) | Mode 2 (Ad-Hoc Ingest) |
 |-------|---------------------|------------------------|
 | `source_repo` | GitHub URL or local path | `n/a` |
-| `source_tool` | Omit | Required — detect or ask |
+| `source_tool` | Detect or ask — always include (e.g., `claude-code` for CLI sessions) | Detect or ask — always include |
 | `date` | Git commit date (`git log -1 --format="%as"`) or today | Today's date |
 | `date_note` | Add if no git history: `"no git history — using harvest date"` | Not needed |
 | `status` | Infer: specs → `stable`, prompt-logs → `stable`, working-docs → `active` | Ask or infer |
 
 ### Filename format
 
-`YYYY-MM-DD-{slug}.md`
+`YYYY-MM-DD-{seq}-{slug}.md`
 
-- Use git commit date when available, otherwise today's date
-- Slug from original filename, kebab-cased
-- For ad-hoc ingests, derive slug from title
+- `YYYY-MM-DD` — git commit date when available, otherwise today's date
+- `{seq}` — two-digit sequence number for chronological ordering within the same date (e.g., `01`, `02`). When multiple documents share the same date, the sequence number ensures correct ordering. Use timestamps, file metadata, or ask the user to determine order.
+- `{slug}` — from original filename (kebab-cased) or derived from title for ad-hoc ingests
