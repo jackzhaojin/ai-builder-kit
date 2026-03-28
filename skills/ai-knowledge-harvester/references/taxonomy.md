@@ -170,6 +170,7 @@ why_private: {one phrase — e.g., "contains unpublished architecture decisions"
 status: stable | active | archived
 source_repo: {github URL or local path — "n/a" for ad-hoc ingests}
 source_tool: {always include: claude-code | claude-web | chatgpt | clo-ai | copilot | other}
+duplicate: {true only for CLAUDE.md/AGENTS.md — source file must remain in place. Omit otherwise.}
 harvested: YYYY-MM-DD
 ---
 ```

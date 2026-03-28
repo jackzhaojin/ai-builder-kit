@@ -59,14 +59,27 @@ find "{source_repo}" -path "*/prompts/*.md" 2>/dev/null
 find "{source_repo}" -path "*/src/prompts/*.md" 2>/dev/null
 ```
 
-### Exclusions
+### Exclusions — do NOT harvest
 
+**Integral project files** — if a file is instrumental to how the capability works, do not harvest it. The test: if you deleted it, would the project break or lose functionality?
+
+- `docs/` directories — integral project documentation, even if AI-generated
+- `src/prompts/` and other harness code — these are executable, not just documentation
+- Skill SKILL.md files that are actively loaded by agents — these are code, not docs
+- Config files, templates, assets that other code references
 - `node_modules/`, `.git/`, `dist/`, `build/`, `output/`
-- `docs/` directories — these are integral project documentation, not AI-only docs. Even if AI-generated, they belong with the project and should never be harvested.
 - Files already in the knowledge repo
 - README.md files (public documentation, not AI docs)
 - `.env` files, lock files, generated files
 - Files > 50MB
+
+### Noted exceptions — harvest as duplicates
+
+`CLAUDE.md` and `AGENTS.md` are the exception. They are both:
+- Instrumental to the project (Claude Code reads them at session start)
+- AI documentation worth preserving in the knowledge repo
+
+**Harvest these as duplicates** — copy them to ai-knowledge but NEVER delete them from the source repo. Mark them in frontmatter with `duplicate: true` so it's clear the source file must remain in place. These are noted exceptions, not the rule.
 
 ### Sub-project detection for monorepos
 
@@ -196,15 +209,16 @@ You review the diff before committing. I never push.
 ```
 
 **What to DELETE (safe to remove — duplicated in ai-knowledge):**
-- `ai-docs/` directories and all their contents — these are pure AI documentation
-- Standalone prompt log files outside `ai-docs/` (e.g., `skills-prompt-log.md`)
+- `ai-docs/` directories and all their contents — pure AI documentation with no runtime purpose
+- Standalone prompt log files outside `ai-docs/` that aren't referenced by anything
 
-**What to NEVER DELETE (integral project files):**
-- `CLAUDE.md` / `AGENTS.md` — Claude Code reads these at session start, they're project config
-- `src/prompts/` — harness code that gets executed, not just documentation
-- `docs/` — integral project documentation (even if AI-generated)
-- Template/asset files (e.g., `init-prompt-log-template.md`)
-- Any file that other code imports or references
+**What to NEVER DELETE:**
+- `CLAUDE.md` / `AGENTS.md` — harvested as duplicates but must stay in place (Claude Code needs them)
+- `src/prompts/` — harness code that gets executed
+- `docs/` — integral project documentation
+- Skill SKILL.md files actively loaded by agents
+- Template/asset files, config files, anything other code references
+- Anything instrumental to how the capability works
 
 **Cleanup rules:**
 - Only offer cleanup after the harvest is committed (not just staged)
