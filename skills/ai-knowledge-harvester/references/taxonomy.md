@@ -45,7 +45,7 @@ ai-knowledge/
 ```
 
 Every README describes its folder and lists immediate children only. Never recurse deeper.
-When updating READMEs, append new entries — never remove existing ones.
+When updating READMEs, insert new entries in newest-first order by Last Modified date — never remove existing ones.
 Only create type folders and their READMEs when documents exist for that type.
 
 ---
@@ -71,10 +71,12 @@ collected from across all projects.
 ```markdown
 # Projects
 
-| Repo | Description |
-|------|-------------|
-| [{github-repo}](./{github-repo}/) | {one-line description} |
+| Project | Last Modified | Description |
+|---------|--------------|-------------|
+| [{github-repo}](./{github-repo}/) | YYYY-MM-DD | {one-line description} |
 ```
+
+Sort rows newest-first by Last Modified date.
 
 ### Repo README (`projects/{github-repo}/README.md`)
 
@@ -91,14 +93,16 @@ This is the **Tier 1** README. Lists sub-projects and repo-level context.
 
 ## Sub-Projects
 
-| Sub-Project | Description |
-|-------------|-------------|
-| [{sub-project}](./{sub-project}/) | {one-line description} |
+| Sub-Project | Last Modified | Description |
+|-------------|--------------|-------------|
+| [{sub-project}](./{sub-project}/) | YYYY-MM-DD | {one-line description} |
 
 ## Open Source Candidate?
 
 {yes/no and why}
 ```
+
+Sort rows newest-first by Last Modified date.
 
 ### Sub-Project README (`projects/{github-repo}/{sub-project}/README.md`)
 
@@ -151,6 +155,10 @@ Type descriptions:
 - **Prompt Logs**: Session transcripts — append-only, chronological records of AI interactions.
 - **Working Docs**: Living documents that evolve over time — gap analyses, kickoff prompts, operational guides.
 - **Harness Prompts**: AI-generated prompt templates, agent configurations, harness prompt files. Secondary priority — harvest but deprioritize vs human-authored docs.
+
+### Last Modified convention
+
+The `Last Modified` date in navigation-level READMEs (projects, repo, sub-project tables) equals the **latest `YYYY-MM-DD` prefix from filenames** in that folder tree (excluding README.md). When harvesting new documents, update parent README dates if the new document's date is more recent than the current `Last Modified` value. Re-sort rows so the newest entry is always first.
 
 ---
 

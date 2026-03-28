@@ -17,7 +17,7 @@ same output: classified, frontmattered markdown in a two-tier project taxonomy.
 | **Monorepo support** | Two-tier taxonomy: `{github-repo}/{sub-project}` — handles monorepos and simple repos alike |
 | **Auto-classify** | Classify documents as `spec`, `prompt-log`, `working-doc`, or `harness-prompt` based on content signals |
 | **Frontmatter** | Add standardized YAML frontmatter to every document for future indexing |
-| **README manifests** | Create/update README.md at each folder level (1 level deep only) for discoverability |
+| **README manifests** | Create/update README.md at each folder level (1 level deep only) with Last Modified dates, sorted newest-first |
 | **Safe staging** | Stage changes for review — never commit or push automatically |
 
 ## Parameters
