@@ -6,7 +6,7 @@ description: "Harvests AI documentation into a centralized private knowledge rep
 # AI Knowledge Harvester
 
 Collect AI documentation into a centralized private `ai-knowledge` repository. Two modes,
-same output: classified, frontmattered markdown in a project-first taxonomy.
+same output: classified, frontmattered markdown in a two-tier project taxonomy.
 
 ## Capabilities
 
@@ -14,7 +14,8 @@ same output: classified, frontmattered markdown in a project-first taxonomy.
 |------------|-------------|
 | **Repo scan** | Scan a source repo for AI docs (CLAUDE.md, specs, prompt logs, gap analyses, kickoff prompts) and copy them into the knowledge repo |
 | **Ad-hoc ingest** | Capture pasted content from ChatGPT, Claude web, Clo.ai, Copilot, or any AI tool and file it into the knowledge repo |
-| **Auto-classify** | Classify documents as `spec`, `prompt-log`, or `working-doc` based on content signals |
+| **Monorepo support** | Two-tier taxonomy: `{github-repo}/{sub-project}` — handles monorepos and simple repos alike |
+| **Auto-classify** | Classify documents as `spec`, `prompt-log`, `working-doc`, or `harness-prompt` based on content signals |
 | **Frontmatter** | Add standardized YAML frontmatter to every document for future indexing |
 | **README manifests** | Create/update README.md at each folder level (1 level deep only) for discoverability |
 | **Safe staging** | Stage changes for review — never commit or push automatically |
@@ -25,41 +26,54 @@ same output: classified, frontmattered markdown in a project-first taxonomy.
 |-----------|----------|---------|-------------|
 | `source_repo` | Mode 1 only | — | Path to the repo with AI docs |
 | `knowledge_repo` | No | `{source_repo}/../ai-knowledge` | Path to the private ai-knowledge repo |
-| `project_name` | No | GitHub remote repo name (Mode 1) or ask user (Mode 2) | Project name in the taxonomy |
+| `project_name` | No | GitHub remote repo name | Top-level project (the GitHub repo name) |
+| `sub_project` | No | Same as `project_name` for simple repos, or detected sub-project name for monorepos | Second tier in taxonomy |
 
 For Mode 2 (ad-hoc), also determine `doc_type`, `title`, `source_tool`, and `why_private`
 from content or by asking the user. See [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
 
 ## Document Types
 
-| Type | Folder | Signals |
-|------|--------|---------|
-| `spec` | `specs/` | "specification", "requirements", "architecture", "decisions" — stable reference docs |
-| `prompt-log` | `prompt-logs/` | Session transcripts, "→ Response / → Action" patterns, conversation exports |
-| `working-doc` | `working-docs/` | Gap analyses, kickoff prompts, CLAUDE.md, AGENTS.md, operational guides. **Default when uncertain.** |
+| Type | Folder | Priority | Signals |
+|------|--------|----------|---------|
+| `spec` | `specs/` | Primary | "specification", "requirements", "architecture", "decisions" — stable reference docs |
+| `prompt-log` | `prompt-logs/` | Primary | Session transcripts, conversation exports, "→ Response / → Action" patterns |
+| `working-doc` | `working-docs/` | Primary | Gap analyses, kickoff prompts, CLAUDE.md, AGENTS.md, operational guides. **Default when uncertain.** |
+| `harness-prompt` | `harness-prompts/` | Secondary | AI-generated prompts, agent configuration templates, harness prompt files in `src/prompts/`. Optional — harvest but deprioritize. |
 
-## Taxonomy Overview
+## Two-Tier Taxonomy
+
+The primary key is always the **GitHub repo name**. Within it, a second tier for sub-projects.
+
+- **Simple repo**: `{repo}/{repo}/` — repeat the name (e.g., `ai-builder-kit/ai-knowledge-harvester/`)
+- **Monorepo**: `{repo}/{sub-project}/` — one folder per sub-project (e.g., `jack-dev-server-configs/generic-harness-v1/`)
 
 ```
 ai-knowledge/
-├── README.md                        # Repo purpose + list of projects
+├── README.md
 ├── projects/
-│   ├── README.md                    # All projects with one-line descriptions
-│   └── {project-name}/
-│       ├── README.md                # Project overview, why private, type folder list
-│       ├── specs/
-│       │   ├── README.md            # List of spec files
-│       │   └── YYYY-MM-DD-{slug}.md
-│       ├── prompt-logs/
-│       │   ├── README.md            # List of prompt log files
-│       │   └── YYYY-MM-DD-{slug}.md
-│       └── working-docs/
-│           ├── README.md            # List of working doc files
-│           └── YYYY-MM-DD-{slug}.md
+│   ├── README.md
+│   ├── {github-repo}/                    # Top tier: GitHub repo name
+│   │   ├── README.md                     # Repo overview, why private, sub-project list
+│   │   └── {sub-project}/               # Second tier: sub-project (or repo name repeated)
+│   │       ├── README.md                 # Sub-project overview, type folder list
+│   │       ├── specs/
+│   │       │   ├── README.md
+│   │       │   └── YYYY-MM-DD-{seq}-{slug}.md
+│   │       ├── prompt-logs/
+│   │       │   ├── README.md
+│   │       │   └── YYYY-MM-DD-{seq}-{slug}.md
+│   │       ├── working-docs/
+│   │       │   ├── README.md
+│   │       │   └── YYYY-MM-DD-{seq}-{slug}.md
+│   │       └── harness-prompts/          # Optional — only if harness prompts exist
+│   │           ├── README.md
+│   │           └── YYYY-MM-DD-{seq}-{slug}.md
+│   └── {another-repo}/
+│       └── ...
 └── shared/
     ├── README.md
     └── skills/
-        └── README.md
 ```
 
 Each README describes its folder's purpose and lists immediate children only — never recurses deeper.
@@ -70,19 +84,20 @@ For full README templates and frontmatter spec, see [references/taxonomy.md](ref
 ### Mode 1: Repo Scan
 
 1. Validate `source_repo` and `knowledge_repo` paths exist
-2. Discover AI docs in source repo — present classified list to user, wait for confirmation
-3. Create project folder structure in knowledge repo
-4. Create/update README.md files at each level (1 level deep)
-5. Copy each file, prepend frontmatter, write to correct type folder
-6. Stage changes, show user the diff command — **stop before committing**
+2. Determine project name from GitHub remote, detect sub-projects (monorepo or simple)
+3. Discover AI docs — scan `ai-docs/`, `local-only/`, `local/`, nested subdirectories
+4. Present classified list to user, wait for confirmation
+5. Create project folder structure, write files with frontmatter
+6. Create/update README.md files at each level (1 level deep)
+7. Stage changes, show user the diff command — **stop before committing**
 
 For detailed steps, scan patterns, and exclusion rules:
 see [references/repo-scan.md](references/repo-scan.md).
 
 ### Mode 2: Ad-Hoc Ingest
 
-1. Read pasted content — detect source tool, classify type, identify project
-2. **Ask the user** if project, type, or title is ambiguous — don't guess
+1. Read pasted content — detect source tool, classify type, identify project + sub-project
+2. **Ask the user** if project, sub-project, type, or title is ambiguous — don't guess
 3. Clean up formatting, prepend frontmatter with `source_tool` field
 4. Write to correct type folder, update READMEs, stage — **stop before committing**
 
@@ -95,9 +110,11 @@ see [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
 |-----------|--------|
 | File already exists in destination | Compare dates — newer overwrites (with note), older skips |
 | Ambiguous file type | Default to `working-doc`, tell the user |
-| Monorepo with sub-projects | Ask: one project or separate projects? |
+| Monorepo with sub-projects | Use two-tier: `{repo}/{sub-project}/` — detect sub-projects from directory structure |
+| Simple repo (not a monorepo) | Repeat repo name: `{repo}/{repo}/` |
 | Multiple docs on same date | Use sequence numbers in filename (`01`, `02`) to preserve chronological order |
 | No git history for date | Use today's date, add `date_note` in frontmatter |
+| Large markdown files (up to 50MB) | Harvest them — storage is free. Only skip files >50MB |
 | Binary files / images / PDFs | Skip, mention them, ask if user wants to handle separately |
 | Pasted content with no context | Ask project and type — don't assume |
 | Mixed-topic paste | Ask: file as one doc or split? |
