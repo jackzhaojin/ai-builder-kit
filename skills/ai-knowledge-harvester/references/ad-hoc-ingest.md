@@ -74,7 +74,7 @@ Follow the same Steps 3–6 from [repo-scan.md](repo-scan.md):
 - Create project folder structure if needed
 - Create/update README.md files at each level (see [taxonomy.md](taxonomy.md))
 - Write the file to the correct type folder
-- Stage changes, show the user, stop before committing
+- Stage and commit changes — never push
 
 ## Ad-Hoc Edge Cases
 

@@ -175,17 +175,12 @@ harvested: YYYY-MM-DD
 
 5. **Write to destination** — do NOT modify the source file
 
-## Step 6: Stage changes
+## Step 6: Stage and commit
 
 ```bash
 cd "{knowledge_repo}"
 git add README.md projects/README.md projects/{project_name}/
 git status
-```
-
-Show staged files. Prepare (but DO NOT run) the commit:
-
-```bash
 git commit -m "harvest({project_name}): add {N} docs from {source_repo_name}
 
 Sub-projects: {list}
@@ -193,7 +188,7 @@ Types: {N} specs, {N} prompt-logs, {N} working-docs, {N} harness-prompts
 Harvested: {today's date}"
 ```
 
-**Never run git push. Never run git commit automatically. Always stop here.**
+**Never push. Commit locally, user pushes when ready.**
 
 ## Step 7: Offer source cleanup (after commit)
 

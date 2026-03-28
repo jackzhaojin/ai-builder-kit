@@ -89,8 +89,8 @@ For full README templates and frontmatter spec, see [references/taxonomy.md](ref
 4. Present classified list to user, wait for confirmation
 5. Create project folder structure, write files with frontmatter
 6. Create/update README.md files at each level (1 level deep)
-7. Stage changes, show user the diff command — **stop before committing**
-8. After user commits harvest, offer to clean up source files (optional, separate commit)
+7. Stage and commit changes — **never push**
+8. Offer to clean up source files (optional, separate commit in source repo)
 
 For detailed steps, scan patterns, and exclusion rules:
 see [references/repo-scan.md](references/repo-scan.md).
@@ -100,7 +100,7 @@ see [references/repo-scan.md](references/repo-scan.md).
 1. Read pasted content — detect source tool, classify type, identify project + sub-project
 2. **Ask the user** if project, sub-project, type, or title is ambiguous — don't guess
 3. Clean up formatting, prepend frontmatter with `source_tool` field
-4. Write to correct type folder, update READMEs, stage — **stop before committing**
+4. Write to correct type folder, update READMEs, stage and commit — **never push**
 
 For detailed steps, source detection hints, and example interactions:
 see [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
@@ -125,9 +125,9 @@ see [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
 
 ## Safety Rules
 
-- **Never push.** Never commit automatically. Always stop at staging.
+- **Never push.** Stage and commit, but never push to remote.
 - **Never modify source files during harvest.** Read-only access to source repos during harvest.
-- **Cleanup is separate.** Only offer source file deletion after harvest is committed. Stage deletions as a separate commit in the source repo. Never push.
+- **Cleanup is separate.** Only offer source file deletion after harvest is committed. Stage and commit deletions as a separate commit in the source repo. Never push.
 - **Never silently overwrite.** Report every file action.
 - **Ask when uncertain.** Project, type, and title must be confirmed when ambiguous.
 
