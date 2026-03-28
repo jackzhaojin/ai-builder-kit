@@ -10,37 +10,53 @@ A [Claude Code plugin marketplace](https://docs.anthropic.com/en/docs/claude-cod
 
 ## Getting Started
 
-### 1. Add the marketplace
+### Option A: Install with `npx skills` (Recommended)
 
-In Claude Code, run `/plugin` and navigate to **Marketplaces** > **+ Add Marketplace**. Enter:
+List available skills:
 
-```
-https://github.com/jackzhaojin/ai-builder-kit.git
-```
-
-Or add it directly to your `~/.claude/settings.json`:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "ai-builder-kit": {
-      "source": {
-        "source": "git",
-        "url": "https://github.com/jackzhaojin/ai-builder-kit.git"
-      }
-    }
-  }
-}
+```bash
+npx skills add jackzhaojin/ai-builder-kit --list
 ```
 
-### 2. Install a plugin
+Install a specific skill:
 
-Run `/plugin` in Claude Code, go to **Discover**, select a plugin, and choose your install scope:
+```bash
+npx skills add jackzhaojin/ai-builder-kit --skill hlx-admin-api-executor
+```
 
-- **User scope** — available in all your projects
-- **Project scope** — available to all collaborators on the current repo
-- **Local scope** — available only to you in the current repo
+Install all skills:
 
-### 3. Activate
+```bash
+npx skills add jackzhaojin/ai-builder-kit --yes
+```
 
-After installing, run `/reload-plugins` to activate the plugin in your current session.
+### Option B: Add as a Claude Code marketplace
+
+1. In Claude Code, run `/plugin` and navigate to **Marketplaces** > **+ Add Marketplace**. Enter:
+
+   ```
+   https://github.com/jackzhaojin/ai-builder-kit.git
+   ```
+
+   Or add it directly to your `~/.claude/settings.json`:
+
+   ```json
+   {
+     "extraKnownMarketplaces": {
+       "ai-builder-kit": {
+         "source": {
+           "source": "git",
+           "url": "https://github.com/jackzhaojin/ai-builder-kit.git"
+         }
+       }
+     }
+   }
+   ```
+
+2. Run `/plugin` in Claude Code, go to **Discover**, select a plugin, and choose your install scope:
+
+   - **User scope** — available in all your projects
+   - **Project scope** — available to all collaborators on the current repo
+   - **Local scope** — available only to you in the current repo
+
+3. After installing, run `/reload-plugins` to activate the plugin in your current session.
