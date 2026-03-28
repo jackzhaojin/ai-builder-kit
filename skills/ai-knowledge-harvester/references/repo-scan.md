@@ -41,6 +41,9 @@ find "{source_repo}" -name "AGENTS.md" 2>/dev/null
 # ai-docs directories at any level (monorepo pattern)
 find "{source_repo}" -path "*/ai-docs/*.md" 2>/dev/null
 
+# local-ai-docs directories (gitignored, flagged for harvest)
+find "{source_repo}" -path "*/local-ai-docs/*.md" 2>/dev/null
+
 # local/ subdirectories with ai-docs (common harness pattern)
 find "{source_repo}/local" -path "*/ai-docs/*.md" 2>/dev/null
 
@@ -210,6 +213,7 @@ You review the diff before committing. I never push.
 
 **What to DELETE (safe to remove — duplicated in ai-knowledge):**
 - `ai-docs/` directories and all their contents — pure AI documentation with no runtime purpose
+- `local-ai-docs/` directories — these exist specifically for harvest staging, safe to clear after harvest
 - Standalone prompt log files outside `ai-docs/` that aren't referenced by anything
 
 **What to NEVER DELETE:**

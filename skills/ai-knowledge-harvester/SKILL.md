@@ -85,7 +85,7 @@ For full README templates and frontmatter spec, see [references/taxonomy.md](ref
 
 1. Validate `source_repo` and `knowledge_repo` paths exist
 2. Determine project name from GitHub remote, detect sub-projects (monorepo or simple)
-3. Discover AI docs — scan `ai-docs/`, `local-only/`, `local/`, nested subdirectories
+3. Discover AI docs — scan `ai-docs/`, `local-ai-docs/`, `local-only/`, `local/`, nested subdirectories
 4. Present classified list to user, wait for confirmation
 5. Create project folder structure, write files with frontmatter
 6. Create/update README.md files at each level (1 level deep)
@@ -121,6 +121,7 @@ see [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
 | Mixed-topic paste | Ask: file as one doc or split? |
 | Non-markdown paste | Convert to clean markdown, preserve substance |
 | "Save this conversation" | Summarize current session as prompt-log or working-doc, ask project |
+| `local-ai-docs/` found in repo | Harvest everything in it — this folder exists specifically for AI docs awaiting harvest. Recommend adding to `.gitignore` if not already ignored |
 
 ## Safety Rules
 
