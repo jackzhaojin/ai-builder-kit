@@ -195,18 +195,30 @@ I'll stage the deletions as a separate commit in the source repo for your review
 You review the diff before committing. I never push.
 ```
 
+**What to DELETE (safe to remove — duplicated in ai-knowledge):**
+- `ai-docs/` directories and all their contents — these are pure AI documentation
+- Standalone prompt log files outside `ai-docs/` (e.g., `skills-prompt-log.md`)
+
+**What to NEVER DELETE (integral project files):**
+- `CLAUDE.md` / `AGENTS.md` — Claude Code reads these at session start, they're project config
+- `src/prompts/` — harness code that gets executed, not just documentation
+- `docs/` — integral project documentation (even if AI-generated)
+- Template/asset files (e.g., `init-prompt-log-template.md`)
+- Any file that other code imports or references
+
 **Cleanup rules:**
 - Only offer cleanup after the harvest is committed (not just staged)
 - Gitignored files (e.g., in `local-only/`): ask if user wants them deleted, but note they're already hidden from git
 - Non-gitignored files: delete and stage the removal as a new commit in the source repo
 - Never delete and harvest in the same commit — these are separate operations
 - Never push the cleanup commit — user reviews first
-- Present the list of files to be deleted before doing anything
+- Present the DELETE vs KEEP lists to the user before doing anything
 
 ```bash
 # In the source repo, after user confirms:
 cd "{source_repo}"
-git rm "{file1}" "{file2}" ...
+git rm -r "{ai-docs-dir1}" "{ai-docs-dir2}" ...
+git rm "{standalone-prompt-log}" ...
 git status
 # Show what will be committed, but DO NOT commit
 ```
