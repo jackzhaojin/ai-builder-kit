@@ -1,7 +1,8 @@
 ---
 name: conversation-logger
 description: "Log AI coding agent conversation sessions with timestamps in structured markdown. Supports Claude Code, OpenAI Codex CLI, and GitHub Copilot. Use when the user says 'log this session', 'convo log', or wants to create a record of prompts and responses for a project. Auto-detects which agent is running and reads timestamps from the correct history file."
-
+context: fork
+disable-model-invocation: true
 ---
 
 # Conversation Logger
