@@ -69,6 +69,17 @@ npx skills add jackzhaojin/ai-builder-kit --list          # List available
 npx skills add jackzhaojin/ai-builder-kit --skill <name>   # Install one
 ```
 
+### Testing branded-pptx
+
+Requires Python 3.12+ (`python3.12`) and the [anthropic pptx skill](https://github.com/anthropics/skills) installed globally. Test templates go in `local-only/` (gitignored):
+
+```bash
+python3.12 skills/branded-pptx/scripts/analyze_template.py \
+  local-only/test/template.pptx --output-dir local-only/test/runs --run-id
+```
+
+Each run creates a timestamped folder with manifests, template copy, and `output/` for generated .pptx/.pdf.
+
 ## Conventions
 
 - SKILL.md descriptions must include trigger phrases ("Use when the user says...")
