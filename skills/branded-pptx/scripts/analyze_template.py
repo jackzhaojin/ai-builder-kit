@@ -735,6 +735,36 @@ def write_slides_md(output_dir: Path, slides: list[dict],
             lines.append(f"- **Visual data elements**: "
                          f"{len(slide['visual_data_elements'])} "
                          f"(images/charts that carry embedded data)")
+
+        # Title detection
+        has_title = any(
+            sh.get("placeholder", {}).get("type") in ("title", "ctrTitle")
+            for sh in slide["shapes"] if sh.get("placeholder"))
+        if not has_title:
+            # Check for large-font text that looks like a title
+            title_candidates = [
+                tc for tc in slide["text_content"]
+                if tc["font_info"] and tc["font_info"][0]["size_pt"] >= 40
+                and len(tc["text"]) < 30]
+            if title_candidates:
+                lines.append(f"- **Title text**: \"{title_candidates[0]['text'].strip()}\"")
+            else:
+                lines.append("- **Title**: None detected")
+
+        # Duplication guide
+        n_text = sum(1 for sh in slide["shapes"]
+                     if sh["shape_type"] in ("textbox", "placeholder")
+                     and sh["text"])
+        n_vd = len(slide["visual_data_elements"])
+        n_deco = sum(1 for sh in slide["shapes"]
+                     if sh["shape_type"] == "decorative"
+                     or (sh["shape_type"] == "group" and not sh["text"]))
+        dup_parts = []
+        dup_parts.append(f"{n_text} editable text")
+        if n_vd:
+            dup_parts.append(f"{n_vd} visual data (replace/remove after dup)")
+        dup_parts.append(f"{n_deco} decorative (keep)")
+        lines.append(f"- **If duplicated**: {', '.join(dup_parts)}")
         lines.append("")
 
         # Shape inventory
@@ -861,6 +891,48 @@ def write_manifest(output_dir: Path, template_name: str, meta: dict,
             lines.append(f"- **Slide {s['number']}** (`{s['filename']}`): "
                          f"{', '.join(vd_names)}")
         lines.append("")
+
+    # Title coverage warning
+    slides_without_title = []
+    for s in slides:
+        has_ph_title = any(
+            sh.get("placeholder", {}).get("type") in ("title", "ctrTitle")
+            for sh in s["shapes"] if sh.get("placeholder"))
+        has_large_title = any(
+            tc["font_info"] and tc["font_info"][0]["size_pt"] >= 40
+            and len(tc["text"]) < 30
+            for tc in s["text_content"])
+        if not has_ph_title and not has_large_title:
+            slides_without_title.append(s["number"])
+
+    if len(slides_without_title) > len(slides) / 2:
+        lines.append("## Title Warning")
+        lines.append("")
+        lines.append(f"{len(slides_without_title)} of {len(slides)} example "
+                     f"slides have no visible title. This template relies on "
+                     f"content context rather than explicit headings. Consider "
+                     f"adding a title text box to slides that need one, or "
+                     f"ensure the first line of body text serves as the title.")
+        lines.append("")
+
+    # Duplication quick reference
+    lines.append("## Duplication Guide")
+    lines.append("")
+    lines.append("What you get when duplicating each example slide:")
+    lines.append("")
+    lines.append("| Slide | Editable Text | Visual Data (stale after dup) | Decorative |")
+    lines.append("|-------|--------------|-------------------------------|------------|")
+    for s in slides:
+        n_text = sum(1 for sh in s["shapes"]
+                     if sh["shape_type"] in ("textbox", "placeholder")
+                     and sh["text"])
+        n_vd = len(s["visual_data_elements"])
+        n_deco = sum(1 for sh in s["shapes"]
+                     if sh["shape_type"] == "decorative"
+                     or (sh["shape_type"] == "group" and not sh["text"]))
+        vd_str = f"{n_vd} (replace/remove)" if n_vd else "—"
+        lines.append(f"| {s['number']} (`{s['filename']}`) | {n_text} | {vd_str} | {n_deco} |")
+    lines.append("")
 
     # Content capacity reference
     cap_entries = []
