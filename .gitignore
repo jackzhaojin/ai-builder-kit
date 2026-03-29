@@ -1,5 +1,6 @@
 # Local
 local-only/
+local-ai-docs/
 
 # IDE
 *.code-workspace
