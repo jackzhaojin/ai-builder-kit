@@ -75,7 +75,7 @@ This is a canonical example of the four output sections. Use it as a template.
 
 **Want me to take any of these next?**
 
-1. Checkout PR #17 and apply the two pre-merge fixes (scope `pkill` to `AGENT_OUTPUTS_BASE`, swap `isLikelyWebProject` keyword match for tag-based detection)
+1. Checkout PR #17, apply the two pre-merge fixes (scope `pkill` to `AGENT_OUTPUTS_BASE`, unify web detection via `WEB_KEYWORDS`), then `gh pr merge 17 --merge` (preserves individual commits — do not squash, the review-driven fixes are worth keeping distinct in history)
 2. Checkout PR #17 as-is and run `npm run typecheck && npm run build` to confirm it's clean locally before you decide
 3. Close PR #18 with a comment linking to this analysis and capturing the R5 reframing as a follow-up issue
 4. Draft a follow-up goal bundle for R5 (POC reference handling) and the E2E 32-step success criterion

@@ -126,6 +126,7 @@ A 4-part closing:
    - Any unaddressed requirements still open
    - Success criteria still unverified (e.g., E2E not run)
    - Whether to close the losing PR or salvage parts of it
+   - **Merge mode**: default to `gh pr merge <N> --merge` (creates a merge commit, preserves individual commits including any review-driven pre-merge fixes). **Do NOT squash by default.** Only suggest `--squash` when the branch is full of noisy fixup/WIP commits that genuinely aren't worth preserving AND there were no meaningful post-triage review fixes. When the triage process itself added pre-merge fixes, squashing erases the separation between "what the agent did" and "what the review caught" — that distinction is exactly what this skill exists to surface, so preserve it in history.
 3. **What the losing PR contributes** — if parts are worth cherry-picking, say so. If it's pure noise, say "close without merging."
 4. **Suggested next actions for the user** — a short numbered menu the user can pick from in their next reply. The skill itself does not execute these; it just makes it cheap for the user to say "do option 2" and have the agent act in the same context. Keep to 3–5 options, each a single imperative line. Example:
 
@@ -146,6 +147,19 @@ Two axes matter most:
 2. **Scope discipline** — `1 - (extras_files / total_files_touched)`
 
 Tiebreakers, in order: test evidence > blast radius > robustness of implementation choices > diff size (smaller wins when coverage is equal).
+
+## Merge mode policy
+
+**Default: `--merge` (standard merge commit).** Preserves all feature-branch commits plus a merge commit tying them together. Keeps full traceability — especially important when the triage review added pre-merge fix commits, because those fixes should remain distinct from the original agent's work in history.
+
+**Use `--squash` only when all of these are true:**
+- The branch has messy fixup/WIP commits (typos, "oops", revert-then-redo sequences)
+- None of those commits carry meaningful review context worth preserving
+- The PR title captures the whole unit of work cleanly in one line
+
+**Use `--rebase` only when** the branch is already well-curated (every commit meaningful) AND the project prefers a linear history.
+
+**Anti-pattern:** squashing a PR that just received review-driven pre-merge fixes. That erases the distinction between "what the original agent produced" and "what the review caught," which is exactly the signal this skill exists to preserve. Future retrospectives on agent performance depend on that distinction being visible in history.
 
 **Critical failure modes that auto-disqualify a PR regardless of other scores:**
 
