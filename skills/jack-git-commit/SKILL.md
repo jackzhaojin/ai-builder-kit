@@ -75,6 +75,23 @@ If `.gitignore` doesn't exist at all, warn and ask before proceeding — don't c
 - **Something already staged?** → Only commit what's staged, don't add more
 - After staging, run `git status` to show what will be committed
 
+#### 3a. Always sweep in prompt logs and session records
+
+Prompt logs (`ai-docs/**/prompt-log*.md`, `ai-docs/**/*session*.md`, `.claude/projects/**/session-*.md`) and retros (`ai-docs/**/retro-*.md`) are the **provenance trail** for the commits around them. They should NEVER be filtered out as "unrelated" — git history is only queryable if the why-we-did-this note lands in the same branch as the what-we-did diff.
+
+Before proposing the commit:
+
+```bash
+git status --porcelain | grep -E '^\?\? .*(prompt-log|retro-|session).*\.md$' || true
+```
+
+If any match:
+- Stage them into the current commit (do not split into a separate commit unless the user explicitly asks)
+- Mention them in the commit body under a `Provenance:` line if space allows
+- If the user said "commit only X," still ASK before dropping a prompt log — never silently exclude
+
+This rule exists because on 2026-04-11 a prompt log for v2.1.6 was left untracked for two commits, breaking the "git log is the ledger" guarantee.
+
 ### 4. Check for mixed concerns
 
 Review the staged diff and group changes by logical intent. Present the analysis:
@@ -132,8 +149,9 @@ Committed: feat(vendor): add Kimi wire protocol support
 
 1. **Never push** unless human explicitly says "push" right now
 2. **Stage smart** — nothing staged → `git add -A`; something staged → commit only that
-3. **Atomic** — one logical change per commit; flag mixed concerns
-4. **Respect hooks** — never `--no-verify`
-5. **Don't fabricate** — only include metadata you actually know
-6. **Ask when uncertain** — unclear intent → ask before committing
-7. **Universal** — same format for human, Claude, Codex, Kimi
+3. **Always sweep prompt logs & retros** — `ai-docs/**/prompt-log*.md`, `ai-docs/**/retro-*.md`, session records. These are provenance, not "unrelated files." Never silently exclude them.
+4. **Atomic** — one logical change per commit; flag mixed concerns
+5. **Respect hooks** — never `--no-verify`
+6. **Don't fabricate** — only include metadata you actually know
+7. **Ask when uncertain** — unclear intent → ask before committing
+8. **Universal** — same format for human, Claude, Codex, Kimi
