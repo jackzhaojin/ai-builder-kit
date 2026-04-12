@@ -173,9 +173,14 @@ harvested: YYYY-MM-DD
 ---
 ```
 
-5. **Write to destination** — do NOT modify the source file
+5. **Handle collisions** — if a file with the same slug already exists at the destination:
+   - Compare last-modified dates — newer overwrites, older skips
+   - If dates are equal, keep the larger file (more comprehensive)
+   - Log every collision: which version was kept and why
 
-## Step 6: Stage and commit
+6. **Write to destination** — do NOT modify the source file
+
+## Step 6: Stage changes
 
 ```bash
 cd "{knowledge_repo}"
@@ -190,21 +195,13 @@ Harvested: {today's date}"
 
 **Never push. Commit locally, user pushes when ready.**
 
-## Step 7: Offer source cleanup (after commit)
+## Step 7: Source cleanup (only if user explicitly asks)
 
-**Only after the user has committed the harvest in the knowledge repo**, offer to clean up
-the source files. This is optional — the user decides.
+**Source files stay in place by default.** Harvest is a copy, not a move. The user may want
+docs to remain in the source repo (e.g., for open-sourcing AI docs alongside the project).
 
-```
-Harvest committed. Would you like me to clean up the source AI docs?
-
-For each harvested file, I can:
-  - Delete it from the source repo (if it's NOT gitignored — will show in git diff)
-  - Leave gitignored files as-is (they're already hidden from git)
-
-I'll stage the deletions as a separate commit in the source repo for your review.
-You review the diff before committing. I never push.
-```
+**Only perform cleanup if the user explicitly requests it** — do not offer or suggest it.
+If the user does ask for cleanup, follow these rules:
 
 **What to DELETE (safe to remove — duplicated in ai-knowledge):**
 - `ai-docs/` directories and all their contents — pure AI documentation with no runtime purpose

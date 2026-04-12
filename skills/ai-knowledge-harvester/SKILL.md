@@ -20,6 +20,7 @@ same output: classified, frontmattered markdown in a two-tier project taxonomy.
 | **Frontmatter** | Add standardized YAML frontmatter to every document for future indexing |
 | **README manifests** | Create/update README.md at each folder level (1 level deep only) with Last Modified dates, sorted newest-first |
 | **Safe staging** | Stage changes for review — never commit or push automatically |
+| **Non-destructive** | Source files are kept in place by default — harvest is a copy, not a move |
 
 ## Parameters
 
@@ -91,7 +92,7 @@ For full README templates and frontmatter spec, see [references/taxonomy.md](ref
 5. Create project folder structure, write files with frontmatter
 6. Create/update README.md files at each level (1 level deep)
 7. Stage and commit changes — **never push**
-8. Offer to clean up source files (optional, separate commit in source repo)
+8. Source files stay in place — only offer cleanup if the user explicitly asks
 
 For detailed steps, scan patterns, and exclusion rules:
 see [references/repo-scan.md](references/repo-scan.md).
@@ -110,7 +111,7 @@ see [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
 
 | Situation | Action |
 |-----------|--------|
-| File already exists in destination | Compare dates — newer overwrites (with note), older skips |
+| File already exists in destination | Compare dates — newer overwrites (with note), older skips. If dates are equal, keep the larger (more comprehensive) file. Log every collision decision |
 | Ambiguous file type | Default to `working-doc`, tell the user |
 | Monorepo with sub-projects | Use two-tier: `{repo}/{sub-project}/` — detect sub-projects from directory structure |
 | Simple repo (not a monorepo) | Repeat repo name: `{repo}/{repo}/` |
@@ -128,8 +129,8 @@ see [references/ad-hoc-ingest.md](references/ad-hoc-ingest.md).
 
 - **Never push.** Stage and commit, but never push to remote.
 - **Never modify source files during harvest.** Read-only access to source repos during harvest.
-- **Cleanup is separate.** Only offer source file deletion after harvest is committed. Stage and commit deletions as a separate commit in the source repo. Never push.
-- **Never silently overwrite.** Report every file action.
+- **Never delete source files unless explicitly asked.** Harvest is a copy, not a move. Source files stay in place by default.
+- **Never silently overwrite.** Report every file action, especially collision resolutions (log both versions' dates and sizes).
 - **Ask when uncertain.** Project, type, and title must be confirmed when ambiguous.
 
 ## Why This Skill Exists
