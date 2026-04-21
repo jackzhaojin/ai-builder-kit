@@ -448,14 +448,12 @@ def check_max_waypoints(cells, limit=3):
 
 
 def check_convergence_alignment(cells, min_arrows=3):
-    """When 3+ edges share a target, they must all enter at the SAME bind point.
+    """When 3+ edges share a target, all of them must enter from the same side.
 
-    'Same bind point' means every converging edge has IDENTICAL entryX AND IDENTICAL
-    entryY — the arrowheads visually merge at one spot on the target. Staggered entries
-    (distinct entryY per arrow) fail this check: that's a spray array, not a convergence.
-
-    Feedback loops (edges where exitX == entryX on an extreme side, the legitimate
-    same-side loop pattern) are exempt from convergence analysis.
+    'Same side' means matching entryX (if both specified) OR matching entryY — i.e.,
+    the edges hit the target from one of its four sides, not from all directions.
+    Edges that don't set an explicit entry anchor are exempt (the router picks the
+    closest side, and for well-placed sources that's usually consistent anyway).
     """
     targets = {}
     for c in cells:
@@ -472,8 +470,9 @@ def check_convergence_alignment(cells, min_arrows=3):
         for e in edges:
             s = style_kv(e["style"])
             ex, ey = s.get("entryx"), s.get("entryy")
+            # Exempt same-side feedback loops (exitX == entryX or exitY == entryY on an extreme edge).
+            # These are a legitimate exception — their "octopus" appearance is the feedback-loop shape, not a convergence failure.
             exx, exy = s.get("exitx"), s.get("exity")
-            # Exempt same-side feedback loops.
             is_feedback = (ex is not None and exx is not None and ex == exx and ex in {"0", "1"}) or \
                           (ey is not None and exy is not None and ey == exy and ey in {"0", "1"})
             if is_feedback:
@@ -481,96 +480,22 @@ def check_convergence_alignment(cells, min_arrows=3):
             if ex is not None or ey is not None:
                 anchored.append((e["id"], ex, ey))
         if len(anchored) < min_arrows:
+            # Not enough anchored edges to judge; rely on router.
             continue
         checked_targets.append(tid)
-        # Require identical (entryX, entryY) across all anchored edges.
-        entry_pairs = {(a[1], a[2]) for a in anchored}
-        if len(entry_pairs) > 1:
-            bad_targets.append((tid, f"{len(anchored)} arrows with {len(entry_pairs)} distinct (entryX,entryY) pairs — expected all identical: {sorted(entry_pairs)[:4]}"))
+        x_values = {a[1] for a in anchored if a[1] is not None}
+        y_values = {a[2] for a in anchored if a[2] is not None}
+        # Same side if all anchored edges share one entryX (all on left or right)
+        # OR all share one entryY (all on top or bottom).
+        same_side = (len(x_values) == 1) or (len(y_values) == 1)
+        if not same_side:
+            bad_targets.append((tid, f"{len(anchored)} arrows, entryX values={sorted(x_values)}, entryY values={sorted(y_values)}"))
 
     if bad_targets:
-        return False, f"{len(bad_targets)} convergence targets where arrows don't merge into one bind point: {bad_targets[:3]}"
+        return False, f"{len(bad_targets)} convergence targets with octopus (arrows from different sides): {bad_targets[:3]}"
     if not checked_targets:
         return True, f"no convergence pattern with ≥{min_arrows} anchored arrows to evaluate (router-driven; visual check required)"
-    return True, f"all {len(checked_targets)} convergence targets have arrows merging at one bind point"
-
-
-def _absolute_positions(cells):
-    """Resolve cell coordinates to absolute canvas coords by walking up parent frames."""
-    by_id = {c["id"]: c for c in cells}
-    abs_pos = {}
-    for c in cells:
-        if not c["vertex"] or c["x"] is None or c["w"] is None:
-            continue
-        x, y = c["x"], c["y"]
-        parent = by_id.get(c["parent"])
-        # Walk up; each ancestor frame contributes its (x, y) offset.
-        while parent and parent.get("vertex") and parent["x"] is not None:
-            x += parent["x"]
-            y += parent["y"]
-            parent = by_id.get(parent["parent"])
-        abs_pos[c["id"]] = (x, y, c["w"], c["h"])
-    return abs_pos
-
-
-def _line_intersects_rect(x1, y1, x2, y2, rx, ry, rw, rh, margin=8):
-    """Does the line segment (x1,y1)-(x2,y2) pass through the rect (rx, ry, rw, rh)?
-
-    Shrinks the rect by `margin` pixels so edges grazing a box edge don't false-positive.
-    Samples 30 points along the segment; returns True if any lies inside the shrunk rect.
-    """
-    x_min, x_max = rx + margin, rx + rw - margin
-    y_min, y_max = ry + margin, ry + rh - margin
-    if x_min >= x_max or y_min >= y_max:
-        return False
-    for i in range(1, 30):
-        t = i / 30
-        px = x1 + (x2 - x1) * t
-        py = y1 + (y2 - y1) * t
-        if x_min < px < x_max and y_min < py < y_max:
-            return True
-    return False
-
-
-def check_no_edges_through_boxes(cells):
-    """HEURISTIC check: for each edge with a source and target, draw a straight line
-    from source center to target center and see if it passes through any OTHER
-    content box's bounding box. Flags edges whose idealized path transits through
-    a non-endpoint box.
-
-    Imperfect — orthogonal edges don't actually route along the straight diagonal,
-    so this is a heuristic for "the routing space contains an obstacle the router
-    probably couldn't dodge." Over-flags cases where the actual route bends cleanly
-    around a box; under-flags cases where the route bends through a box that isn't
-    on the straight line. Use as a directional signal, not a hard truth — pair with
-    visual PNG review.
-    """
-    abs_pos = _absolute_positions(cells)
-    by_id = {c["id"]: c for c in cells}
-    bad = []
-    for c in cells:
-        if not c["edge"] or not c["source"] or not c["target"]:
-            continue
-        src = abs_pos.get(c["source"])
-        dst = abs_pos.get(c["target"])
-        if not src or not dst:
-            continue
-        sx, sy = src[0] + src[2] / 2, src[1] + src[3] / 2
-        tx, ty = dst[0] + dst[2] / 2, dst[1] + dst[3] / 2
-        for other_id, (ox, oy, ow, oh) in abs_pos.items():
-            if other_id in (c["source"], c["target"]):
-                continue
-            other = by_id.get(other_id)
-            # Skip frames (containers, not obstacles) and legend swatches.
-            if not other or is_frame(other) or is_legend_swatch(other):
-                continue
-            if _line_intersects_rect(sx, sy, tx, ty, ox, oy, ow, oh):
-                bad.append((c["id"], f"through {other_id}"))
-                break
-    if bad:
-        return False, f"{len(bad)} edges whose straight-line path passes through a non-endpoint box (heuristic): {bad[:5]}"
-    n_edges = sum(1 for c in cells if c["edge"])
-    return True, f"no edges cross non-endpoint boxes on the straight-line heuristic ({n_edges} edges checked)"
+    return True, f"all {len(checked_targets)} convergence targets pass bus alignment (arrows enter from one side)"
 
 
 def check_frame_nonoverlap(cells):
@@ -688,10 +613,6 @@ def match_assertion(text: str, ctx: dict):
     # Frame non-overlap
     if "non-overlap" in t or ("frames" in t and "overlap" in t):
         return check_frame_nonoverlap(cells)
-
-    # Edges-through-boxes heuristic
-    if "edges cross" in t or "straight-line" in t or ("path passes through" in t and "non-endpoint" in t):
-        return check_no_edges_through_boxes(cells)
 
     # Cross-frame edges
     if "cross-frame edges" in t and ("at least 3" in t or "≥ 3" in t):

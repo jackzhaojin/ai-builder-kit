@@ -32,7 +32,7 @@ Components:
 
 **Cross-frame edges (parent="1" — top-level, NOT inside any frame):**
 - Sensor Health Monitor (F1) → Signal Fusion (F2) — blue edge, labeled "health stream" (italic)
-- All five sensor boxes (F1) → Signal Fusion (F2) — black edges, **merged-bind-point fan-in**: every edge uses `exitX=1;exitY=0.5` on the source AND **`entryX=0;entryY=0.5` on Signal Fusion** — IDENTICAL on all 5 edges. Every arrowhead lands at the same spot on Signal Fusion's left-middle. Do NOT stagger `entryY` across sensors (that produces a spray-array look). All 5 arrowheads should visually stack at one point; the tails fan out to their respective sensors. Same color, same stroke width across the fan-in. This is the same rule for Sensor Health Monitor → Signal Fusion (blue edge): its endBinding also uses `entryX=0;entryY=0.5` — merging with the sensor fan-in at the same bind point.
+- All five sensor boxes (F1) → Signal Fusion (F2) — black edges, **bus-pattern fan-in**: every edge must use `exitX=1;exitY=0.5` on the source AND `entryX=0` on Signal Fusion with entryY staggered across the sensors (e.g., entryY = 0.15, 0.3, 0.5, 0.7, 0.85 for the 5 sensors). The 5 arrows should arrive at Signal Fusion as parallel horizontal lines entering from its left side, NOT fanning in from multiple sides (octopus anti-pattern). They should be the same color and stroke width.
 - Decision Tree (F2) → Motor Command Bus (F3) — blue edge, labeled "commands"
 - Fail-safe Fallback (F2) → Motor Command Bus (F3) — blue **dashed** edge (feedback/fallback)
 - Actuator Health Monitor (F3) → Explainer Log (F2) — black edge (reverse flow — diagnostics return)

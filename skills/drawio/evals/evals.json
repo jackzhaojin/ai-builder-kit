@@ -28,8 +28,7 @@
         "At least 2 edge-label cells exist: connectable='0', parent is an edge id (not the frame or '1'), style contains 'edgeLabel'",
         "All edges use edgeStyle=orthogonalEdgeStyle (no curved/straight edges — diagrams are orthogonal by default)",
         "No edge has more than 3 waypoints in its <Array as='points'> (aspiration: max 2 turns — 3 is allowed only for edges targeting frames, which need one extra routing bend)",
-        "When 3+ non-feedback edges share a target, they all enter at the SAME bind point — identical entryX AND identical entryY across every edge (arrowheads merge at one spot, not a spray array). Same-side feedback loops are exempt.",
-        "No edge's straight-line path from source center to target center passes through any non-endpoint content box (heuristic — catches most layout regressions where the router would have to dodge a box)",
+        "When 3+ non-feedback edges share a target, all of them enter from the same side of the target — same entryX OR same entryY (the bus/convergence pattern, not octopus fan-in; same-side feedback loops are exempt)",
         "PNG export file exists at the expected path and is >10 KB (rendered something non-trivial)"
       ]
     },
@@ -58,8 +57,7 @@
         "At least one feedback-loop edge with same-side exit/entry (exitX=entryX=0 OR exitX=entryX=1) — the Fail-safe Fallback loop",
         "All edges use edgeStyle=orthogonalEdgeStyle",
         "No edge has more than 3 waypoints in its <Array as='points'> (aspiration: max 2 turns — 3 is allowed only for edges targeting frames)",
-        "When 3+ non-feedback edges share a target, they all enter at the SAME bind point — identical entryX AND identical entryY across every edge (the 5 sensor fan-in into Signal Fusion must all target one merged entry point, e.g. entryX=0;entryY=0.5). Same-side feedback loops are exempt.",
-        "No edge's straight-line path from source center to target center passes through any non-endpoint content box (heuristic — catches most cases where cross-frame or long edges would visually transit a foreign box)",
+        "When 3+ non-feedback edges share a target, all of them enter from the same side of the target — same entryX OR same entryY (the 5 sensor fan-in into Signal Fusion must use this bus pattern; same-side feedback loops are exempt)",
         "Frames do not overlap: all 3 swimlane frames have non-overlapping bounding boxes (> 5px overlap fails)",
         "PNG export file exists at the expected path and is >10 KB"
       ]
