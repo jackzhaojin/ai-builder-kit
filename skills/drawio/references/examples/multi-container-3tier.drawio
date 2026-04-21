@@ -1,0 +1,248 @@
+<mxfile host="Electron" agent="drawio-skill/1.0">
+  <diagram name="Page-1" id="page-1">
+    <mxGraphModel dx="1795" dy="791" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="frame-sensors" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontStyle=0;fontColor=#1e1e1e;startSize=30;rounded=0;" value="Sensor Array" vertex="1">
+          <mxGeometry height="700" width="460" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="box-thermal" parent="frame-sensors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontColor=#1e1e1e;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Thermal Probe&#xa;(IR + ambient)" vertex="1">
+          <mxGeometry height="70" width="180" x="140" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="box-optical" parent="frame-sensors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontColor=#1e1e1e;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Optical Sensor" vertex="1">
+          <mxGeometry height="60" width="180" x="140" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="box-audio" parent="frame-sensors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontColor=#1e1e1e;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Audio Mic Array" vertex="1">
+          <mxGeometry height="60" width="180" x="140" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="box-lidar" parent="frame-sensors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontColor=#1e1e1e;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Lidar Scan&#xa;(32-beam)" vertex="1">
+          <mxGeometry height="70" width="180" x="140" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="box-vibration" parent="frame-sensors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontColor=#1e1e1e;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;dashed=1;dashPattern=8 8;" value="Vibration&#xa;(optional)" vertex="1">
+          <mxGeometry height="60" width="180" x="140" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="box-sensorhealth" parent="frame-sensors" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=12;fontColor=#1971c2;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Sensor Health&#xa;Monitor" vertex="1">
+          <mxGeometry height="60" width="180" x="140" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="frame-cognition" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontStyle=0;fontColor=#1e1e1e;startSize=30;rounded=0;" value="Cognition Core" vertex="1">
+          <mxGeometry height="700" width="560" x="560" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="box-fusion" parent="frame-cognition" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f08c00;strokeWidth=2;fontSize=14;fontColor=#f08c00;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Signal Fusion&#xa;(multi-modal)" vertex="1">
+          <mxGeometry height="70" width="180" x="200" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="box-pattern" parent="frame-cognition" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=14;fontColor=#1971c2;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Pattern Matcher" vertex="1">
+          <mxGeometry height="60" width="150" x="20" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="box-intent" parent="frame-cognition" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Intent Parser&#xa;(LLM)" vertex="1">
+          <mxGeometry height="70" width="150" x="215" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="box-context" parent="frame-cognition" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f08c00;strokeWidth=2;fontSize=14;fontColor=#f08c00;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Context Synth" vertex="1">
+          <mxGeometry height="60" width="150" x="390" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="box-decision" parent="frame-cognition" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Decision Tree&#xa;(Q-learning)" vertex="1">
+          <mxGeometry height="70" width="150" x="215" y="330" as="geometry" />
+        </mxCell>
+        <mxCell id="box-policy" parent="frame-cognition" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=14;fontColor=#1971c2;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;dashed=1;dashPattern=8 8;" value="Policy Gate&#xa;(safety check)" vertex="1">
+          <mxGeometry height="70" width="150" x="215" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="box-memory" parent="frame-cognition" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=14;fontColor=#1971c2;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Memory Store&#xa;(episodic)" vertex="1">
+          <mxGeometry height="70" width="150" x="390" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="box-replan" parent="frame-cognition" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=12;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;dashed=1;dashPattern=8 8;" value="Replan Trigger" vertex="1">
+          <mxGeometry height="60" width="140" x="30" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fusion-pattern" edge="1" parent="frame-cognition" source="box-fusion" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#f08c00;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;exitDx=0;exitDy=0;" target="box-pattern">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-fusion-intent" edge="1" parent="frame-cognition" source="box-fusion" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#f08c00;strokeWidth=2;endArrow=classic;endFill=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+            <mxPoint x="300" y="160" as="sourcePoint" />
+            <mxPoint x="290" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-fusion-context" edge="1" parent="frame-cognition" source="box-fusion" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#f08c00;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;exitDx=0;exitDy=0;" target="box-context">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-pattern-decision" edge="1" parent="frame-cognition" source="box-pattern" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971c2;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0;entryY=0.5;exitDx=0;exitDy=0;" target="box-decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-intent-decision" edge="1" parent="frame-cognition" source="box-intent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="box-decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-context-decision" edge="1" parent="frame-cognition" source="box-context" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#f08c00;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=1;entryY=0.5;exitDx=0;exitDy=0;" target="box-decision">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="465" y="365" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-decision-policy" edge="1" parent="frame-cognition" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="289.41" y="410" as="sourcePoint" />
+            <mxPoint x="289.41" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-decision-policy-label" connectable="0" parent="edge-decision-policy" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;span style=&quot;color: rgb(224, 49, 49); font-size: 12px; font-style: italic;&quot;&gt;validate action&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-decision-memory" edge="1" parent="frame-cognition" source="box-decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971c2;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.75;exitY=1;entryX=0.5;entryY=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="box-memory">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="328" y="420" />
+              <mxPoint x="465" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-decision-replan" edge="1" parent="frame-cognition" source="box-decision" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;dashed=1;dashPattern=8 8;exitX=0.25;exitY=1;entryX=0.5;entryY=0;exitDx=0;exitDy=0;entryDx=0;entryDy=0;" target="box-replan">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="252" y="420" />
+              <mxPoint x="100" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-replan-fusion" edge="1" parent="frame-cognition" source="box-replan" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;dashed=1;dashPattern=8 8;exitX=0;exitY=0.5;entryX=0;entryY=0.5;" target="box-fusion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="frame-actuators" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontStyle=0;fontColor=#1e1e1e;startSize=30;rounded=0;" value="Actuator Mesh" vertex="1">
+          <mxGeometry height="700" width="460" x="1180" y="80" as="geometry">
+            <mxRectangle height="30" width="130" x="1180" y="80" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yiLfplY1Tr8tY1ckWvw1-4" edge="1" parent="frame-actuators" source="box-motor" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#1971C2;" target="box-speech">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="box-motor" parent="frame-actuators" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=14;fontColor=#1971c2;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Motor Control" vertex="1">
+          <mxGeometry height="60" width="180" x="140" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="box-speech" parent="frame-actuators" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Speech Engine&#xa;(TTS)" vertex="1">
+          <mxGeometry height="70" width="180" x="140" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="yiLfplY1Tr8tY1ckWvw1-3" edge="1" parent="frame-actuators" source="box-display" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971C2;" target="box-speech">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="box-display" parent="frame-actuators" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=14;fontColor=#1971c2;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Display Panel" vertex="1">
+          <mxGeometry height="60" width="180" x="140" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="yiLfplY1Tr8tY1ckWvw1-2" edge="1" parent="frame-actuators" source="box-haptic" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971C2;" target="box-display" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="box-haptic" parent="frame-actuators" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=14;fontColor=#1971c2;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Haptic Engine" vertex="1">
+          <mxGeometry height="60" width="180" x="140" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="box-logsink" parent="frame-actuators" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=12;fontColor=#1971c2;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;dashed=1;dashPattern=8 8;" value="Telemetry Sink&#xa;(cold storage)" vertex="1">
+          <mxGeometry height="60" width="180" x="140" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="box-emergency" parent="frame-actuators" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="E-Stop Relay" vertex="1">
+          <mxGeometry height="60" width="180" x="140" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-emergency-motor" edge="1" parent="frame-actuators" source="box-emergency" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;exitX=1;exitY=0.5;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitDx=0;exitDy=0;" target="box-motor">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="610" />
+              <mxPoint x="370" y="90" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-emergency-motor-label" connectable="0" parent="edge-emergency-motor" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;span style=&quot;color: rgb(224, 49, 49); font-size: 12px; font-style: italic;&quot;&gt;panic halt&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.3" as="geometry">
+            <mxPoint y="-103" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="legend-user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=12;fontColor=#1e1e1e;arcSize=15;" value="User" vertex="1">
+          <mxGeometry height="30" width="100" x="1700" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-det" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=12;fontColor=#1971c2;arcSize=15;" value="Deterministic" vertex="1">
+          <mxGeometry height="30" width="100" x="1700" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-agent" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=12;fontColor=#e03131;arcSize=15;" value="Agentic" vertex="1">
+          <mxGeometry height="30" width="100" x="1700" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-mix" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f08c00;strokeWidth=2;fontSize=12;fontColor=#f08c00;arcSize=15;" value="Mix" vertex="1">
+          <mxGeometry height="30" width="100" x="1700" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-thermal-fusion" edge="1" parent="1" source="box-thermal" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1e1e1e;strokeWidth=2;endArrow=classic;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="box-fusion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-optical-fusion" edge="1" parent="1" source="box-optical" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1e1e1e;strokeWidth=2;endArrow=classic;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="box-fusion">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="270" />
+              <mxPoint x="530" y="175" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-audio-fusion" edge="1" parent="1" source="box-audio" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1e1e1e;strokeWidth=2;endArrow=classic;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="box-fusion">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="370" />
+              <mxPoint x="530" y="175" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-lidar-fusion" edge="1" parent="1" source="box-lidar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1e1e1e;strokeWidth=2;endArrow=classic;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="box-fusion">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="475" />
+              <mxPoint x="530" y="175" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-vibration-fusion" edge="1" parent="1" source="box-vibration" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1e1e1e;strokeWidth=2;endArrow=classic;endFill=1;dashed=1;dashPattern=8 8;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="box-fusion">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="530" y="580" />
+              <mxPoint x="530" y="175" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-policy-haptic" edge="1" parent="1" source="box-policy" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971c2;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="frame-actuators">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="850" y="680" />
+              <mxPoint x="1150" y="680" />
+              <mxPoint x="1150" y="430" />
+            </Array>
+            <mxPoint x="1150" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-policy-haptic-label" connectable="0" parent="edge-policy-haptic" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;span style=&quot;color: rgb(25, 113, 194); font-size: 12px; font-style: italic;&quot;&gt;approved&lt;br&gt;command&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1" as="geometry">
+            <mxPoint x="-69" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-intent-speech" edge="1" parent="1" source="box-intent" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;dashed=1;dashPattern=8 8;" target="box-speech">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1150" y="315" />
+              <mxPoint x="1150" y="275" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge-haptic-logsink" edge="1" parent="1" source="box-haptic" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971c2;strokeWidth=2;endArrow=classic;endFill=1;dashed=1;dashPattern=8 8;" target="box-logsink">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="yiLfplY1Tr8tY1ckWvw1-5" edge="1" parent="1" source="box-sensorhealth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeColor=#1971C2;" target="frame-cognition">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="270" y="830" />
+              <mxPoint x="840" y="830" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yiLfplY1Tr8tY1ckWvw1-6" edge="1" parent="1" source="box-sensorhealth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeColor=#1971C2;" target="frame-actuators">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="270" y="830" />
+              <mxPoint x="1410" y="830" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

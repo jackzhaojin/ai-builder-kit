@@ -1,0 +1,497 @@
+{
+  "metadata": {
+    "skill_name": "drawio",
+    "skill_path": "<path/to/skill>",
+    "executor_model": "claude-opus-4-7[1m]",
+    "analyzer_model": "claude-opus-4-7[1m]",
+    "timestamp": "2026-04-20T23:49:53Z",
+    "evals_run": [
+      1,
+      2
+    ],
+    "runs_per_configuration": 1,
+    "source": "Iteration 1 \u2014 initial port of excalidraw patterns (Step 0 planning, render-and-look loop, MANDATORY file index) to drawio skill. 2 evals: agent-sdk-harness (single-frame), multi-container-3tier (3 side-by-side frames). 1 run per configuration."
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 18,
+        "failed": 0,
+        "total": 18,
+        "time_seconds": 158.16,
+        "tokens": 71137,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is well-formed XML with mxfile > diagram > mxGraphModel > root structure",
+          "passed": true,
+          "evidence": "mxfile > diagram > mxGraphModel > root skeleton present"
+        },
+        {
+          "text": "Root contains both mxCell id='0' and mxCell id='1' parent='0' (required draw.io skeleton)",
+          "passed": true,
+          "evidence": "cells 0 and 1 present with id=1 parent=0"
+        },
+        {
+          "text": "Every mxCell with vertex='1' has a child mxGeometry element",
+          "passed": true,
+          "evidence": "all 21 vertex cells have mxGeometry"
+        },
+        {
+          "text": "Every mxCell with edge='1' has a child mxGeometry with relative='1'",
+          "passed": true,
+          "evidence": "all 12 edges have <mxGeometry relative='1'/>"
+        },
+        {
+          "text": "All IDs are unique across the document",
+          "passed": true,
+          "evidence": "all 35 ids unique"
+        },
+        {
+          "text": "Every edge's source and target reference an existing mxCell id in the document",
+          "passed": true,
+          "evidence": "all 12 edges have valid source+target refs"
+        },
+        {
+          "text": "Exactly one swimlane frame (style contains 'swimlane') \u2014 this is a single-subsystem diagram",
+          "passed": true,
+          "evidence": "exactly 1 swimlane frame(s)"
+        },
+        {
+          "text": "At least 12 content boxes (vertex cells that are not the frame and not legend swatches)",
+          "passed": true,
+          "evidence": "12 content boxes (\u2265 12)"
+        },
+        {
+          "text": "All content boxes use rounded=1 and arcSize=15 (hand-friendly rounded corners, not sharp)",
+          "passed": true,
+          "evidence": "all 12 content boxes use rounded=1 (arcSize=15 where set)"
+        },
+        {
+          "text": "All boxes use fontStyle=0 or omit fontStyle entirely \u2014 never fontStyle=2 (italic text on boxes is a style regression)",
+          "passed": true,
+          "evidence": "all boxes have fontStyle=0 or omitted"
+        },
+        {
+          "text": "Every color-coded box with strokeColor matching one of the 4 semantic colors (#1e1e1e, #1971c2, #e03131, #f08c00) has a matching fontColor in its style string \u2014 stroke and font must agree",
+          "passed": true,
+          "evidence": "all 16 color-coded boxes have stroke=font (or no semantic stroke)"
+        },
+        {
+          "text": "All 4 semantic colors (#1e1e1e, #1971c2, #e03131, #f08c00) appear as strokeColor on at least one cell \u2014 the full palette is used",
+          "passed": true,
+          "evidence": "all 4 semantic colors present: ['#1971c2', '#1e1e1e', '#e03131', '#f08c00']"
+        },
+        {
+          "text": "At least 4 legend swatches exist: boxes sized 80-120 wide and 20-40 tall, one per semantic color, inside the frame (parent = frame id)",
+          "passed": true,
+          "evidence": "4 legend swatches covering 4 colors (frame-scope OK)"
+        },
+        {
+          "text": "At least one edge uses dashed=1 (the retry/feedback flows must be visually dashed)",
+          "passed": true,
+          "evidence": "2 dashed edges (\u2265 1)"
+        },
+        {
+          "text": "At least one pair of edges uses same-side exit/entry \u2014 both endpoints at exitX=0;entryX=0 OR both at exitX=1;entryX=1 (the feedback-loop mechanic; opposite-side loops route around the whole frame and look wrong)",
+          "passed": true,
+          "evidence": "2 same-side feedback edges: ['edge-planning-detproc', 'edge-tasklevel-detproc']"
+        },
+        {
+          "text": "At least 2 edge-label cells exist: connectable='0', parent is an edge id (not the frame or '1'), style contains 'edgeLabel'",
+          "passed": true,
+          "evidence": "4 edge-label cells correctly parented to edges"
+        },
+        {
+          "text": "All edges use edgeStyle=orthogonalEdgeStyle (no curved/straight edges \u2014 diagrams are orthogonal by default)",
+          "passed": true,
+          "evidence": "all 12 edges use orthogonalEdgeStyle"
+        },
+        {
+          "text": "PNG export file exists at the expected path and is >10 KB (rendered something non-trivial)",
+          "passed": true,
+          "evidence": "PNG exists (70929 bytes)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 18,
+        "failed": 0,
+        "total": 18,
+        "time_seconds": 437.534,
+        "tokens": 110164,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is well-formed XML with mxfile > diagram > mxGraphModel > root structure",
+          "passed": true,
+          "evidence": "mxfile > diagram > mxGraphModel > root skeleton present"
+        },
+        {
+          "text": "Root contains both mxCell id='0' and mxCell id='1' parent='0'",
+          "passed": true,
+          "evidence": "cells 0 and 1 present with id=1 parent=0"
+        },
+        {
+          "text": "Every vertex cell has a child mxGeometry; every edge cell has a child mxGeometry with relative='1'",
+          "passed": true,
+          "evidence": "all 28 vertex cells have mxGeometry"
+        },
+        {
+          "text": "All IDs are unique across the document",
+          "passed": true,
+          "evidence": "all 48 ids unique"
+        },
+        {
+          "text": "Every edge's source and target reference an existing mxCell id",
+          "passed": true,
+          "evidence": "all 18 edges have valid source+target refs"
+        },
+        {
+          "text": "Exactly 3 swimlane frames \u2014 one per container (Sensor Array, Cognition Core, Actuator Mesh)",
+          "passed": true,
+          "evidence": "exactly 3 swimlane frame(s)"
+        },
+        {
+          "text": "At least 18 content boxes (vertex cells that are not frames and not legend swatches)",
+          "passed": true,
+          "evidence": "19 content boxes (\u2265 18)"
+        },
+        {
+          "text": "All content boxes use rounded=1 and arcSize=15",
+          "passed": true,
+          "evidence": "all 19 content boxes use rounded=1 (arcSize=15 where set)"
+        },
+        {
+          "text": "All boxes have fontStyle=0 or omit fontStyle (no italic box text)",
+          "passed": true,
+          "evidence": "all boxes have fontStyle=0 or omitted"
+        },
+        {
+          "text": "Every color-coded box with a semantic strokeColor has a matching fontColor in its style (strokeColor = fontColor)",
+          "passed": true,
+          "evidence": "all 23 color-coded boxes have stroke=font (or no semantic stroke)"
+        },
+        {
+          "text": "All 4 semantic colors (#1e1e1e, #1971c2, #e03131, #f08c00) appear as strokeColor somewhere \u2014 full palette used",
+          "passed": true,
+          "evidence": "all 4 semantic colors present: ['#1971c2', '#1e1e1e', '#e03131', '#f08c00']"
+        },
+        {
+          "text": "At least 3 cross-frame edges exist: edges whose source-cell parent differs from target-cell parent AND whose own parent is '1' (cross-frame edges live at top level, not inside any frame \u2014 this is the most-missed mechanic)",
+          "passed": true,
+          "evidence": "9 cross-frame edges at parent='1'"
+        },
+        {
+          "text": "At least 2 internal edges exist where edge.parent equals both endpoints' parent (a frame id) \u2014 internal edges are inside the frame",
+          "passed": true,
+          "evidence": "9 internal edges with parent matching endpoints"
+        },
+        {
+          "text": "At least 2 cells have dashed=1 in their style (optional/noteworthy markers \u2014 Vibration sensor, Fail-safe, LED/Audio Feedback, fallback edge)",
+          "passed": true,
+          "evidence": "5 dashed cells (boxes+edges, \u2265 2)"
+        },
+        {
+          "text": "Legend exists: 4 swatches (80-120 wide, 20-40 tall), one per semantic color \u2014 placement either inside a frame OR at top-level is acceptable for multi-container diagrams",
+          "passed": true,
+          "evidence": "4 legend swatches covering 4 colors (frame-scope OK)"
+        },
+        {
+          "text": "At least one feedback-loop edge with same-side exit/entry (exitX=entryX=0 OR exitX=entryX=1) \u2014 the Fail-safe Fallback loop",
+          "passed": true,
+          "evidence": "1 same-side feedback edges: ['edge-decision-failsafe']"
+        },
+        {
+          "text": "All edges use edgeStyle=orthogonalEdgeStyle",
+          "passed": true,
+          "evidence": "all 18 edges use orthogonalEdgeStyle"
+        },
+        {
+          "text": "PNG export file exists at the expected path and is >10 KB",
+          "passed": true,
+          "evidence": "PNG exists (69780 bytes)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333333333333334,
+        "passed": 15,
+        "failed": 3,
+        "total": 18,
+        "time_seconds": 103.605,
+        "tokens": 37340,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is well-formed XML with mxfile > diagram > mxGraphModel > root structure",
+          "passed": true,
+          "evidence": "mxfile > diagram > mxGraphModel > root skeleton present"
+        },
+        {
+          "text": "Root contains both mxCell id='0' and mxCell id='1' parent='0' (required draw.io skeleton)",
+          "passed": true,
+          "evidence": "cells 0 and 1 present with id=1 parent=0"
+        },
+        {
+          "text": "Every mxCell with vertex='1' has a child mxGeometry element",
+          "passed": true,
+          "evidence": "all 21 vertex cells have mxGeometry"
+        },
+        {
+          "text": "Every mxCell with edge='1' has a child mxGeometry with relative='1'",
+          "passed": true,
+          "evidence": "all 12 edges have <mxGeometry relative='1'/>"
+        },
+        {
+          "text": "All IDs are unique across the document",
+          "passed": true,
+          "evidence": "all 35 ids unique"
+        },
+        {
+          "text": "Every edge's source and target reference an existing mxCell id in the document",
+          "passed": true,
+          "evidence": "all 12 edges have valid source+target refs"
+        },
+        {
+          "text": "Exactly one swimlane frame (style contains 'swimlane') \u2014 this is a single-subsystem diagram",
+          "passed": true,
+          "evidence": "exactly 1 swimlane frame(s)"
+        },
+        {
+          "text": "At least 12 content boxes (vertex cells that are not the frame and not legend swatches)",
+          "passed": true,
+          "evidence": "12 content boxes (\u2265 12)"
+        },
+        {
+          "text": "All content boxes use rounded=1 and arcSize=15 (hand-friendly rounded corners, not sharp)",
+          "passed": false,
+          "evidence": "12 content boxes without rounded=1 arcSize=15: [('long-spec', \"rounded='0'\"), ('ai-log', \"rounded='0'\"), ('det-proc', \"rounded='0'\"), ('planning', \"rounded='0'\"), ('task-agents', \"rounded='0'\")]"
+        },
+        {
+          "text": "All boxes use fontStyle=0 or omit fontStyle entirely \u2014 never fontStyle=2 (italic text on boxes is a style regression)",
+          "passed": false,
+          "evidence": "13 boxes/frames with non-zero fontStyle: [('frame', \"fontStyle='1'\"), ('long-spec', \"fontStyle='1'\"), ('ai-log', \"fontStyle='1'\"), ('det-proc', \"fontStyle='1'\"), ('planning', \"fontStyle='1'\")]"
+        },
+        {
+          "text": "Every color-coded box with strokeColor matching one of the 4 semantic colors (#1e1e1e, #1971c2, #e03131, #f08c00) has a matching fontColor in its style string \u2014 stroke and font must agree",
+          "passed": false,
+          "evidence": "16/16 color-coded boxes with stroke\u2260font: [('legend-user', 'stroke=#1e1e1e font=#ffffff'), ('legend-det', 'stroke=#1971c2 font=#ffffff'), ('legend-agentic', 'stroke=#e03131 font=#ffffff'), ('legend-mix', 'stroke=#f08c00 font=#ffffff'), ('long-spec', 'stroke=#1e1e1e font=#ffffff')]"
+        },
+        {
+          "text": "All 4 semantic colors (#1e1e1e, #1971c2, #e03131, #f08c00) appear as strokeColor on at least one cell \u2014 the full palette is used",
+          "passed": true,
+          "evidence": "all 4 semantic colors present: ['#1971c2', '#1e1e1e', '#e03131', '#f08c00']"
+        },
+        {
+          "text": "At least 4 legend swatches exist: boxes sized 80-120 wide and 20-40 tall, one per semantic color, inside the frame (parent = frame id)",
+          "passed": true,
+          "evidence": "4 legend swatches covering 4 colors (frame-scope OK)"
+        },
+        {
+          "text": "At least one edge uses dashed=1 (the retry/feedback flows must be visually dashed)",
+          "passed": true,
+          "evidence": "2 dashed edges (\u2265 1)"
+        },
+        {
+          "text": "At least one pair of edges uses same-side exit/entry \u2014 both endpoints at exitX=0;entryX=0 OR both at exitX=1;entryX=1 (the feedback-loop mechanic; opposite-side loops route around the whole frame and look wrong)",
+          "passed": true,
+          "evidence": "2 same-side feedback edges: ['e4', 'e5']"
+        },
+        {
+          "text": "At least 2 edge-label cells exist: connectable='0', parent is an edge id (not the frame or '1'), style contains 'edgeLabel'",
+          "passed": true,
+          "evidence": "4 edge-label cells correctly parented to edges"
+        },
+        {
+          "text": "All edges use edgeStyle=orthogonalEdgeStyle (no curved/straight edges \u2014 diagrams are orthogonal by default)",
+          "passed": true,
+          "evidence": "all 12 edges use orthogonalEdgeStyle"
+        },
+        {
+          "text": "PNG export file exists at the expected path and is >10 KB (rendered something non-trivial)",
+          "passed": true,
+          "evidence": "PNG exists (55605 bytes)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8333333333333334,
+        "passed": 15,
+        "failed": 3,
+        "total": 18,
+        "time_seconds": 92.851,
+        "tokens": 31391,
+        "tool_calls": 0,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is well-formed XML with mxfile > diagram > mxGraphModel > root structure",
+          "passed": true,
+          "evidence": "mxfile > diagram > mxGraphModel > root skeleton present"
+        },
+        {
+          "text": "Root contains both mxCell id='0' and mxCell id='1' parent='0'",
+          "passed": true,
+          "evidence": "cells 0 and 1 present with id=1 parent=0"
+        },
+        {
+          "text": "Every vertex cell has a child mxGeometry; every edge cell has a child mxGeometry with relative='1'",
+          "passed": true,
+          "evidence": "all 26 vertex cells have mxGeometry"
+        },
+        {
+          "text": "All IDs are unique across the document",
+          "passed": true,
+          "evidence": "all 46 ids unique"
+        },
+        {
+          "text": "Every edge's source and target reference an existing mxCell id",
+          "passed": true,
+          "evidence": "all 18 edges have valid source+target refs"
+        },
+        {
+          "text": "Exactly 3 swimlane frames \u2014 one per container (Sensor Array, Cognition Core, Actuator Mesh)",
+          "passed": true,
+          "evidence": "exactly 3 swimlane frame(s)"
+        },
+        {
+          "text": "At least 18 content boxes (vertex cells that are not frames and not legend swatches)",
+          "passed": true,
+          "evidence": "19 content boxes (\u2265 18)"
+        },
+        {
+          "text": "All content boxes use rounded=1 and arcSize=15",
+          "passed": false,
+          "evidence": "19 content boxes without rounded=1 arcSize=15: [('s-thermal', \"rounded='0'\"), ('s-optical', \"rounded='0'\"), ('s-audio', \"rounded='0'\"), ('s-lidar', \"rounded='0'\"), ('s-vibration', \"rounded='0'\")]"
+        },
+        {
+          "text": "All boxes have fontStyle=0 or omit fontStyle (no italic box text)",
+          "passed": false,
+          "evidence": "3 boxes/frames with non-zero fontStyle: [('frame1', \"fontStyle='1'\"), ('frame2', \"fontStyle='1'\"), ('frame3', \"fontStyle='1'\")]"
+        },
+        {
+          "text": "Every color-coded box with a semantic strokeColor has a matching fontColor in its style (strokeColor = fontColor)",
+          "passed": true,
+          "evidence": "all 23 color-coded boxes have stroke=font (or no semantic stroke)"
+        },
+        {
+          "text": "All 4 semantic colors (#1e1e1e, #1971c2, #e03131, #f08c00) appear as strokeColor somewhere \u2014 full palette used",
+          "passed": true,
+          "evidence": "all 4 semantic colors present: ['#1971c2', '#1e1e1e', '#e03131', '#f08c00']"
+        },
+        {
+          "text": "At least 3 cross-frame edges exist: edges whose source-cell parent differs from target-cell parent AND whose own parent is '1' (cross-frame edges live at top level, not inside any frame \u2014 this is the most-missed mechanic)",
+          "passed": true,
+          "evidence": "9 cross-frame edges at parent='1'"
+        },
+        {
+          "text": "At least 2 internal edges exist where edge.parent equals both endpoints' parent (a frame id) \u2014 internal edges are inside the frame",
+          "passed": true,
+          "evidence": "9 internal edges with parent matching endpoints"
+        },
+        {
+          "text": "At least 2 cells have dashed=1 in their style (optional/noteworthy markers \u2014 Vibration sensor, Fail-safe, LED/Audio Feedback, fallback edge)",
+          "passed": true,
+          "evidence": "5 dashed cells (boxes+edges, \u2265 2)"
+        },
+        {
+          "text": "Legend exists: 4 swatches (80-120 wide, 20-40 tall), one per semantic color \u2014 placement either inside a frame OR at top-level is acceptable for multi-container diagrams",
+          "passed": true,
+          "evidence": "4 legend swatches covering 4 colors (frame-scope OK)"
+        },
+        {
+          "text": "At least one feedback-loop edge with same-side exit/entry (exitX=entryX=0 OR exitX=entryX=1) \u2014 the Fail-safe Fallback loop",
+          "passed": false,
+          "evidence": "only 0 same-side feedback edges, need \u2265 1"
+        },
+        {
+          "text": "All edges use edgeStyle=orthogonalEdgeStyle",
+          "passed": true,
+          "evidence": "all 18 edges use orthogonalEdgeStyle"
+        },
+        {
+          "text": "PNG export file exists at the expected path and is >10 KB",
+          "passed": true,
+          "evidence": "PNG exists (52264 bytes)"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": 297.847,
+        "stddev": 197.5472,
+        "min": 158.16,
+        "max": 437.534
+      },
+      "tokens": {
+        "mean": 90650.5,
+        "stddev": 27596.2563,
+        "min": 71137,
+        "max": 110164
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.8333,
+        "stddev": 0.0,
+        "min": 0.8333,
+        "max": 0.8333
+      },
+      "time_seconds": {
+        "mean": 98.228,
+        "stddev": 7.6042,
+        "min": 92.851,
+        "max": 103.605
+      },
+      "tokens": {
+        "mean": 34365.5,
+        "stddev": 4206.5782,
+        "min": 31391,
+        "max": 37340
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.17",
+      "time_seconds": "+199.6",
+      "tokens": "+56285"
+    }
+  },
+  "notes": []
+}

@@ -1,0 +1,68 @@
+{
+  "skill_name": "drawio",
+  "description": "Evaluates whether the drawio skill produces .drawio diagrams in Jack's brand style with correct mxGraphModel mechanics. Each eval reads a prompt, expects a matching .drawio file (and .png render), and checks programmatic assertions covering (1) file validity, (2) brand-style rules (palette, rounded corners, matching stroke/font colors, Helvetica, fontStyle=0 on boxes), (3) draw.io mechanics (edge parent matches endpoints' parent, source/target IDs resolve, swimlane frames present, cross-frame edges at parent='1'), and (4) diagram-specific structure (frame count, legend presence, dashed feedback loops, edge labels with italic HTML spans).",
+  "executor_notes": "Each eval expects the executor to save the output as <eval_name>.drawio in the outputs directory and export it to <eval_name>.png via the draw.io CLI ('/Applications/draw.io.app/Contents/MacOS/draw.io -x -f png -b 10 -o ...' — NEVER with the -e flag). The grader reads the .drawio XML file and runs evals/grade_drawio.py to score assertions against the XML structure. The grader also smoke-tests that the .png file exists and is non-trivial in size (>10 KB).",
+  "evals": [
+    {
+      "id": 1,
+      "eval_name": "agent-sdk-harness",
+      "prompt": "See evals/files/01-agent-sdk-harness-prompt.md. Single swimlane 'Agentic Harness v1' with ~12 content boxes in 4-color semantic palette, 2 same-side feedback loops (dashed), 2+ italic edge labels, legend top-right inside the frame.",
+      "expected_output": "agent-sdk-harness.drawio + agent-sdk-harness.png. 1 swimlane frame, 12+ content boxes, 4-box legend top-right, 14+ edges including 2 dashed feedback loops and 2+ edge labels.",
+      "files": ["evals/files/01-agent-sdk-harness-prompt.md"],
+      "expectations": [
+        "File is well-formed XML with mxfile > diagram > mxGraphModel > root structure",
+        "Root contains both mxCell id='0' and mxCell id='1' parent='0' (required draw.io skeleton)",
+        "Every mxCell with vertex='1' has a child mxGeometry element",
+        "Every mxCell with edge='1' has a child mxGeometry with relative='1'",
+        "All IDs are unique across the document",
+        "Every edge's source and target reference an existing mxCell id in the document",
+        "Exactly one swimlane frame (style contains 'swimlane') — this is a single-subsystem diagram",
+        "At least 12 content boxes (vertex cells that are not the frame and not legend swatches)",
+        "All content boxes use rounded=1 and arcSize=15 (hand-friendly rounded corners, not sharp)",
+        "All boxes use fontStyle=0 or omit fontStyle entirely — never fontStyle=2 (italic text on boxes is a style regression)",
+        "Every color-coded box with strokeColor matching one of the 4 semantic colors (#1e1e1e, #1971c2, #e03131, #f08c00) has a matching fontColor in its style string — stroke and font must agree",
+        "All 4 semantic colors (#1e1e1e, #1971c2, #e03131, #f08c00) appear as strokeColor on at least one cell — the full palette is used",
+        "At least 4 legend swatches exist: boxes sized 80-120 wide and 20-40 tall, one per semantic color, inside the frame (parent = frame id)",
+        "At least one edge uses dashed=1 (the retry/feedback flows must be visually dashed)",
+        "At least one pair of edges uses same-side exit/entry — both endpoints at exitX=0;entryX=0 OR both at exitX=1;entryX=1 (the feedback-loop mechanic; opposite-side loops route around the whole frame and look wrong)",
+        "At least 2 edge-label cells exist: connectable='0', parent is an edge id (not the frame or '1'), style contains 'edgeLabel'",
+        "All edges use edgeStyle=orthogonalEdgeStyle (no curved/straight edges — diagrams are orthogonal by default)",
+        "No edge has more than 3 waypoints in its <Array as='points'> (aspiration: max 2 turns — 3 is allowed only for edges targeting frames, which need one extra routing bend)",
+        "When 3+ non-feedback edges share a target, they all enter at the SAME bind point — identical entryX AND identical entryY across every edge (arrowheads merge at one spot, not a spray array). Same-side feedback loops are exempt.",
+        "No edge's straight-line path from source center to target center passes through any non-endpoint content box (heuristic — catches most layout regressions where the router would have to dodge a box)",
+        "PNG export file exists at the expected path and is >10 KB (rendered something non-trivial)"
+      ]
+    },
+    {
+      "id": 2,
+      "eval_name": "multi-container-3tier",
+      "prompt": "See evals/files/02-multi-container-3tier-prompt.md. Three side-by-side swimlane frames (Sensor Array, Cognition Core, Actuator Mesh) with cross-frame edges at parent='1' and internal edges at parent='frame-id'. Mixed 4-color palette. ≥ 3 cross-frame edges, ≥ 2 dashed boxes/edges, legend in Frame 2.",
+      "expected_output": "multi-container-3tier.drawio + multi-container-3tier.png. 3 swimlane frames, 18+ content boxes, 4-color palette, cross-frame edges, legend in Cognition Core frame.",
+      "files": ["evals/files/02-multi-container-3tier-prompt.md"],
+      "expectations": [
+        "File is well-formed XML with mxfile > diagram > mxGraphModel > root structure",
+        "Root contains both mxCell id='0' and mxCell id='1' parent='0'",
+        "Every vertex cell has a child mxGeometry; every edge cell has a child mxGeometry with relative='1'",
+        "All IDs are unique across the document",
+        "Every edge's source and target reference an existing mxCell id",
+        "Exactly 3 swimlane frames — one per container (Sensor Array, Cognition Core, Actuator Mesh)",
+        "At least 18 content boxes (vertex cells that are not frames and not legend swatches)",
+        "All content boxes use rounded=1 and arcSize=15",
+        "All boxes have fontStyle=0 or omit fontStyle (no italic box text)",
+        "Every color-coded box with a semantic strokeColor has a matching fontColor in its style (strokeColor = fontColor)",
+        "All 4 semantic colors (#1e1e1e, #1971c2, #e03131, #f08c00) appear as strokeColor somewhere — full palette used",
+        "At least 3 cross-frame edges exist: edges whose source-cell parent differs from target-cell parent AND whose own parent is '1' (cross-frame edges live at top level, not inside any frame — this is the most-missed mechanic)",
+        "At least 2 internal edges exist where edge.parent equals both endpoints' parent (a frame id) — internal edges are inside the frame",
+        "At least 2 cells have dashed=1 in their style (optional/noteworthy markers — Vibration sensor, Fail-safe, LED/Audio Feedback, fallback edge)",
+        "Legend exists: 4 swatches (80-120 wide, 20-40 tall), one per semantic color — placement either inside a frame OR at top-level is acceptable for multi-container diagrams",
+        "At least one feedback-loop edge with same-side exit/entry (exitX=entryX=0 OR exitX=entryX=1) — the Fail-safe Fallback loop",
+        "All edges use edgeStyle=orthogonalEdgeStyle",
+        "No edge has more than 3 waypoints in its <Array as='points'> (aspiration: max 2 turns — 3 is allowed only for edges targeting frames)",
+        "When 3+ non-feedback edges share a target, they all enter at the SAME bind point — identical entryX AND identical entryY across every edge (the 5 sensor fan-in into Signal Fusion must all target one merged entry point, e.g. entryX=0;entryY=0.5). Same-side feedback loops are exempt.",
+        "No edge's straight-line path from source center to target center passes through any non-endpoint content box (heuristic — catches most cases where cross-frame or long edges would visually transit a foreign box)",
+        "Frames do not overlap: all 3 swimlane frames have non-overlapping bounding boxes (> 5px overlap fails)",
+        "PNG export file exists at the expected path and is >10 KB"
+      ]
+    }
+  ]
+}

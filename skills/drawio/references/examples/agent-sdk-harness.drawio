@@ -1,0 +1,113 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.3.0 Chrome/140.0.7339.249 Electron/38.7.2 Safari/537.36">
+  <diagram name="Page-1" id="page-1">
+    <mxGraphModel dx="1908" dy="840" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2200" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="frame-right" parent="1" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontStyle=0;fontColor=#1e1e1e;startSize=30;rounded=0;" value="Agentic Harness v1" vertex="1">
+          <mxGeometry height="820" width="920" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="box-longspec" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontColor=#1e1e1e;arcSize=15;" value="Long Spec (Human&#xa;+ AI), no prompting" vertex="1">
+          <mxGeometry height="60" width="160" x="190" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="P66dQyduhBbfPgqVPCEN-1" edge="1" parent="frame-right" source="box-ailog" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="box-detproc" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="box-ailog" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;" value="AI Log monitoring&#xa;and collaboration" vertex="1">
+          <mxGeometry height="60" width="160" x="190" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="P66dQyduhBbfPgqVPCEN-2" edge="1" parent="frame-right" source="box-detproc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971C2;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=classic;endFill=1;" target="box-tasklevel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="box-detproc" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=12;fontColor=#1971c2;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Deterministic Processor,&#xa;once in task mode will&#xa;pick up next available&#xa;task" vertex="1">
+          <mxGeometry height="80" width="180" x="180" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="P66dQyduhBbfPgqVPCEN-5" edge="1" parent="frame-right" source="box-planning" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#E03131;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=classic;dashed=1;" target="box-detproc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="P66dQyduhBbfPgqVPCEN-6" connectable="0" parent="P66dQyduhBbfPgqVPCEN-5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="&lt;span style=&quot;text-wrap-mode: wrap; color: rgb(224, 49, 49); font-size: 12px; font-style: italic; text-align: left;&quot;&gt;Human Readable&lt;/span&gt;&lt;br style=&quot;text-wrap-mode: wrap; color: rgb(224, 49, 49); font-size: 12px; font-style: italic; text-align: left;&quot;&gt;&lt;span style=&quot;text-wrap-mode: wrap; color: rgb(224, 49, 49); font-size: 12px; font-style: italic; text-align: left;&quot;&gt;Handoffs&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2165" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="box-planning" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;" value="Planning Agents&#xa;(why, what, how,&#xa;when in seq)" vertex="1">
+          <mxGeometry height="70" width="150" x="60" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="P66dQyduhBbfPgqVPCEN-3" edge="1" parent="frame-right" source="box-tasklevel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeColor=#E03131;strokeWidth=2;dashed=1;" target="box-detproc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="P66dQyduhBbfPgqVPCEN-4" connectable="0" parent="P66dQyduhBbfPgqVPCEN-3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=default;" value="&lt;span style=&quot;color: rgb(224, 49, 49); font-size: 12px; font-style: italic; text-align: left; text-wrap-mode: wrap;&quot;&gt;Human Readable&lt;/span&gt;&lt;br style=&quot;color: rgb(224, 49, 49); font-size: 12px; font-style: italic; text-align: left; text-wrap-mode: wrap;&quot;&gt;&lt;span style=&quot;color: rgb(224, 49, 49); font-size: 12px; font-style: italic; text-align: left; text-wrap-mode: wrap;&quot;&gt;Handoffs&lt;/span&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0549" y="1" as="geometry">
+            <mxPoint x="1" y="30" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="P66dQyduhBbfPgqVPCEN-7" edge="1" parent="frame-right" source="box-tasklevel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#E03131;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=classic;" target="box-build">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="P66dQyduhBbfPgqVPCEN-8" edge="1" parent="frame-right" source="box-tasklevel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeColor=#E03131;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=classic;" target="box-research">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="P66dQyduhBbfPgqVPCEN-9" edge="1" parent="frame-right" source="box-tasklevel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeColor=#E03131;strokeWidth=2;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;endArrow=classic;" target="box-validate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="box-tasklevel" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#E03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Task Level Agents" vertex="1">
+          <mxGeometry height="70" width="150" x="330" y="390" as="geometry" />
+        </mxCell>
+        <mxCell id="box-research" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Research" vertex="1">
+          <mxGeometry height="50" width="120" x="140" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="box-build" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Build" vertex="1">
+          <mxGeometry height="50" width="130" x="340" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="box-validate" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Validate (product&#xa;owner UAT)" vertex="1">
+          <mxGeometry height="50" width="120" x="560" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="box-human" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;dashed=1;dashPattern=8 8;" value="Call for human in&#xa;the loop or replan" vertex="1">
+          <mxGeometry height="50" width="120" x="740" y="580" as="geometry" />
+        </mxCell>
+        <mxCell id="box-analyze" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=12;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Analyze current code&#xa;and goal, generate task&#xa;spec" vertex="1">
+          <mxGeometry height="60" width="140" x="130" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="box-playwright" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=12;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="MCP Playwright, giving&#xa;AI eyes and self&#xa;validation and build plus&#xa;test, adhoc + e2e&#xa;regression" vertex="1">
+          <mxGeometry height="80" width="150" x="330" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="box-subtask" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=12;fontColor=#e03131;arcSize=15;align=center;verticalAlign=middle;fontFamily=Helvetica;" value="Will create subtask (if&#xa;executing on v2, will&#xa;create v2.1)" vertex="1">
+          <mxGeometry height="60" width="140" x="550" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-spec-ailog" edge="1" parent="frame-right" source="box-longspec" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1e1e1e;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="box-ailog">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-ailog-detproc" edge="1" parent="frame-right" source="box-ailog" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="box-detproc" value="&lt;span style=&quot;color: rgb(224, 49, 49); font-size: 12px; font-style: italic; text-wrap-mode: wrap; background-color: rgb(236, 236, 236);&quot;&gt;Launch and Monitor&lt;/span&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-detproc-planning" edge="1" parent="frame-right" source="box-detproc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971C2;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" target="box-planning">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-validate-human" edge="1" parent="frame-right" source="box-validate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="box-human">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-research-analyze" edge="1" parent="frame-right" source="box-research" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" target="box-analyze">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-build-playwright" edge="1" parent="frame-right" source="box-build" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" target="box-playwright">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-validate-subtask" edge="1" parent="frame-right" source="box-validate" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;endArrow=classic;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;" target="box-subtask">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-right-user" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=12;fontColor=#1e1e1e;arcSize=15;" value="User" vertex="1">
+          <mxGeometry height="30" width="100" x="740" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-right-det" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=12;fontColor=#1971c2;arcSize=15;" value="Deterministic" vertex="1">
+          <mxGeometry height="30" width="100" x="740" y="90" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-right-agent" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=12;fontColor=#e03131;arcSize=15;" value="Agentic" vertex="1">
+          <mxGeometry height="30" width="100" x="740" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-right-mix" parent="frame-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f08c00;strokeWidth=2;fontSize=12;fontColor=#f08c00;arcSize=15;" value="Mix" vertex="1">
+          <mxGeometry height="30" width="100" x="740" y="170" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
