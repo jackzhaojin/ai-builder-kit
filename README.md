@@ -9,6 +9,7 @@ A [Claude Code plugin marketplace](https://docs.anthropic.com/en/docs/claude-cod
 | [ai-knowledge-harvester](skills/ai-knowledge-harvester/) | 2026-03-28 | Harvest AI docs from repos into a centralized private knowledge repository |
 | [conversation-logger](skills/conversation-logger/) | 2026-03-28 | Log Claude Code conversation sessions with timestamps in structured markdown |
 | [branded-pptx](skills/branded-pptx/) | 2026-03-29 | Create branded PowerPoint decks from templates — analyzes themes, slide masters, layouts with shape dimensions, text capacity, and visual data tracking. Timestamped run folders. **Requires**: [pptx](https://github.com/anthropics/skills) skill + Python 3.12+ |
+| [drawio](skills/drawio/) | 2026-04-20 | Generate `.drawio` XML diagrams in Jack's brand style (swimlane frames, 4-color semantic palette, rounded boxes, orthogonal edges). Render-view-fix loop via the draw.io CLI with visual validation. Ships with two worked examples and an evals harness. |
 | [hlx-admin-api-executor](skills/hlx-admin-api-executor/) | 2026-03-22 | Interactive AEM Edge Delivery Services Admin API executor |
 
 ## Available Plugins
