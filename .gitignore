@@ -13,3 +13,9 @@ local-ai-docs/
 
 # Node
 node_modules/
+
+# Claude skill creator - workspace artifacts
+skills/*-workspace/
+
+# Temporary files
+.$*
