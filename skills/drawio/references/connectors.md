@@ -152,14 +152,12 @@ Match edge color to semantic meaning:
 
 ## Dashed Edges
 
-For indirect flows and noteworthy responses (not the direct request path):
+Use dashed connectors only for **return/response calls** (reply path back to a caller):
 ```
 dashed=1;dashPattern=8 8;
 ```
 
-Common combinations:
-- Dashed red: feedback, indirect agentic responses
-- Dashed blue: secondary deterministic outputs
+Do **not** use dashed edges for optional/unknown, noteworthy exceptions, secondary outputs, or human-in-the-loop. Use solid edges plus explicit annotation/lane patterns for those semantics.
 
 ---
 
@@ -244,7 +242,7 @@ style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;h
 style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971c2;strokeWidth=2;endArrow=classic;endFill=1;"
 ```
 
-### Red Dashed (Indirect Response/Feedback)
+### Red Dashed (Response/Return Path)
 ```xml
 style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;dashed=1;dashPattern=8 8;endArrow=classic;endFill=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;"
 ```

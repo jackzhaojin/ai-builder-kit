@@ -16,20 +16,22 @@ Before writing any XML, read every `references/*.md` file below. They are small,
 | `references/xml-format.md` | `mxfile` structure, `mxCell` elements (vertices + edges), swimlanes, waypoints, loops, bidirectional edges. Read first — the skeleton must be correct before style matters. |
 | `references/diagram-style.md` | Palette, roughness, Helvetica, layout patterns (vertical / feedback / fan-out), spacing grid, legend placement, box sizing. Read this to get the look right — every diagram follows these rules regardless of complexity. |
 | `references/connectors.md` | Edge anatomy, `exitX/entryX` recipe, **same-side feedback-loop rule**, fan-out stagger, arrow types, edge-label placement. Read before placing any edge; same-side rule is the #1 source of "my loop looks weird" bugs. |
-| `references/brand-colors.md` | 4-color semantic palette (User/Det/Agentic/Mix) with BOTH `strokeColor` AND `fontColor` matched, dashed-box recipe for indirect/noteworthy. Read when picking colors. |
+| `references/brand-colors.md` | 4-color semantic palette (User/Det/Agentic/Mix) with BOTH `strokeColor` AND `fontColor` matched, and dashed usage narrowed to response/return semantics. Read when picking colors. |
 | `references/validation.md` | Technical + style validation checklist (unique IDs, source/target valid, edge parent matches source parent, `fontStyle=0` on boxes, etc). Run through before declaring the diagram done. |
 | `references/cli.md` | draw.io CLI export reference: platform paths, flags, **the `-e` flag is forbidden** (breaks Claude Code's image reader), PNG vs SVG tradeoffs. Read before running any export. |
 | `references/examples/agent-sdk-harness.{drawio,png,svg}` | **Best example.** Single-swimlane comparison diagram, feedback loops via same-side exit/entry, dashed retry edges, italic edge labels, 4-color semantic palette, legend top-right. Study the JSON *and* the PNG side by side — the PNG shows the visual, the XML shows the coordinates, parent bindings, and edge routing Jack uses. You cannot match Jack's style without seeing both. |
 | `references/examples/multi-container-3tier.{drawio,png,svg}` | Multi-container pattern: 3 side-by-side swimlane frames with cross-frame edges at `parent="1"` (not inside any frame), local-to-frame edges at `parent="frame-id"`. Study when the diagram has ≥ 2 subsystems that talk to each other. |
+| `references/examples/sample-input.md` | Canonical *input* structure for diagram generation. Use it as the target shape for user-provided markdown/specs before writing XML. |
 
 ## Quick Start
 
 1. Ask the user for missing info (type, complexity, subsystems) — see **Required Information**.
-2. **Read every `references/*.md` file.** Do not skip any. Rules interact across files.
-3. **Plan sections first** (Step 0). Pick the visual pattern; sketch frame layout; verify no edge has to cross a third frame.
-4. Generate XML. For multi-frame diagrams, **build one frame per edit** — place frame + its internal boxes + its internal edges, render + look, then add the next frame. Cross-frame edges come last.
-5. Export to PNG via the CLI (`-x -f png -b 10`, **no `-e`**) and **Read the PNG**.
-6. Iterate 2–4 times fixing anything the render shows that the XML didn't.
+2. Reconcile prompt claims vs source document claims before diagramming.
+3. **Read every `references/*.md` file.** Do not skip any. Rules interact across files.
+4. **Plan sections first** (Step 0). Pick the visual pattern; sketch frame layout; verify no edge has to cross a third frame.
+5. Generate XML. For multi-frame diagrams, **build one frame per edit** — place frame + its internal boxes + its internal edges, render + look, then add the next frame. Cross-frame edges come last.
+6. Export to PNG via the CLI (`-x -f png -b 10`, **no `-e`**) and **Read the PNG**.
+7. Iterate 2–4 times fixing anything the render shows that the XML didn't.
 
 ## Required Information
 
@@ -40,7 +42,15 @@ Ensure you have:
 3. **Components** and how they connect.
 4. **Subsystems** (if 2+): each becomes a swimlane frame. For each frame, list which other frames it sends edges to.
 
-Ask the user:
+When required info is missing, ask **multiple-choice questions with a recommended default** instead of open-ended prompts. Keep it fast and concrete:
+
+1. "Diagram type?" → Architecture (**Recommended**) / Process
+2. "Layout?" → Multi-frame by subsystem (**Recommended**) / Single frame / Hybrid
+3. "Cross-cutting infra placement?" → Shared bar/lane (**Recommended**) / Inside each frame / Omit
+4. "Exceptions/unknowns style?" → Solid line + annotation (**Recommended**) / Dedicated callout box / Minimal labels
+5. "Color semantic axis?" → Determinism (default palette, **Recommended**) / Ownership / Lifecycle / None
+
+Then ask the user:
 
 ```
 To create your diagram, I need:
@@ -75,6 +85,8 @@ To create your diagram, I need:
    - An edge would need to jump over another frame to reach its target.
    - Dead whitespace > 300px between neighboring frames with no edges across.
 
+6. **Reconcile prompt vs source before finalizing layout.** If the prompt asserts grouping, ownership, or dependency claims that conflict with the source markdown/spec, stop and ask for confirmation before generating XML. Prefer source-of-truth documents over summary prompt labels when they disagree.
+
 **Fix by moving frames, not by hand-routing waypoints.** Edge XML is determined by layout.
 
 ### Step 1: Read ALL References
@@ -87,8 +99,9 @@ Not optional. For the pattern you picked in Step 0, open **both the `.drawio` XM
 
 | Example | Pattern | When to pick it |
 |---------|---------|-----------------|
-| `references/examples/agent-sdk-harness.{drawio,png}` | Single swimlane, ~30 boxes, feedback loops via same-side exit/entry, dashed retry edges, italic HTML edge labels, 4-color legend top-right | Process/architecture that reads as one coherent subsystem. Most common default. Pick when the whole thing is "how one system works." |
+| `references/examples/agent-sdk-harness.{drawio,png}` | Single swimlane, ~30 boxes, feedback loops via same-side exit/entry, dashed retry edges (response-direction), italic HTML edge labels, 4-color legend top-right | Process/architecture that reads as one coherent subsystem. Most common default. Pick when the whole thing is "how one system works." |
 | `references/examples/multi-container-3tier.{drawio,png}` | 3 side-by-side swimlane frames, cross-frame edges at `parent="1"`, per-frame internal edges at `parent="frame-id"`, 1-color default with accent boxes | Architecture where 2–4 subsystems pass data between each other. Pick when the argument is "this container does X, this container does Y, and here's how they talk." |
+| `references/examples/sample-input.md` | High-quality source markdown with explicit subsystems, ownership, data stores, and style intents | Use as a checklist/template when user input is ambiguous or incomplete. |
 
 The PNG shows the visual target. The XML shows the exact attribute patterns — parent bindings, edge routing, `exitX/entryX` values, legend coordinates — that Jack's diagrams use. You cannot match Jack's style without seeing both.
 
@@ -111,11 +124,18 @@ Standard defaults (see `references/xml-format.md`, `diagram-style.md`):
 
 Write the `.drawio` file directly. Do **not** generate helper/build scripts (`.py`, `.js`, XSLT transforms) unless the user explicitly asks for a reusable generator.
 
-### Step 4: Export PNG via the CLI
+### Step 4: Export PNG via the CLI (Versioned Artifacts)
 
 ```sh
 /Applications/draw.io.app/Contents/MacOS/draw.io -x -f png -b 10 -o path/to/diagram.png path/to/diagram.drawio
 ```
+
+For iterative runs, never overwrite artifacts. Use version-suffixed filenames:
+- `diagram-v1.drawio`, `diagram-v1.png`
+- `diagram-v2.drawio`, `diagram-v2.png`
+- etc.
+
+The latest version can also be copied/symlinked to `diagram.drawio` + `diagram.png` if needed, but keep all intermediate versions.
 
 **Never pass `-e` / `--embed-diagram`** — it embeds the full XML into the image and breaks Claude Code's Read tool for images. See `references/cli.md` for platform-specific paths (Linux, Windows, WSL2) and SVG fallback.
 
@@ -139,7 +159,7 @@ If the user wants both formats, run the export twice (`-f png` and `-f svg`). PN
 
 **Do not ship a diagram you haven't looked at.** Claiming "done" without Reading the PNG is the single biggest regression the eval caught. The first three checks above are the ones that were missing from iteration 1 and caused visually-wrong-but-XML-valid outputs.
 
-### Step 6: Fix & re-render (loop 2–4 times)
+### Step 6: Fix & re-render (loop 2–4 times, keep every version)
 
 If anything is wrong, edit the XML and re-export. Typical fixes:
 - Edge crossing a third frame → **Step 0 (re-plan the layout)**, not a new waypoint.
@@ -148,7 +168,7 @@ If anything is wrong, edit the XML and re-export. Typical fixes:
 - Colors don't match → set BOTH `strokeColor` AND `fontColor`.
 - Italic text on boxes → `fontStyle=0` (not `2`).
 
-Re-Read the PNG after each fix.
+Re-Read the PNG after each fix. Increment version suffix on each pass; never overwrite prior `.drawio` / `.png` outputs.
 
 ### Step 7: Technical validation
 
@@ -196,7 +216,7 @@ Run through the checklist in `references/validation.md` before declaring done:
 Box: rounded=1;arcSize=15;fillColor=#ffffff;strokeWidth=2;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontStyle=0
 Edge: edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;endArrow=classic;endFill=1
 Frame: swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontStyle=0;fontColor=#1e1e1e;startSize=30;rounded=0
-Dashed: append dashed=1;dashPattern=8 8;
+Dashed (response/return only): append dashed=1;dashPattern=8 8;
 Feedback-left loop: append exitX=0;exitY=0.5;entryX=0;entryY=0.5;
 Feedback-right loop: append exitX=1;exitY=0.5;entryX=1;entryY=0.5;
 ```

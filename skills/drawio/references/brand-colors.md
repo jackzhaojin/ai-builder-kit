@@ -51,10 +51,12 @@ strokeColor=#f08c00;fontColor=#f08c00;
 <mxCell id="box-mix" value="Human + AI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f08c00;strokeWidth=2;fontSize=14;fontColor=#f08c00;arcSize=15;" vertex="1" parent="frame-main">
 ```
 
-### Indirect/Noteworthy Box (Dashed)
+### Return/Response Element (Dashed)
 ```xml
 <mxCell id="box-indirect" value="Indirect&#xa;Response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;dashed=1;dashPattern=8 8;" vertex="1" parent="frame-main">
 ```
+
+Use dashed styling only when the visual meaning is "this is the response/return path." For optional or unknown elements, keep solid borders and mark uncertainty in the label (for example: `Service ?`).
 
 ---
 

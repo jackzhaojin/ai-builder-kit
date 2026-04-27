@@ -56,6 +56,18 @@ All shapes are `mxCell` elements with `vertex="1"`.
 - Two lines: 150-160 wide x 60 tall
 - Three+ lines: 160-180 wide x 70-80 tall
 
+### Database/Data Store Cylinder (Use for Persistent Storage)
+
+Use a cylinder when the node is a persistent data store (especially when multiple stores appear in one diagram and need clear distinction from services/components):
+
+```xml
+<mxCell id="store-orders" value="Orders DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontColor=#1e1e1e;align=center;verticalAlign=middle;fontFamily=Helvetica;" vertex="1" parent="1">
+  <mxGeometry x="100" y="100" width="180" height="90" as="geometry" />
+</mxCell>
+```
+
+Use rounded rectangles for services/processes/components; use cylinders for data stores.
+
 ### Color-Coded Box (Matching Stroke and Font)
 
 When using semantic colors, match BOTH strokeColor AND fontColor:
@@ -71,12 +83,12 @@ When using semantic colors, match BOTH strokeColor AND fontColor:
 <mxCell id="box-mix" value="Mix" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f08c00;strokeWidth=2;fontSize=14;fontColor=#f08c00;arcSize=15;" vertex="1" parent="1">
 ```
 
-### Dashed Box (Indirect/Noteworthy)
+### Dashed Box/Edge (Return/Response Only)
 
-For elements that aren't the direct request path but responses worth mentioning:
+Reserve dashed styling for return/response direction only:
 
 ```xml
-<mxCell id="box-indirect" value="Indirect Response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
+<mxCell id="box-response" value="Response Path" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
   <mxGeometry x="100" y="100" width="120" height="50" as="geometry" />
 </mxCell>
 ```
@@ -177,7 +189,7 @@ style="...strokeColor=#1971c2;..."
 <!-- Red edge (agentic flow) -->
 style="...strokeColor=#e03131;..."
 
-<!-- Dashed red edge (indirect/noteworthy response) -->
+<!-- Dashed red edge (response/return path) -->
 style="...strokeColor=#e03131;dashed=1;dashPattern=8 8;..."
 ```
 

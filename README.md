@@ -10,7 +10,7 @@ A [Claude Code plugin marketplace](https://docs.anthropic.com/en/docs/claude-cod
 | [conversation-logger](skills/conversation-logger/) | 2026-03-28 | Log Claude Code conversation sessions with timestamps in structured markdown |
 | [chat-conversation-logger](skills/chat-conversation-logger/) | 2026-04-26 | Log Claude.ai chat conversations with timestamps in structured markdown (designed for Claude.ai web interface, unlike conversation-logger which is for Claude Code) |
 | [branded-pptx](skills/branded-pptx/) | 2026-03-29 | Create branded PowerPoint decks from templates — analyzes themes, slide masters, layouts with shape dimensions, text capacity, and visual data tracking. Timestamped run folders. **Requires**: [pptx](https://github.com/anthropics/skills) skill + Python 3.12+ |
-| [drawio](skills/drawio/) | 2026-04-20 | Generate `.drawio` XML diagrams in Jack's brand style (swimlane frames, 4-color semantic palette, rounded boxes, orthogonal edges). Render-view-fix loop via the draw.io CLI with visual validation. Ships with two worked examples and an evals harness. |
+| [drawio](skills/drawio/) | 2026-04-27 | Generate `.drawio` XML diagrams in Jack's brand style (swimlane frames, 4-color semantic palette, rounded boxes, orthogonal edges). Render-view-fix loop via the draw.io CLI with visual validation, prompt-vs-source reconciliation, and versioned iteration artifacts. Includes worked output examples plus a canonical sample input markdown. |
 | [hlx-admin-api-executor](skills/hlx-admin-api-executor/) | 2026-03-22 | Interactive AEM Edge Delivery Services Admin API executor |
 
 ## Available Plugins

@@ -59,13 +59,15 @@ rounded=1;arcSize=15;fillColor=#ffffff;strokeWidth=2;
 whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontFamily=Helvetica;
 ```
 
-### 5. Dashed for Indirect/Noteworthy Responses
+### 5. Dashed Only for Return/Response Calls
 
-Use `dashed=1;dashPattern=8 8;` for:
-- Indirect flows (not the direct request path)
-- Responses/feedback worth mentioning
-- Secondary outputs
-- Human-in-the-loop elements
+Reserve `dashed=1;dashPattern=8 8;` for **return/response direction only** (replies flowing back to a caller).
+
+Avoid using dashes for multiple unrelated semantics. Use these alternatives instead:
+- Noteworthy / exception path → solid edge + red `strokeColor` + italic edge label annotation
+- Secondary output → solid edge with `strokeWidth=1` (or neutral color)
+- Human-in-the-loop → explicit HITL lane/box/icon + solid edge
+- Optional / unknown → solid edge with `?` in label text
 
 ---
 
@@ -168,7 +170,7 @@ Before finalizing:
 - [ ] Single swimlane frame with title
 - [ ] Legend inside frame (top-right)
 - [ ] Colors match for strokeColor AND fontColor
-- [ ] Dashed boxes for optional components
+- [ ] Dashed lines used only for return/response calls
 - [ ] Feedback loops use same-side exit/entry
 - [ ] Edge labels are italic
 - [ ] All boxes have `rounded=1;arcSize=15`
