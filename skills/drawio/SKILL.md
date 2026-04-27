@@ -216,6 +216,7 @@ Run through the checklist in `references/validation.md` before declaring done:
 14. **Snap to 10px grid.** `gridSize=10` at the `mxGraphModel` level; every coordinate should be a multiple of 10.
 15. **Keep the `.drawio` file. Preserve every iteration with a `-vN` suffix; never overwrite.** The `.drawio` file is the re-editable source of truth — never try to round-trip edits through the exported image. During the render-view-fix loop, each pass writes a new `-vN.drawio` and `-vN.png`; at session end, copy the winning version to the unsuffixed canonical filename and keep the `-vN` files as iteration history.
 16. **No helper-file detours.** When the deliverable is a diagram, create the `.drawio` file itself. Do not create `.py`/`.xslt`/`.js` builder files unless the user explicitly asks for one.
+17. **Dashed only on edges, only for return/response/feedback. Never on boxes.** `dashed=1;dashPattern=8 8;` carries exactly one meaning: the arrow flows back to a caller (response, reply, feedback, retry, async callback). For optional or unknown components, append `?` to the box label — do **not** draw a dashed box. The "Dashed Box" recipes that still appear in `references/xml-format.md` and `references/brand-colors.md` are deprecated; this rule supersedes them.
 
 ## Quick Reference
 
