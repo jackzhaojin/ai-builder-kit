@@ -71,12 +71,30 @@ When using semantic colors, match BOTH strokeColor AND fontColor:
 <mxCell id="box-mix" value="Mix" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f08c00;strokeWidth=2;fontSize=14;fontColor=#f08c00;arcSize=15;" vertex="1" parent="1">
 ```
 
-### Dashed Box (Indirect/Noteworthy)
+### Database Cylinder (Persistent Data Store)
 
-For elements that aren't the direct request path but responses worth mentioning:
+For persistent data stores — databases, object stores, queues — use `shape=cylinder3` to visually distinguish storage from services/processes. **Use a cylinder whenever a data store is a first-class element**, especially when one service owns multiple distinct stores; rendering them as labeled rectangles loses the service-vs-storage distinction.
 
 ```xml
-<mxCell id="box-indirect" value="Indirect Response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
+<mxCell id="store-events" value="Events&#xa;(Postgres)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#ffffff;strokeColor=#1971c2;strokeWidth=2;fontSize=14;fontColor=#1971c2;fontFamily=Helvetica;" vertex="1" parent="1">
+  <mxGeometry x="100" y="100" width="80" height="80" as="geometry" />
+</mxCell>
+```
+
+**Key style properties:**
+- `shape=cylinder3` — cylinder with top ellipse rendered as the "lid"
+- `boundedLbl=1;backgroundOutline=1` — keeps the label inside the body, not on top of the lid
+- `size=15` — controls the lid height
+- Standard sizing: 80×80 (single store) or 100×80 (two-line label). One color rule still applies: match `strokeColor` AND `fontColor`.
+
+When a service owns multiple stores, draw the service box once and connect it to each cylinder — do not encode multiple stores as a single rectangle's text label.
+
+### Dashed Box (Optional / Unknown — use sparingly)
+
+Reserve dashed boxes for elements whose existence is uncertain or explicitly optional. Do **not** use a dashed box for "noteworthy," "indirect," "secondary," or "human-in-the-loop" — those have dedicated treatments (see `diagram-style.md`). Dashed must mean exactly one thing in the diagram or the signal collapses.
+
+```xml
+<mxCell id="box-optional" value="Optional&#xa;Component" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontColor=#1e1e1e;arcSize=15;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
   <mxGeometry x="100" y="100" width="120" height="50" as="geometry" />
 </mxCell>
 ```

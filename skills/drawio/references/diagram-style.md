@@ -59,13 +59,29 @@ rounded=1;arcSize=15;fillColor=#ffffff;strokeWidth=2;
 whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontFamily=Helvetica;
 ```
 
-### 5. Dashed for Indirect/Noteworthy Responses
+### 5. Shape Carries Meaning: Rectangles vs Cylinders
 
-Use `dashed=1;dashPattern=8 8;` for:
-- Indirect flows (not the direct request path)
-- Responses/feedback worth mentioning
-- Secondary outputs
-- Human-in-the-loop elements
+Use shape to distinguish two semantic roles:
+- **Rounded rectangle** → process / service / component / step (anything that *acts*).
+- **Cylinder (`shape=cylinder3`)** → persistent data store (database, object store, queue, log). Use whenever a data store is a first-class element, especially when one service owns multiple distinct stores. See `references/xml-format.md` for the recipe.
+
+If a service has two distinct datasets, draw two cylinders connected to the service box — do not collapse them into one rectangle with a long text label.
+
+### 6. Dashed = Return/Response/Feedback Edges Only
+
+Reserve `dashed=1;dashPattern=8 8;` for **edges that flow back to a caller** (responses, replies, feedback, retry, async callbacks). One meaning, one visual.
+
+Do **not** use dashed for: "indirect," "noteworthy," "secondary," "human-in-the-loop," or "optional/unknown." Each of those has its own dedicated treatment — see *Alternatives to Dashed* below. Overloading dashes with five meanings dilutes the signal until readers can't tell which one is meant.
+
+#### Alternatives to Dashed
+
+| Concept | Treatment |
+|---------|-----------|
+| Noteworthy / exception | Red stroke (`strokeColor=#e03131`) + italic edge label annotating the exception. No dash. |
+| Secondary output | Thinner stroke (`strokeWidth=1`) or neutral color. No dash. |
+| Human-in-the-loop | Dedicated HITL swimlane, or an explicit user/operator box wired into the flow. No dash. |
+| Optional / unknown component | Dashed *box* (rare; see `xml-format.md`) **or** a `?` suffix in the box label. Optional *edges* should be omitted from the diagram and noted in the legend or caption. |
+| Indirect flow | Reroute or relabel — if the diagram needs to say "this is indirect," that's usually a layout/labelling problem, not a stroke problem. |
 
 ---
 
@@ -168,7 +184,8 @@ Before finalizing:
 - [ ] Single swimlane frame with title
 - [ ] Legend inside frame (top-right)
 - [ ] Colors match for strokeColor AND fontColor
-- [ ] Dashed boxes for optional components
+- [ ] Cylinders (`shape=cylinder3`) used for persistent data stores; rectangles for services/processes
+- [ ] Dashed (`dashed=1;dashPattern=8 8;`) used **only** on return/response/feedback edges — not on any other concept
 - [ ] Feedback loops use same-side exit/entry
 - [ ] Edge labels are italic
 - [ ] All boxes have `rounded=1;arcSize=15`

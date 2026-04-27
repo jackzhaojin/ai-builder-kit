@@ -150,16 +150,20 @@ Match edge color to semantic meaning:
 
 ---
 
-## Dashed Edges
+## Dashed Edges — Return/Response/Feedback ONLY
 
-For indirect flows and noteworthy responses (not the direct request path):
+`dashed=1;dashPattern=8 8;` means exactly one thing on edges: **the arrow flows back to a caller** — a response, reply, feedback, retry, or async callback. Do not use dashed for "indirect," "noteworthy," "secondary," "human-in-the-loop," or "optional." Those have separate treatments documented in `references/diagram-style.md` (§6).
+
 ```
 dashed=1;dashPattern=8 8;
 ```
 
-Common combinations:
-- Dashed red: feedback, indirect agentic responses
-- Dashed blue: secondary deterministic outputs
+Common combinations (all return/response):
+- Dashed red: feedback or retry edges from agentic components
+- Dashed blue: response edges from deterministic components
+- Dashed black: generic reply edges
+
+**If you find yourself reaching for dashed to express something other than "this is a return path," stop and pick a different visual** (color, stroke width, label, swimlane, box style). Reserving dashed for one meaning is what keeps it readable.
 
 ---
 
@@ -244,7 +248,7 @@ style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;h
 style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1971c2;strokeWidth=2;endArrow=classic;endFill=1;"
 ```
 
-### Red Dashed (Indirect Response/Feedback)
+### Red Dashed (Response/Feedback Edge)
 ```xml
 style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e03131;strokeWidth=2;dashed=1;dashPattern=8 8;endArrow=classic;endFill=1;exitX=0;exitY=0.5;entryX=0;entryY=0.5;"
 ```

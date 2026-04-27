@@ -51,9 +51,12 @@ strokeColor=#f08c00;fontColor=#f08c00;
 <mxCell id="box-mix" value="Human + AI" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f08c00;strokeWidth=2;fontSize=14;fontColor=#f08c00;arcSize=15;" vertex="1" parent="frame-main">
 ```
 
-### Indirect/Noteworthy Box (Dashed)
+### Optional/Unknown Box (Dashed — use sparingly)
+
+Dashed boxes are reserved for components whose existence is genuinely uncertain or explicitly optional. Do **not** use a dashed box to mean "indirect," "noteworthy," "secondary," or "human-in-the-loop" — see `diagram-style.md` §6 for the correct treatment of each. Dashed has one meaning per diagram or the signal collapses.
+
 ```xml
-<mxCell id="box-indirect" value="Indirect&#xa;Response" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e03131;strokeWidth=2;fontSize=14;fontColor=#e03131;arcSize=15;dashed=1;dashPattern=8 8;" vertex="1" parent="frame-main">
+<mxCell id="box-optional" value="Optional&#xa;Component" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontColor=#1e1e1e;arcSize=15;dashed=1;dashPattern=8 8;" vertex="1" parent="frame-main">
 ```
 
 ---
