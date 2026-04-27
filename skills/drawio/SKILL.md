@@ -16,39 +16,54 @@ Before writing any XML, read every `references/*.md` file below. They are small,
 | `references/xml-format.md` | `mxfile` structure, `mxCell` elements (vertices + edges), swimlanes, waypoints, loops, bidirectional edges. Read first — the skeleton must be correct before style matters. |
 | `references/diagram-style.md` | Palette, roughness, Helvetica, layout patterns (vertical / feedback / fan-out), spacing grid, legend placement, box sizing. Read this to get the look right — every diagram follows these rules regardless of complexity. |
 | `references/connectors.md` | Edge anatomy, `exitX/entryX` recipe, **same-side feedback-loop rule**, fan-out stagger, arrow types, edge-label placement. Read before placing any edge; same-side rule is the #1 source of "my loop looks weird" bugs. |
-| `references/brand-colors.md` | 4-color semantic palette (User/Det/Agentic/Mix) with BOTH `strokeColor` AND `fontColor` matched, dashed-box recipe for indirect/noteworthy. Read when picking colors. |
+| `references/brand-colors.md` | 4-color semantic palette (User/Det/Agentic/Mix) with BOTH `strokeColor` AND `fontColor` matched, plus the (rare) dashed-box recipe for optional/unknown components. Read when picking colors. |
 | `references/validation.md` | Technical + style validation checklist (unique IDs, source/target valid, edge parent matches source parent, `fontStyle=0` on boxes, etc). Run through before declaring the diagram done. |
 | `references/cli.md` | draw.io CLI export reference: platform paths, flags, **the `-e` flag is forbidden** (breaks Claude Code's image reader), PNG vs SVG tradeoffs. Read before running any export. |
 | `references/examples/agent-sdk-harness.{drawio,png,svg}` | **Best example.** Single-swimlane comparison diagram, feedback loops via same-side exit/entry, dashed retry edges, italic edge labels, 4-color semantic palette, legend top-right. Study the JSON *and* the PNG side by side — the PNG shows the visual, the XML shows the coordinates, parent bindings, and edge routing Jack uses. You cannot match Jack's style without seeing both. |
 | `references/examples/multi-container-3tier.{drawio,png,svg}` | Multi-container pattern: 3 side-by-side swimlane frames with cross-frame edges at `parent="1"` (not inside any frame), local-to-frame edges at `parent="frame-id"`. Study when the diagram has ≥ 2 subsystems that talk to each other. |
+| `references/examples/sample-input.md` | **Reference *input* document.** Shows the shape of a well-structured source markdown — executive summary, subsystems, per-component fields (role, owner, color), data stores listed separately, cross-cutting placement, edge table with explicit return-vs-forward marking, prompt-vs-source caveats. Use as a checklist when the user's input is sparse: every section missing in their input is a candidate Step 0 interview question. |
 
 ## Quick Start
 
-1. Ask the user for missing info (type, complexity, subsystems) — see **Required Information**.
+1. Run the **Step 0 Interview** for any decision the user didn't already specify — see **Required Information** (eight decisions, recommended defaults marked, only ask the missing ones).
 2. **Read every `references/*.md` file.** Do not skip any. Rules interact across files.
 3. **Plan sections first** (Step 0). Pick the visual pattern; sketch frame layout; verify no edge has to cross a third frame.
 4. Generate XML. For multi-frame diagrams, **build one frame per edit** — place frame + its internal boxes + its internal edges, render + look, then add the next frame. Cross-frame edges come last.
-5. Export to PNG via the CLI (`-x -f png -b 10`, **no `-e`**) and **Read the PNG**.
-6. Iterate 2–4 times fixing anything the render shows that the XML didn't.
+5. Export to PNG via the CLI (`-x -f png -b 10`, **no `-e`**) using a `-vN` version suffix (`diagram-v1.png`, never overwrite), and **Read the PNG**.
+6. Iterate 2–4 times — each pass increments the suffix (`diagram-v2.drawio`, `diagram-v2.png`, …). At session end, copy the winning version to the unsuffixed canonical filename and keep the `-vN` files as iteration history.
 
-## Required Information
+## Required Information — Step 0 Interview
 
-Ensure you have:
+Diagram quality is bounded by input quality. Before generating XML, confirm the eight decisions below. **Only ask the user about decisions that are genuinely missing or ambiguous in their input** — if they already said "make me an architecture diagram of these 5 services with auth as cross-cutting," do not re-ask. For each decision they did not specify, present the options as multiple choice with the **Recommended** default marked, so the user can override only what they care about and accept defaults for the rest.
 
-1. **Diagram type**: process (workflow, timeline, steps) OR architecture (components, services, infrastructure).
-2. **Complexity**: simple (5–10 boxes) / medium (15–25) / complex (30+).
-3. **Components** and how they connect.
-4. **Subsystems** (if 2+): each becomes a swimlane frame. For each frame, list which other frames it sends edges to.
+`references/examples/sample-input.md` is a worked example of input that answers all eight questions upfront. Use it as the checklist: every section absent from the user's input is a candidate interview question.
 
-Ask the user:
+### The Eight Decisions
+
+1. **Diagram type** — process (workflow, timeline, ordered steps) or architecture (components, services, infrastructure)?
+2. **Complexity** — simple (5–10 boxes) / medium (15–25, *Recommended default if uncertain*) / complex (30+)?
+3. **Subsystems / frames** — single frame, or multiple swimlane frames? If multiple: what are the frames, and which talk to which?
+4. **Components per subsystem** — name, role, owner (internal vs vendor), and how they connect.
+5. **Data stores** — are there persistent stores (databases, queues, logs)? List each separately so the skill can render each as a cylinder. (Default: no stores unless mentioned.)
+6. **Cross-cutting concerns** — auth, telemetry, HITL review, etc. For each, where does it render? (a) global bar above frames, (b) own swimlane (*Recommended* if it interacts with most components), (c) inside an existing frame, (d) omit and mention in caption.
+7. **Color axis** — what semantic dimension drives color? (a) ownership (internal vs vendor), (b) determinism — blue/red/orange/black (*Recommended default — matches brand palette*), (c) lifecycle status (current/deprecated/planned), (d) none / monochrome.
+8. **Exception / noteworthy highlighting** — how should exception paths or callouts be marked? (a) red stroke + italic edge label (*Recommended*), (b) inline `?` in label, (c) dedicated callout box, (d) no exceptions in this diagram. **Do not use dashed for this** — dashed is reserved for return/response edges only.
+
+### Interview Template (use only for unanswered decisions)
 
 ```
-To create your diagram, I need:
-1. Process or architecture?
-2. Complexity: simple (5–10 boxes), medium (15–25), complex (30+)?
-3. Main components / steps?
-4. If multiple subsystems: what are the frames, and which connect to which?
+A few quick choices to make sure the diagram matches what you have in mind. I've marked Recommended defaults — you can just say "defaults" to skip.
+
+1. Diagram type: process or architecture?
+2. Complexity: simple / medium [Recommended] / complex?
+3. Cross-cutting infrastructure (auth, telemetry, HITL) — global bar above frames / own swimlane [Recommended if it touches most components] / inside an existing frame / omit?
+4. Color axis — ownership / determinism [Recommended] / lifecycle / none?
+5. Exceptions / noteworthy paths — red stroke + italic label [Recommended] / inline ? / callout box / none?
+
+(Only asking the ones I couldn't infer from your input.)
 ```
+
+**The interview is not a gate.** If the user says "just go" or "use defaults," accept the recommended defaults for every unanswered decision and proceed. The point of the interview is to *flip the default*: the skill prompts for the decisions that most influence quality so the user only overrides what they care about.
 
 ## Workflow
 
@@ -74,6 +89,8 @@ To create your diagram, I need:
    - Frames < 100px apart with edges squeezing between them.
    - An edge would need to jump over another frame to reach its target.
    - Dead whitespace > 300px between neighboring frames with no edges across.
+
+6. **Reconcile the prompt against the source.** If the user provided both a prompt *and* a source document (markdown, design doc, spec), check that every grouping, ownership claim, and label in the prompt is supported by the source before encoding it in XML. When the prompt says "Platform X owns components A and B" but the source describes A and B as independent third-party vendors with no mention of Platform X, **flag the discrepancy and ask the user which is correct** — do not silently trust the prompt. Content errors propagate from Step 0 into the rendered diagram and are far more expensive to catch downstream than to confirm upfront.
 
 **Fix by moving frames, not by hand-routing waypoints.** Edge XML is determined by layout.
 
@@ -111,15 +128,36 @@ Standard defaults (see `references/xml-format.md`, `diagram-style.md`):
 
 Write the `.drawio` file directly. Do **not** generate helper/build scripts (`.py`, `.js`, XSLT transforms) unless the user explicitly asks for a reusable generator.
 
-### Step 4: Export PNG via the CLI
+### Step 4: Export PNG via the CLI (with `-vN` version suffix)
+
+**Preserve every iteration. Never overwrite a previous `.drawio` or `.png` in place.** Each render-view-fix pass burns real tokens; if iteration N+1 turns out worse than N (AI evals are not deterministic, and the human reviewer may disagree with your own assessment), the previous artifact must still exist.
+
+Naming convention — write each iteration to a version-suffixed filename:
 
 ```sh
-/Applications/draw.io.app/Contents/MacOS/draw.io -x -f png -b 10 -o path/to/diagram.png path/to/diagram.drawio
+# Iteration 1
+/Applications/draw.io.app/Contents/MacOS/draw.io -x -f png -b 10 \
+  -o path/to/diagram-v1.png path/to/diagram-v1.drawio
+
+# Iteration 2 (after Step 6 fixes)
+/Applications/draw.io.app/Contents/MacOS/draw.io -x -f png -b 10 \
+  -o path/to/diagram-v2.png path/to/diagram-v2.drawio
 ```
+
+Treat all `-vN.drawio` and `-vN.png` files as **deliverables**, not temporaries. They are the iteration history the human reviewer will compare side-by-side at the end.
+
+At session end, after the human picks the winning version (or if the model judges the latest is best and the user agrees), copy that version to the unsuffixed canonical filename so downstream consumers have a single stable target:
+
+```sh
+cp path/to/diagram-vN.drawio path/to/diagram.drawio
+cp path/to/diagram-vN.png   path/to/diagram.png
+```
+
+The `-vN` files stay in place as iteration history.
 
 **Never pass `-e` / `--embed-diagram`** — it embeds the full XML into the image and breaks Claude Code's Read tool for images. See `references/cli.md` for platform-specific paths (Linux, Windows, WSL2) and SVG fallback.
 
-If the user wants both formats, run the export twice (`-f png` and `-f svg`). PNG is what you (the model) Read in Step 5; SVG is for the human to view with adaptive light/dark theming.
+If the user wants both formats, run the export twice (`-f png` and `-f svg`) — both with the same `-vN` suffix. PNG is what you (the model) Read in Step 5; SVG is for the human to view with adaptive light/dark theming.
 
 ### Step 5: View the PNG (MANDATORY)
 
@@ -139,16 +177,16 @@ If the user wants both formats, run the export twice (`-f png` and `-f svg`). PN
 
 **Do not ship a diagram you haven't looked at.** Claiming "done" without Reading the PNG is the single biggest regression the eval caught. The first three checks above are the ones that were missing from iteration 1 and caused visually-wrong-but-XML-valid outputs.
 
-### Step 6: Fix & re-render (loop 2–4 times)
+### Step 6: Fix & re-render (loop 2–4 times — increment the version suffix each pass)
 
-If anything is wrong, edit the XML and re-export. Typical fixes:
+If anything is wrong, **copy `diagram-vN.drawio` to `diagram-v(N+1).drawio`**, edit the new file, then re-export to `diagram-v(N+1).png`. Do not overwrite the previous version's `.drawio` or `.png`. Typical fixes:
 - Edge crossing a third frame → **Step 0 (re-plan the layout)**, not a new waypoint.
 - Feedback loop looks weird → switch to same-side exit/entry (`exitX=0;exitY=0.5;entryX=0;entryY=0.5`).
 - Edge drawn straight line through a box → edge `parent` doesn't match the connected boxes' parent; fix `parent`.
 - Colors don't match → set BOTH `strokeColor` AND `fontColor`.
 - Italic text on boxes → `fontStyle=0` (not `2`).
 
-Re-Read the PNG after each fix.
+Re-Read the new `-v(N+1).png` after each fix. When the loop terminates, surface all `-vN` versions to the user so they can pick the winner before you copy it to the canonical unsuffixed filename (see Step 4).
 
 ### Step 7: Technical validation
 
@@ -176,7 +214,7 @@ Run through the checklist in `references/validation.md` before declaring done:
 12. **Legend inside the frame, top-right (single-frame diagrams); top-left at canvas level (multi-frame).** Legend items 100×30, `fontSize=12`, 40px vertical spacing.
 13. **One box size per diagram.** Pick a standard (usually 160×60 for one-line labels, 180×80 for two-line) and hold it. Legend swatches (100×30) are the one intentional exception.
 14. **Snap to 10px grid.** `gridSize=10` at the `mxGraphModel` level; every coordinate should be a multiple of 10.
-15. **Keep the `.drawio` file.** It's the re-editable source of truth. Never try to round-trip edits through the exported image.
+15. **Keep the `.drawio` file. Preserve every iteration with a `-vN` suffix; never overwrite.** The `.drawio` file is the re-editable source of truth — never try to round-trip edits through the exported image. During the render-view-fix loop, each pass writes a new `-vN.drawio` and `-vN.png`; at session end, copy the winning version to the unsuffixed canonical filename and keep the `-vN` files as iteration history.
 16. **No helper-file detours.** When the deliverable is a diagram, create the `.drawio` file itself. Do not create `.py`/`.xslt`/`.js` builder files unless the user explicitly asks for one.
 
 ## Quick Reference
@@ -196,7 +234,7 @@ Run through the checklist in `references/validation.md` before declaring done:
 Box: rounded=1;arcSize=15;fillColor=#ffffff;strokeWidth=2;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontStyle=0
 Edge: edgeStyle=orthogonalEdgeStyle;rounded=0;strokeWidth=2;endArrow=classic;endFill=1
 Frame: swimlane;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1e1e1e;strokeWidth=2;fontSize=14;fontStyle=0;fontColor=#1e1e1e;startSize=30;rounded=0
-Dashed: append dashed=1;dashPattern=8 8;
+Dashed (return/response/feedback edges only): append dashed=1;dashPattern=8 8;
 Feedback-left loop: append exitX=0;exitY=0.5;entryX=0;entryY=0.5;
 Feedback-right loop: append exitX=1;exitY=0.5;entryX=1;entryY=0.5;
 ```
