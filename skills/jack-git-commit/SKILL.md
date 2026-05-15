@@ -37,9 +37,13 @@ Footer metadata (one per line, only what's known)
 | `Goal:` | Worker executing a goal bundle | `Goal: P2-finance-dashboard` |
 | `Step:` | Multi-step execution | `Step: 3/5` |
 | `Worker:` | Autonomous agent commit | `Worker: claude`, `Worker: codex`, `Worker: kimi` |
+| `Skill:` | Skill(s) invoked during the work | `Skill: jack-git-commit, drawio` |
+| `Plugin:` | Plugin(s) used | `Plugin: ai-builder-kit/executive-loop` |
+| `MCP:` | MCP server(s) used | `MCP: claude-in-chrome, context7` |
+| `Tools:` | Claude tools / notable Bash commands used | `Tools: WebSearch, WebFetch, Bash(rg, jq, gh pr view)` |
 | `Co-Authored-By:` | Attribution desired | `Co-Authored-By: Claude <noreply@anthropic.com>` |
 
-Only include fields you actually know. Zero footer fields is fine.
+Only include fields you actually know. Zero footer fields is fine — but if a skill, plugin, MCP server, or notable tool *was* used to produce the change, **always** record it. These are provenance: which capability authored what.
 
 ## Workflow
 
@@ -109,6 +113,26 @@ Split into separate commits?
 - User says no → commit as-is
 - User says yes → unstage all, then stage and commit each concern one at a time
 
+### 4a. Record skills, plugins, MCP servers, and tools used
+
+Before composing the message, recall what capabilities produced the staged changes:
+
+- **Skill(s)** invoked this session that shaped the diff (e.g., `drawio`, `pptx`, `excalidraw`, `playwright-cli`)
+- **Plugin(s)** active during the work
+- **MCP server(s)** whose tools were called to produce or verify the change (e.g., `context7` for docs lookups, `claude-in-chrome` for browser testing, `stitch` for design)
+- **Tools** — Claude built-in tools (`WebSearch`, `WebFetch`, `Agent`, `NotebookEdit`, etc.) and **notable Bash commands** that materially shaped the change (e.g., `rg`, `jq`, `gh pr view`, `curl`, `npm test`, `pytest`, `terraform plan`)
+
+Add each as a footer line (`Skill:`, `Plugin:`, `MCP:`, `Tools:`). If none were used, omit. Never fabricate — only list what was actually invoked in the conversation that produced this commit.
+
+**What counts as "notable" for `Tools:`:**
+- ✅ External research (`WebSearch`, `WebFetch`, `gh`, `curl` to a real API)
+- ✅ Verification / test runs whose output influenced the diff (`npm test`, `pytest`, `terraform plan`, `cargo check`)
+- ✅ Code analysis that drove decisions (`rg`/`grep`, `jq`, `ast-grep`)
+- ✅ Spawned `Agent` subagents
+- ❌ Trivial built-ins: `Read`, `Edit`, `Write`, `ls`, `cat`, `git status/diff/log`, `mkdir`
+
+When in doubt: if the tool's *output* shaped what you wrote, record it. If it was just navigation, skip it.
+
 ### 5. Generate message and present
 
 ```
@@ -122,6 +146,9 @@ Proposed commit:
   Goal: P1-multi-vendor-workers
   Step: 2/4
   Worker: claude
+  Skill: jack-git-commit
+  MCP: context7
+  Tools: WebSearch, Bash(rg, npm test)
 
 Commit with this message?
 ```
@@ -153,5 +180,6 @@ Committed: feat(vendor): add Kimi wire protocol support
 4. **Atomic** — one logical change per commit; flag mixed concerns
 5. **Respect hooks** — never `--no-verify`
 6. **Don't fabricate** — only include metadata you actually know
-7. **Ask when uncertain** — unclear intent → ask before committing
-8. **Universal** — same format for human, Claude, Codex, Kimi
+7. **Always record capability provenance** — if a skill, plugin, MCP server, or notable tool/Bash command materially shaped the change, add `Skill:` / `Plugin:` / `MCP:` / `Tools:` footer lines. Never silently omit.
+8. **Ask when uncertain** — unclear intent → ask before committing
+9. **Universal** — same format for human, Claude, Codex, Kimi
