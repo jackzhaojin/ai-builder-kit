@@ -3,8 +3,9 @@
 validate_log.py — Structural linter for chat-conversation-logger output.
 
 Checks a generated log file conforms to the format documented in SKILL.md:
-  - Filename matches YYYY-MM-DD-HHMM-{slug}.md
+  - Filename matches YYYY-MM-DD-{N}-{slug}.md
   - YAML frontmatter present, parseable, and contains required fields
+  - frontmatter `stage` matches the {N} in the filename
   - prompt_count matches the actual number of "### Prompt N:" headers
   - Every prompt block has an Inputs line, a verbatim blockquote, and
     Response/Action/Tools triplet lines
@@ -26,7 +27,7 @@ import re
 import sys
 from pathlib import Path
 
-REQUIRED_FRONTMATTER = {"date", "time", "platform", "topic", "prompt_count", "status"}
+REQUIRED_FRONTMATTER = {"date", "stage", "platform", "topic", "prompt_count", "status"}
 ALLOWED_STATUS = {"complete", "in-progress", "blocked", "exploration"}
 FORBIDDEN_HEADERS = {
     "## what was built",
@@ -35,7 +36,7 @@ FORBIDDEN_HEADERS = {
     "## accomplishments",
     "## summary of changes",
 }
-FILENAME_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}-\d{4}-[a-z0-9-]+\.md$")
+FILENAME_PATTERN = re.compile(r"^(\d{4}-\d{2}-\d{2})-(\d+)-([a-z0-9-]+)\.md$")
 PROMPT_HEADER = re.compile(r"^### Prompt (\d+):\s*(.+)$", re.MULTILINE)
 
 
@@ -59,9 +60,31 @@ def parse_frontmatter(content):
 
 def check_filename(path, errors, warnings):
     name = path.name
-    if not FILENAME_PATTERN.match(name):
+    m = FILENAME_PATTERN.match(name)
+    if not m:
         errors.append(
-            f"filename '{name}' does not match YYYY-MM-DD-HHMM-{{slug}}.md pattern"
+            f"filename '{name}' does not match YYYY-MM-DD-{{N}}-{{slug}}.md pattern"
+        )
+        return None
+    return m  # groups: (date, stage, slug)
+
+
+def check_filename_matches_frontmatter(fm_match, fm, errors, warnings):
+    """Cross-check the filename's date+stage+slug against the frontmatter."""
+    if fm_match is None or fm is None:
+        return
+    fn_date, fn_stage, fn_slug = fm_match.group(1), fm_match.group(2), fm_match.group(3)
+    if fm.get("date") and fm["date"] != fn_date:
+        errors.append(
+            f"frontmatter date '{fm['date']}' does not match filename date '{fn_date}'"
+        )
+    if fm.get("stage") and str(fm["stage"]).strip() != fn_stage:
+        errors.append(
+            f"frontmatter stage '{fm['stage']}' does not match filename stage '{fn_stage}'"
+        )
+    if fm.get("topic") and fm["topic"] != fn_slug:
+        warnings.append(
+            f"frontmatter topic '{fm['topic']}' differs from filename slug '{fn_slug}'"
         )
 
 
@@ -85,6 +108,12 @@ def check_frontmatter(fm, errors, warnings):
             int(pc)
         except ValueError:
             errors.append(f"prompt_count '{pc}' is not an integer")
+    stage = fm.get("stage")
+    if stage is not None:
+        try:
+            int(stage)
+        except ValueError:
+            errors.append(f"stage '{stage}' is not an integer")
 
 
 def check_prompt_blocks(body, fm, errors, warnings):
@@ -153,9 +182,10 @@ def validate(path):
     errors = []
     warnings = []
 
-    check_filename(path, errors, warnings)
+    fn_match = check_filename(path, errors, warnings)
     fm, body = parse_frontmatter(content)
     check_frontmatter(fm, errors, warnings)
+    check_filename_matches_frontmatter(fn_match, fm, errors, warnings)
     if body is not None:
         check_prompt_blocks(body, fm, errors, warnings)
         check_summary_creep(body, warnings)

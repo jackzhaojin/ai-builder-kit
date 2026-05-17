@@ -41,21 +41,46 @@ Think of it like a lab notebook: the scientist's observations and questions are 
 
 ## Quick Start
 
-1. Determine log location from context or ask user
-2. Create/append to `prompt-log.md` at determined location
-3. Use template from `assets/init-prompt-log-template.md`
+1. Determine the log folder from context or ask the user
+2. Compute today's date and the next stage number `{N}` for that folder
+3. Create a new file named `YYYY-MM-DD-{N}-{topic-slug}.md`
+4. Use the template from `assets/init-prompt-log-template.md`
 
-## File Location
+## File Location and Naming
 
-**Filename**: `prompt-log.md`
+**Filename pattern**: `YYYY-MM-DD-{N}-{topic-slug}.md`
+
+Where:
+- `YYYY-MM-DD` — today's date from `date "+%Y-%m-%d"`. Day precision only — no hours/minutes in the filename. ISO 8601 day-level format is the one identifier that's meaningful across every project.
+- `{N}` — zero-based stage number that orders logs within a single day. **Always present**, even if it's the only log on that date — it keeps folder listings deterministically chronological by pure alphanumeric sort. First log of the day is `0`, next is `1`, etc.
+- `{topic-slug}` — kebab-case, 3–8 words, descriptive (e.g. `init-eval-harness`, `building-batch-runner`, `refinement-flaky-tests`). The slug may begin with a stage word (`init`, `building`, `refinement`, `followup`) as a human readability hint, but the numeric `{N}` is what enforces order.
+
+**New day = new file.** If the user resumes work on a new calendar day, always start a fresh file with the new date and `N=0`. Never append to yesterday's log. This is the most important rule — it's what makes the log set readable as a timeline.
+
+**Picking `{N}`**: List the target folder for existing `YYYY-MM-DD-*.md` files matching today's date, take the highest `{N}` you see, and add 1. If none, start at `0`.
+
+```bash
+TODAY=$(date "+%Y-%m-%d")
+ls "$LOG_DIR" 2>/dev/null | grep -E "^${TODAY}-[0-9]+-" | \
+  awk -F- '{print $4}' | sort -n | tail -1
+# Add 1 to that value (or use 0 if no match)
+```
+
+**Examples**:
+- `2026-05-17-0-init-eval-harness.md` — first log of the day
+- `2026-05-17-1-building-batch-runner.md` — second log, different phase
+- `2026-05-17-2-refinement-flaky-tests.md` — third log
+- `2026-05-18-0-followup-batch-runner.md` — next day, counter resets
 
 **Location priority** (if clear from context):
 1. `./ai-docs/{project-name}/` - if working on a specific project/agent
 2. `./ai-docs/` - if exists
-3. `./docs/` - if exists  
+3. `./docs/` - if exists
 4. `./` - project root as fallback
 
-**If location is not clear**: Ask the user where they'd like the log saved before creating it. Example: "Where should I save the prompt log? I see you have `./ai-docs/` - want me to create it there, or somewhere specific like `./ai-docs/content-authoring-eval/prompt-log.md`?"
+**If location is not clear**: Ask the user where they'd like the log saved before creating it. Example: "Where should I save the prompt log? I see you have `./ai-docs/` — want me to create it there as `./ai-docs/{project}/2026-05-17-0-{slug}.md`, or somewhere specific?"
+
+**Existing single `prompt-log.md` files**: Leave them alone. The new per-session naming applies to logs going forward; don't migrate or rewrite legacy single-file logs.
 
 ## Logging Format
 
@@ -184,15 +209,18 @@ Use 12-hour format with AM/PM: `(10:07 AM)`, `(2:15 PM)`
 | Tool use | `{ToolName}: {brief purpose}` |
 | Questions | `Asked {N} questions` |
 
-## Session Breaks
+## Session Breaks (new file vs. new header)
 
-Start new session headers when:
-- New day
-- Significant time gap (>2 hours)
-- Shifting to different phase of work
+The default is **one session per file**. New-file triggers:
+
+- **New day** — always start a fresh file with the new date and `N=0`. Never append to yesterday's log, even if the topic is identical.
+- **Phase shift mid-day** — when the work clearly transitions (e.g. debugging → docs, building → refinement), bump `{N}` and create a new file. Reflect the shift in the slug (`2026-05-17-0-debugging-batch-runner.md` → `2026-05-17-1-refactoring-batch-runner.md`).
+- **Long gap (>2 hours)** — usually warrants a new file with bumped `{N}`.
+
+Within a single file you may use `## Session N: ...` headers if a single session has multiple internal phases that aren't worth their own file. But prefer splitting into files — that's what makes the folder a timeline.
 
 ```markdown
-## Session 2: Implementation (Dec 14, 2025)
+## Session 2: Implementation (May 17, 2026)
 ```
 
 ## Session Summaries

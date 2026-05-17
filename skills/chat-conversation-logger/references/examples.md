@@ -6,12 +6,12 @@ Two end-to-end example logs, fictional but realistic. Both are complete files �
 
 ## Example 1: Short, clean Q&A session
 
-**Filename:** `2026-04-15-1102-pkce-vs-auth-code-flow-comparison.md`
+**Filename:** `2026-04-15-0-pkce-vs-auth-code-flow-comparison.md`
 
 ```markdown
 ---
 date: 2026-04-15
-time: "11:02"
+stage: 0
 platform: claude-ai
 model: claude-opus-4-7
 topic: pkce-vs-auth-code-flow-comparison
@@ -22,7 +22,7 @@ status: complete
 
 # PKCE vs Auth Code Flow Comparison — Conversation Log
 
-**Date**: 2026-04-15 11:02
+**Date**: 2026-04-15
 **Platform**: Claude.ai
 **Topic**: Quick clarification on when to use PKCE vs traditional auth code flow for a SPA-plus-BFF architecture.
 
@@ -75,12 +75,12 @@ status: complete
 
 ## Example 2: Long, tool-heavy build session
 
-**Filename:** `2026-04-22-2014-cea-priority-queue-dashboard-build.md`
+**Filename:** `2026-04-22-0-cea-priority-queue-dashboard-build.md`
 
 ```markdown
 ---
 date: 2026-04-22
-time: "20:14"
+stage: 0
 platform: claude-ai
 model: claude-opus-4-7
 topic: cea-priority-queue-dashboard-build
@@ -91,7 +91,7 @@ status: in-progress
 
 # CEA Priority Queue Dashboard Build — Conversation Log
 
-**Date**: 2026-04-22 20:14
+**Date**: 2026-04-22
 **Platform**: Claude.ai
 **Topic**: First-pass dashboard for the Continuous Executive Agent priority queue, showing goal/step/contract hierarchy with live worker status.
 

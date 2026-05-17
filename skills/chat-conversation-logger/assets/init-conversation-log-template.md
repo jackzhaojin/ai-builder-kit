@@ -1,17 +1,17 @@
 ---
 date: {YYYY-MM-DD}
-time: "{HH:MM}"
+stage: {N}
 platform: claude-ai
 model: {model-id-if-known}
 topic: {topic-slug}
 tags: [{tag-1}, {tag-2}, {tag-3}]
-prompt_count: {N}
+prompt_count: {prompt-count}
 status: {complete | in-progress | blocked | exploration}
 ---
 
 # {Human-readable title} — Conversation Log
 
-**Date**: {YYYY-MM-DD HH:MM}
+**Date**: {YYYY-MM-DD}
 **Platform**: Claude.ai
 **Topic**: {one-line summary of what this chat was about}
 

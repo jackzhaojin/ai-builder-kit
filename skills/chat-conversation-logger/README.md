@@ -19,7 +19,7 @@ In any Claude.ai chat where you want an archive of the work, send one of:
 - `convo log`
 - `archive this chat`
 
-Claude will produce a downloadable markdown file named `YYYY-MM-DD-HHMM-{topic-slug}.md` with full prompts, attachment metadata, and a structured per-turn record of what Claude did and which tools it used.
+Claude will produce a downloadable markdown file named `YYYY-MM-DD-{N}-{topic-slug}.md` (where `{N}` is a zero-based stage counter within the day — always present, so folder listings stay chronologically sorted) with full prompts, attachment metadata, and a structured per-turn record of what Claude did and which tools it used.
 
 ## What's in the package
 
@@ -48,8 +48,8 @@ Exit code 0 means the log conforms to the format. Issues are printed to stderr. 
 
 - **Manual invocation only** — the description tells Claude not to trigger on its own initiative. Logging should be your decision, not Claude's.
 - **No per-prompt timestamps** — Claude.ai doesn't expose them and inventing them is dishonest. Sequential numbering with descriptive titles instead.
-- **Datetime in the filename** is the timeline anchor — the same topic built across three separate chats stays distinguishable on a sorted directory listing.
-- **Frontmatter** (`date`, `time`, `topic`, `tags`, `prompt_count`, `status`) is structured for downstream ingestion. Filter, search, and cluster from any second-brain tool that reads YAML frontmatter (Obsidian, Logseq, custom pipelines).
+- **Date + stage counter in the filename** is the timeline anchor — `YYYY-MM-DD-{N}` keeps a sorted directory listing in true chronological order without needing hour/minute precision. The same topic built across three separate chats stays distinguishable.
+- **Frontmatter** (`date`, `stage`, `topic`, `tags`, `prompt_count`, `status`) is structured for downstream ingestion. Filter, search, and cluster from any second-brain tool that reads YAML frontmatter (Obsidian, Logseq, custom pipelines).
 
 ## Differences from the Claude Code `conversation-logger`
 
@@ -59,5 +59,5 @@ Exit code 0 means the log conforms to the format. Issues are printed to stderr. 
 | Per-turn detail | 1-line response + 1-line action | 1–2 lines each + new `→ Tools:` line |
 | Attachment handling | Rare in Claude Code | First-class — `**Inputs**:` line + 📎 markers |
 | Tool surface | Read/Write/Bash/WebSearch | Plus artifacts, image search, MCP, memory tools |
-| Output | Appended to `prompt-log.md` | New file per session, datetime-stamped |
+| Output | New file per session, `YYYY-MM-DD-{N}-{slug}.md` | New file per session, `YYYY-MM-DD-{N}-{slug}.md` |
 | Trigger | `disable-model-invocation: true` flag | Description-only (Claude.ai validator restricts frontmatter keys) |

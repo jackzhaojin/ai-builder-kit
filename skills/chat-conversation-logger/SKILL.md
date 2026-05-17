@@ -35,22 +35,32 @@ If the conversation is very long (50+ turns), prefer fidelity on user prompts an
 
 Preserve typos, voice-to-text artifacts, autocorrect mishaps, casual phrasing, missing punctuation, and incomplete sentences. The way the user wrote it is part of the record — six months later, "claw code" instead of "Claude Code" tells the user this was a voice-dictated late-night thought, which is meaningful context. Don't silently fix anything. The only legitimate exception is redacting credentials (see Edge Cases below).
 
-## Filename and Datetime
+## Filename and Date
 
-Filename pattern: `YYYY-MM-DD-HHMM-{topic-slug}.md`
+Filename pattern: `YYYY-MM-DD-{N}-{topic-slug}.md`
+
+Where:
+- `YYYY-MM-DD` — today's date (no hours/minutes; ISO 8601 day precision is enough).
+- `{N}` — a zero-based stage number that orders this log within the day. The first log of the day is `0`, the next is `1`, etc. **Always present**, even for a single-log day.
+- `{topic-slug}` — kebab-case, 3–8 words, descriptive.
 
 Examples:
-- `2026-04-26-1547-continuous-executive-agent-architecture.md`
-- `2026-03-12-0930-eds-block-migration-with-make-com.md`
-- `2026-04-02-2210-claude-certified-architect-study-plan.md`
+- `2026-04-26-0-continuous-executive-agent-architecture.md`
+- `2026-04-26-1-continuous-executive-agent-followup.md`
+- `2026-03-12-0-eds-block-migration-with-make-com.md`
+- `2026-04-02-0-claude-certified-architect-study-plan.md`
 
-Get the real datetime from the system at log-creation time:
+Get the date from the system at log-creation time:
 
 ```bash
-date "+%Y-%m-%d-%H%M"
+date "+%Y-%m-%d"
 ```
 
-Choose the topic slug from the substantive subject of the chat — not from the user's literal first prompt, which is often vague ("hey can you help me with something"). Slug rules: lowercase, hyphen-separated, 3–8 words, descriptive enough to disambiguate from similar sessions. The user often builds the same topic 2–3 times across separate chats; the slug + datetime together must make them distinguishable on a timeline.
+**Picking `{N}`**: default to `0`. If you have evidence of earlier logs from the same date in the target folder (you've logged something earlier in this same chat session, or the user references a prior file), increment past the highest existing number. The stage prefix is mandatory because it's what guarantees the folder stays alphanumerically sorted in true chronological order — minute-level filename timestamps are unnecessary; a stage counter is more meaningful.
+
+**Optional human-readable stage hints**: the slug itself may start with a stage word (`init`, `building`, `refinement`, `followup`) when it helps a future reader understand what phase this log captures — but the *numeric* `{N}` is what enforces order, not the word.
+
+Choose the topic slug from the substantive subject of the chat — not from the user's literal first prompt, which is often vague ("hey can you help me with something"). Slug rules: lowercase, hyphen-separated, 3–8 words, descriptive enough to disambiguate from similar sessions. The user often builds the same topic 2–3 times across separate chats; the slug + date + `{N}` together must make them distinguishable on a timeline.
 
 If you genuinely cannot tell the topic, ask the user one short question before generating the file.
 
@@ -61,7 +71,7 @@ Use the template at `assets/init-conversation-log-template.md`. The high-level s
 ```markdown
 ---
 date: 2026-04-26
-time: "15:47"
+stage: 0
 platform: claude-ai
 model: claude-opus-4-7
 topic: continuous-executive-agent-architecture
@@ -72,7 +82,7 @@ status: in-progress
 
 # {Human-readable title} — Conversation Log
 
-**Date**: 2026-04-26 15:47
+**Date**: 2026-04-26
 **Platform**: Claude.ai
 **Topic**: {one-line summary of what this chat was about}
 
@@ -96,10 +106,10 @@ For two fully-worked end-to-end examples (one short clean session, one long mult
 ### Frontmatter fields (in priority order)
 
 - `date` (YYYY-MM-DD) — required
-- `time` ("HH:MM" 24-hour) — required
+- `stage` — required integer matching the `{N}` in the filename
 - `platform: claude-ai` — required, fixed value
 - `model` — best-effort, e.g. `claude-opus-4-7`. If unknown, omit the field entirely rather than guessing.
-- `topic` — same slug used in the filename
+- `topic` — same slug used in the filename (excluding the stage prefix)
 - `tags` — 2–5 short kebab-case tags inferred from the content (e.g. `agentic-ai`, `aem-eds`, `oauth`, `mcp-server`). Bias toward tags the user has used in past sessions if you can tell from context.
 - `prompt_count` — integer count of user prompts logged (excluding the trigger)
 - `status` — one of `complete`, `in-progress`, `blocked`, `exploration`. Default `complete` unless context indicates otherwise.

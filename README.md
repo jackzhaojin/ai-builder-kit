@@ -7,8 +7,8 @@ A [Claude Code plugin marketplace](https://docs.anthropic.com/en/docs/claude-cod
 | Skill | Last Modified | Description |
 |-------|--------------|-------------|
 | [ai-knowledge-harvester](skills/ai-knowledge-harvester/) | 2026-03-28 | Harvest AI docs from repos into a centralized private knowledge repository |
-| [conversation-logger](skills/conversation-logger/) | 2026-03-28 | Log Claude Code conversation sessions with timestamps in structured markdown |
-| [chat-conversation-logger](skills/chat-conversation-logger/) | 2026-04-26 | Log Claude.ai chat conversations with timestamps in structured markdown (designed for Claude.ai web interface, unlike conversation-logger which is for Claude Code) |
+| [conversation-logger](skills/conversation-logger/) | 2026-05-17 | Log Claude Code / Codex sessions as per-session `YYYY-MM-DD-{N}-{slug}.md` files (date + zero-based stage counter + topic slug — folder sort = chronological order). New day = new file. |
+| [chat-conversation-logger](skills/chat-conversation-logger/) | 2026-05-17 | Log Claude.ai chat conversations as `YYYY-MM-DD-{N}-{slug}.md` files with verbatim prompts, attachment metadata, and per-turn tool record. Stage prefix `{N}` is always present so listings stay chronologically sorted. |
 | [branded-pptx](skills/branded-pptx/) | 2026-03-29 | Create branded PowerPoint decks from templates — analyzes themes, slide masters, layouts with shape dimensions, text capacity, and visual data tracking. Timestamped run folders. **Requires**: [pptx](https://github.com/anthropics/skills) skill + Python 3.12+ |
 | [drawio](skills/drawio/) | 2026-04-27 | Generate `.drawio` XML diagrams in Jack's brand style (swimlane frames, 4-color semantic palette, rounded boxes + cylinders for data stores, orthogonal edges, dashed reserved for return/response). Step 0 interview with multiple-choice defaults; render-view-fix loop with versioned-iteration artifacts (`-v1`, `-v2`, …). Ships with two worked output examples, a sample-input reference, and an evals harness. |
 | [hlx-admin-api-executor](skills/hlx-admin-api-executor/) | 2026-03-22 | Interactive AEM Edge Delivery Services Admin API executor |
