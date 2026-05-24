@@ -37,18 +37,19 @@ Preserve typos, voice-to-text artifacts, autocorrect mishaps, casual phrasing, m
 
 ## Filename and Date
 
-Filename pattern: `YYYY-MM-DD-{N}-{topic-slug}.md`
+Filename pattern: `chat-prompt-log-YYYY-MM-DD-{N}-{topic-slug}.md`
 
 Where:
+- `chat-prompt-log-` — literal type prefix. **Always present.** Marks the file as a Claude.ai *chat* prompt log, distinct from the Claude Code `prompt-log-` logs (from the sibling `conversation-logger` skill) and from other dated docs (plans, retros, migration records). When both log types land in the same second-brain folder, the prefix keeps them grouped and unambiguous.
 - `YYYY-MM-DD` — today's date (no hours/minutes; ISO 8601 day precision is enough).
 - `{N}` — a zero-based stage number that orders this log within the day. The first log of the day is `0`, the next is `1`, etc. **Always present**, even for a single-log day.
 - `{topic-slug}` — kebab-case, 3–8 words, descriptive.
 
 Examples:
-- `2026-04-26-0-continuous-executive-agent-architecture.md`
-- `2026-04-26-1-continuous-executive-agent-followup.md`
-- `2026-03-12-0-eds-block-migration-with-make-com.md`
-- `2026-04-02-0-claude-certified-architect-study-plan.md`
+- `chat-prompt-log-2026-04-26-0-continuous-executive-agent-architecture.md`
+- `chat-prompt-log-2026-04-26-1-continuous-executive-agent-followup.md`
+- `chat-prompt-log-2026-03-12-0-eds-block-migration-with-make-com.md`
+- `chat-prompt-log-2026-04-02-0-claude-certified-architect-study-plan.md`
 
 Get the date from the system at log-creation time:
 
@@ -109,7 +110,7 @@ For two fully-worked end-to-end examples (one short clean session, one long mult
 - `stage` — required integer matching the `{N}` in the filename
 - `platform: claude-ai` — required, fixed value
 - `model` — best-effort, e.g. `claude-opus-4-7`. If unknown, omit the field entirely rather than guessing.
-- `topic` — same slug used in the filename (excluding the stage prefix)
+- `topic` — same slug used in the filename (excluding the `chat-prompt-log-` type prefix and the `{N}` stage number)
 - `tags` — 2–5 short kebab-case tags inferred from the content (e.g. `agentic-ai`, `aem-eds`, `oauth`, `mcp-server`). Bias toward tags the user has used in past sessions if you can tell from context.
 - `prompt_count` — integer count of user prompts logged (excluding the trigger)
 - `status` — one of `complete`, `in-progress`, `blocked`, `exploration`. Default `complete` unless context indicates otherwise.
