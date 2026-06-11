@@ -12,6 +12,7 @@ A [Claude Code plugin marketplace](https://docs.anthropic.com/en/docs/claude-cod
 | [branded-pptx](skills/branded-pptx/) | 2026-03-29 | Create branded PowerPoint decks from templates — analyzes themes, slide masters, layouts with shape dimensions, text capacity, and visual data tracking. Timestamped run folders. **Requires**: [pptx](https://github.com/anthropics/skills) skill + Python 3.12+ |
 | [drawio](skills/drawio/) | 2026-04-27 | Generate `.drawio` XML diagrams in Jack's brand style (swimlane frames, 4-color semantic palette, rounded boxes + cylinders for data stores, orthogonal edges, dashed reserved for return/response). Step 0 interview with multiple-choice defaults; render-view-fix loop with versioned-iteration artifacts (`-v1`, `-v2`, …). Ships with two worked output examples, a sample-input reference, and an evals harness. |
 | [hlx-admin-api-executor](skills/hlx-admin-api-executor/) | 2026-03-22 | Interactive AEM Edge Delivery Services Admin API executor |
+| [playwright-demo-video](skills/playwright-demo-video/) | 2026-06-11 | Generate polished demo videos (MP4) from Playwright specs — on-screen captions, ElevenLabs AI voiceover with exact timestamp sync, freeze-frame merge, background music. Includes auto-discover mode that scans a project and generates a demo spec. **Requires**: ffmpeg, Node.js 18+, Playwright in the target project, ElevenLabs API key (for voiceover) |
 
 ## Available Plugins
 

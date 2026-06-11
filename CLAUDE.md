@@ -80,6 +80,10 @@ python3.12 skills/branded-pptx/scripts/analyze_template.py \
 
 Each run creates a timestamped folder with manifests, template copy, and `output/` for generated .pptx/.pdf.
 
+### Testing playwright-demo-video
+
+Requires ffmpeg/ffprobe (`brew install ffmpeg`), Node.js 18+, and a target web project with Playwright installed. Voiceover needs `ELEVENLABS_API_KEY`. Pipeline scripts are zero-dependency Node (`node --check skills/playwright-demo-video/scripts/*.mjs` to syntax-check). Demo output goes in the target project, not this repo.
+
 ## Conventions
 
 - SKILL.md descriptions must include trigger phrases ("Use when the user says...")
