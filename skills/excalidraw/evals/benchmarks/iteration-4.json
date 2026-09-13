@@ -85,7 +85,7 @@
         {
           "text": "PNG renders successfully via scripts/render_excalidraw.py (smoke test)",
           "passed": true,
-          "evidence": "render ok: /Users/jackjin/dev/jack-dev-server-configs/local/claude-settings/skills/excalidraw-workspace/iteration-4/eval-1-authoring-patterns/with_skill/run-1/outputs/authoring-patterns.png"
+          "evidence": "render ok: ../excalidraw-workspace/iteration-4/eval-1-authoring-patterns/with_skill/run-1/outputs/authoring-patterns.png"
         },
         {
           "text": "Exactly 10 content rectangles (labeled boxes, not legend swatches)",
@@ -198,7 +198,7 @@
         {
           "text": "PNG renders successfully",
           "passed": true,
-          "evidence": "render ok: /Users/jackjin/dev/jack-dev-server-configs/local/claude-settings/skills/excalidraw-workspace/iteration-4/eval-2-agentic-ai-auth/with_skill/run-1/outputs/agentic-ai-auth.png"
+          "evidence": "render ok: ../excalidraw-workspace/iteration-4/eval-2-agentic-ai-auth/with_skill/run-1/outputs/agentic-ai-auth.png"
         }
       ],
       "notes": []
@@ -281,7 +281,7 @@
         {
           "text": "PNG renders successfully",
           "passed": true,
-          "evidence": "render ok: /Users/jackjin/dev/jack-dev-server-configs/local/claude-settings/skills/excalidraw-workspace/iteration-4/eval-3-multi-frame-process/with_skill/run-1/outputs/multi-frame-process.png"
+          "evidence": "render ok: ../excalidraw-workspace/iteration-4/eval-3-multi-frame-process/with_skill/run-1/outputs/multi-frame-process.png"
         }
       ],
       "notes": []
@@ -364,7 +364,7 @@
         {
           "text": "PNG renders successfully",
           "passed": true,
-          "evidence": "render ok: /Users/jackjin/dev/jack-dev-server-configs/local/claude-settings/skills/excalidraw-workspace/iteration-4/eval-4-agent-sdk-and-harness/with_skill/run-1/outputs/agent-sdk-and-harness.png"
+          "evidence": "render ok: ../excalidraw-workspace/iteration-4/eval-4-agent-sdk-and-harness/with_skill/run-1/outputs/agent-sdk-and-harness.png"
         }
       ],
       "notes": []
@@ -442,7 +442,7 @@
         {
           "text": "PNG renders successfully",
           "passed": true,
-          "evidence": "render ok: /Users/jackjin/dev/jack-dev-server-configs/local/claude-settings/skills/excalidraw-workspace/iteration-4/eval-5-prompts-to-harness/with_skill/run-1/outputs/prompts-to-harness.png"
+          "evidence": "render ok: ../excalidraw-workspace/iteration-4/eval-5-prompts-to-harness/with_skill/run-1/outputs/prompts-to-harness.png"
         }
       ],
       "notes": []
@@ -525,7 +525,7 @@
         {
           "text": "PNG renders successfully",
           "passed": true,
-          "evidence": "render ok: /Users/jackjin/dev/jack-dev-server-configs/local/claude-settings/skills/excalidraw-workspace/iteration-4/eval-6-summit-2026-v2-simple/with_skill/run-1/outputs/summit-2026-v2-simple.png"
+          "evidence": "render ok: ../excalidraw-workspace/iteration-4/eval-6-summit-2026-v2-simple/with_skill/run-1/outputs/summit-2026-v2-simple.png"
         }
       ],
       "notes": []
