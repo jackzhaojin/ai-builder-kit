@@ -51,7 +51,7 @@ plugin-name/
 
 ### Testing a skill locally
 
-Skills in `skills/` are automatically available when working in this repo. To test a skill from another project, symlink it into `~/.claude/skills/`.
+Claude Code does not load `skills/` from a repo root, only `.claude/skills/`. To try a skill while editing it, symlink it into the target project: `.claude/skills/<name>` for Claude Code, `.agents/skills/<name>` for Codex and OpenCode. Do not `npx skills add` a local path over an existing GitHub install of the same skill; the lock file would then point at the clone instead of GitHub.
 
 ### Testing a plugin locally
 
@@ -86,6 +86,14 @@ Each run creates a timestamped folder with manifests, template copy, and `output
 
 Requires ffmpeg/ffprobe (`brew install ffmpeg`), Node.js 18+, and a target web project with Playwright installed. Voiceover needs `ELEVENLABS_API_KEY`. Pipeline scripts are zero-dependency Node (`node --check skills/playwright-demo-video/scripts/*.mjs` to syntax-check). Demo output goes in the target project, not this repo.
 
+## Release checklist
+
+1. Edit the skill. Keep `SKILL.md` under 500 lines; move detail to `references/`.
+2. Validate: `claude plugin validate skills` and `claude plugin validate .claude-plugin/marketplace.json --strict`. Optional Codex check: `python3 ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py .` (it reports the two skills that set `disable-model-invocation: true` and the gitignored `drawio-workspace`; both are accepted).
+3. New skill: add a README.md row with the Last Modified date and a `.claude-plugin/marketplace.json` entry (copy an existing skill entry, no `version`). Changed skill: bump its Last Modified date.
+4. Commit in Conventional Commits format with provenance footers (the `jack-git-commit` skill), push only when told.
+5. Consumers get it on their next update (see "Keeping it up to date" in README.md). Jack's laptop: run the `update-skills` skill or `~/dev/jack-dev-server-configs/local/update-skills.sh`.
+
 ## Conventions
 
 - SKILL.md descriptions must include trigger phrases ("Use when the user says...")
@@ -97,4 +105,6 @@ Requires ffmpeg/ffprobe (`brew install ffmpeg`), Node.js 18+, and a target web p
 - Do not add `version` to skill entries in `.claude-plugin/marketplace.json`: with no version, Claude Code keys updates on the commit SHA, so every push to main reaches users on `/plugin update`
 - Validate before committing: `claude plugin validate .claude-plugin/marketplace.json --strict` and `claude plugin validate skills`
 - Keep skills Codex-compatible: only `name` and `description` in frontmatter are portable, Codex ignores Claude-only keys such as `allowed-tools` and `context`, and the SKILL.md body should not depend on Claude-only tools without a plain-shell fallback
+- Python scripts in skills carry PEP 723 inline metadata (`# /// script` block) and run with `uv run <script>`; never create or commit a `.venv`, `node_modules` or `pyproject.toml` inside a skill folder. OpenCode scans every nested `SKILL.md`, and a Playwright venv once leaked three skills
+- Pin CDN imports in render templates (see `skills/excalidraw/scripts/render_template.html`); an unpinned "latest" broke rendering on 2026-09-13
 - Do not commit or push unless explicitly instructed

@@ -13,7 +13,7 @@ A collection of skills, plugins, and hooks for AI coding agents. Works as a [Cla
 | [drawio](skills/drawio/) | 2026-04-27 | Generate `.drawio` XML diagrams in Jack's brand style (swimlane frames, 4-color semantic palette, rounded boxes + cylinders for data stores, orthogonal edges, dashed reserved for return/response). Step 0 interview with multiple-choice defaults; render-view-fix loop with versioned-iteration artifacts (`-v1`, `-v2`, …). Ships with two worked output examples, a sample-input reference, and an evals harness. |
 | [hlx-admin-api-executor](skills/hlx-admin-api-executor/) | 2026-03-22 | Interactive AEM Edge Delivery Services Admin API executor |
 | [playwright-demo-video](skills/playwright-demo-video/) | 2026-06-11 | Generate polished demo videos (MP4) from Playwright specs — on-screen captions, ElevenLabs AI voiceover with exact timestamp sync, freeze-frame merge, background music. Includes auto-discover mode that scans a project and generates a demo spec. **Requires**: ffmpeg, Node.js 18+, Playwright in the target project, ElevenLabs API key (for voiceover) |
-| [excalidraw](skills/excalidraw/) | 2026-06-01 | Generate `.excalidraw` diagrams in Jack's brand style (hand-drawn roughness, Nunito, 7-color semantic palette, frames for grouping) with a mandatory render-view-fix loop. Ships core references, six worked examples with PNG previews, and an evals harness. **Requires**: `uv` (installs Playwright itself on first run) plus a one-time `uv run --with playwright playwright install chromium` |
+| [excalidraw](skills/excalidraw/) | 2026-09-13 | Generate `.excalidraw` diagrams in Jack's brand style (hand-drawn roughness, Nunito, 7-color semantic palette, frames for grouping) with a mandatory render-view-fix loop. Ships core references, six worked examples with PNG previews, and an evals harness. **Requires**: `uv` (installs Playwright itself on first run) plus a one-time `uv run --with playwright playwright install chromium` |
 | [podcast-slides-video](skills/podcast-slides-video/) | 2026-09-07 | Build a YouTube-ready MP4 from narrated audio (NotebookLM overview, recorded talk) plus a slide deck (PDF or PPTX), with slide changes cut to the transcript. Produces the MP4, an auditable cue sheet, a validation contact sheet, and a YouTube chapter list. **Requires**: ffmpeg/ffprobe, `uv` (runs mlx-whisper on Apple Silicon), poppler `pdftoppm`, LibreOffice `soffice` for PPTX input, Python with Pillow and numpy |
 
 ## Available Plugins
@@ -37,7 +37,7 @@ npx skills add jackzhaojin/ai-builder-kit -g -y                         # everyt
 npx skills update -g -y                                                 # pull updates later
 ```
 
-Codex reads `~/.agents/skills` directly, so a global install shows up in Codex with no extra step.
+Codex and OpenCode read `~/.agents/skills` directly, so a global install shows up in both with no extra step.
 
 ### Option B: Claude Code plugin marketplace
 
@@ -73,6 +73,16 @@ codex plugin marketplace add jackzhaojin/ai-builder-kit
 ```
 
 Then restart the ChatGPT desktop app, open the Plugins Directory, choose the **AI Builder Kit** marketplace, and install. For single skills in Codex, use Option A with `-a codex`.
+
+## Keeping it up to date
+
+Skill entries carry no pinned version, so every push to `main` is an update. Pull it with whichever path you installed from:
+
+| Installed with | Update with |
+|----------------|-------------|
+| `npx skills` | `npx skills update -g -y` (global) or `npx skills update -p -y` (inside a project) |
+| Claude Code marketplace | `/plugin update` in a session, or `claude plugin marketplace update ai-builder-kit` followed by `claude plugin update <name>@ai-builder-kit` |
+| Codex marketplace | `codex plugin marketplace upgrade ai-builder-kit`, or reinstall from the Plugins Directory in the desktop app |
 
 ## Repo layout
 
