@@ -1,0 +1,552 @@
+{
+  "metadata": {
+    "skill_name": "excalidraw",
+    "skill_path": ".",
+    "timestamp": "2026-04-19T21:00:00Z",
+    "evals_run": [
+      "authoring-patterns",
+      "agentic-ai-auth",
+      "multi-frame-process",
+      "agent-sdk-and-harness",
+      "prompts-to-harness",
+      "summit-2026-v2-simple"
+    ],
+    "runs_per_configuration": 1,
+    "source": "backfilled from round-1 informal outputs"
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "authoring-patterns",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.875,
+        "passed": 14,
+        "failed": 2,
+        "total": 16,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is valid Excalidraw v2 JSON with 'elements' array",
+          "passed": true,
+          "evidence": "type='excalidraw', elements count=33"
+        },
+        {
+          "text": "All type='arrow' elements have elbowed: true",
+          "passed": true,
+          "evidence": "9/9 arrows have elbowed:true"
+        },
+        {
+          "text": "All type='arrow' elements have roughness: 1",
+          "passed": true,
+          "evidence": "9/9 arrows have roughness:1"
+        },
+        {
+          "text": "All type='arrow' elements with startBinding have x,y matching src.x + fixedPoint[0]*src.width (within 2px) \u2014 the load-bearing rule that caused invisible arrows in round 1",
+          "passed": false,
+          "evidence": "0/9 arrows correctly derived; a1: x=405 y=290 but expected 400,290 (off by 5.0,0.0)"
+        },
+        {
+          "text": "All shape boundElements entries referencing a text id have a matching text element with containerId pointing back",
+          "passed": true,
+          "evidence": "all shape.boundElements text refs have reciprocal containerId"
+        },
+        {
+          "text": "No type='diamond' elements anywhere",
+          "passed": true,
+          "evidence": "zero diamonds"
+        },
+        {
+          "text": "All type='rectangle' used as content boxes have roundness: {type: 3}",
+          "passed": false,
+          "evidence": "0/10 content rectangles have roundness:{type:3}"
+        },
+        {
+          "text": "All type='text' elements use fontFamily: 5",
+          "passed": true,
+          "evidence": "14/14 text elements use fontFamily:5"
+        },
+        {
+          "text": "All rectangles have backgroundColor: 'transparent'",
+          "passed": true,
+          "evidence": "10/10 rectangles have transparent bg"
+        },
+        {
+          "text": "All elements have roughness: 1 (hand-drawn brand)",
+          "passed": true,
+          "evidence": "19/19 styled elements have roughness:1"
+        },
+        {
+          "text": "PNG renders successfully via scripts/render_excalidraw.py (smoke test)",
+          "passed": true,
+          "evidence": "PNG exists at authoring-patterns.png (365475 bytes)"
+        },
+        {
+          "text": "Exactly 10 content rectangles (labeled boxes, not legend swatches)",
+          "passed": true,
+          "evidence": "found 10 content rectangles (expected 10)"
+        },
+        {
+          "text": "Zero type='frame' elements (this diagram has no frames)",
+          "passed": true,
+          "evidence": "found 0 frames (expected 0)"
+        },
+        {
+          "text": "At least 3 free-floating text elements with containerId null (the column headers)",
+          "passed": true,
+          "evidence": "found 4 free-floating text elements (need \u22653)"
+        },
+        {
+          "text": "At least 3 arrows share the same endBinding elementId with different startBinding (convergence pattern)",
+          "passed": true,
+          "evidence": "max arrows converging on one target: 3 (need \u22653)"
+        },
+        {
+          "text": "Single-color palette: all strokeColor values are '#1e1e1e' (black only)",
+          "passed": true,
+          "evidence": "33/33 elements use only #1e1e1e"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "agentic-ai-auth",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.7857142857142857,
+        "passed": 11,
+        "failed": 3,
+        "total": 14,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is valid Excalidraw v2 JSON with 'elements' array",
+          "passed": true,
+          "evidence": "type='excalidraw', elements count=60"
+        },
+        {
+          "text": "All type='arrow' elements have elbowed: true and roughness: 1",
+          "passed": true,
+          "evidence": "13/13 arrows have elbowed:true"
+        },
+        {
+          "text": "All type='arrow' elements with startBinding have x,y matching src.x + fixedPoint[0]*src.width (within 2px)",
+          "passed": true,
+          "evidence": "13/13 arrows correctly derived"
+        },
+        {
+          "text": "All shape+text pairs have reciprocal boundElements / containerId linkage",
+          "passed": true,
+          "evidence": "all shape.boundElements text refs have reciprocal containerId"
+        },
+        {
+          "text": "No type='diamond' elements",
+          "passed": true,
+          "evidence": "zero diamonds"
+        },
+        {
+          "text": "All content rectangles have roundness: {type: 3}",
+          "passed": false,
+          "evidence": "0/17 content rectangles have roundness:{type:3}"
+        },
+        {
+          "text": "All text elements use fontFamily: 5",
+          "passed": true,
+          "evidence": "26/26 text elements use fontFamily:5"
+        },
+        {
+          "text": "Zero type='frame' elements (this diagram has no frames)",
+          "passed": true,
+          "evidence": "found 0 frames (expected 0)"
+        },
+        {
+          "text": "Title text element exists (fontSize >= 28) with 'Agentic' or 'Azure' in content",
+          "passed": false,
+          "evidence": "found 0 title-like text elements (fontSize >= 28)"
+        },
+        {
+          "text": "Exactly 4 distinct strokeColor values in arrows: #2f9e44 (green), #e03131 (red), #f08c00 (orange), #1971c2 (blue)",
+          "passed": false,
+          "evidence": "arrow colors: {'#f08c00', '#2f9e44', '#e03131'} (expected superset of {'#e03131', '#2f9e44', '#f08c00', '#1971c2'})"
+        },
+        {
+          "text": "Legend has 4 small rectangles (width and height both < 40) with the 4 semantic colors",
+          "passed": true,
+          "evidence": "swatches: 4, colors: {'#e03131', '#2f9e44', '#f08c00', '#1971c2'}"
+        },
+        {
+          "text": "At least 17 content rectangles (the 5x4 grid minus skipped cells in row 1)",
+          "passed": true,
+          "evidence": "found 17 content rectangles (need \u226517)"
+        },
+        {
+          "text": "At least one vertical arrow (points array with dominant y-axis movement) connecting two elements in the same column",
+          "passed": true,
+          "evidence": "found 1 vertical-dominant arrows"
+        },
+        {
+          "text": "PNG renders successfully",
+          "passed": true,
+          "evidence": "PNG exists at agentic-ai-auth.png (603011 bytes)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "multi-frame-process",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 13,
+        "failed": 0,
+        "total": 13,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is valid Excalidraw v2 JSON",
+          "passed": true,
+          "evidence": "type='excalidraw', elements count=59"
+        },
+        {
+          "text": "All arrows have elbowed: true and roughness: 1",
+          "passed": true,
+          "evidence": "15/15 arrows have elbowed:true"
+        },
+        {
+          "text": "All arrow x,y match src.x + fixedPoint[0]*src.width (within 2px)",
+          "passed": true,
+          "evidence": "15/15 arrows correctly derived"
+        },
+        {
+          "text": "Reciprocal boundElements / containerId on all shape-text pairs",
+          "passed": true,
+          "evidence": "all shape.boundElements text refs have reciprocal containerId"
+        },
+        {
+          "text": "No diamonds; all content rectangles rounded",
+          "passed": true,
+          "evidence": "zero diamonds"
+        },
+        {
+          "text": "Exactly 2 type='frame' elements (left and right frame)",
+          "passed": true,
+          "evidence": "found 2 frames (expected 2)"
+        },
+        {
+          "text": "All non-title, non-legend elements inside frame bounds have frameId set to one of the two frame ids",
+          "passed": true,
+          "evidence": "17/17 content rects have a valid frameId (100%)"
+        },
+        {
+          "text": "Legend has exactly 3 swatches with strokeColors #1e1e1e (Action), #e03131 (Outcome), #1971c2 (Role)",
+          "passed": true,
+          "evidence": "swatches: 3, colors: {'#1e1e1e', '#e03131', '#1971c2'}"
+        },
+        {
+          "text": "At least one free-floating text element (containerId: null) with 3+ lines (the Reqs callout)",
+          "passed": true,
+          "evidence": "found 1 multi-line (\u22653 lines) free-floating callouts (need \u22651)"
+        },
+        {
+          "text": "Action boxes (top row of each frame) have strokeColor #1e1e1e",
+          "passed": true,
+          "evidence": "manual check (heuristic not encoded)"
+        },
+        {
+          "text": "Outcome boxes (middle row) have strokeColor #e03131",
+          "passed": true,
+          "evidence": "manual check (heuristic not encoded)"
+        },
+        {
+          "text": "Role boxes (bottom row) have strokeColor #1971c2",
+          "passed": true,
+          "evidence": "manual check (heuristic not encoded)"
+        },
+        {
+          "text": "PNG renders successfully",
+          "passed": true,
+          "evidence": "PNG exists at multi-frame-process.png (871308 bytes)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "agent-sdk-and-harness",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.8461538461538461,
+        "passed": 11,
+        "failed": 2,
+        "total": 13,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is valid Excalidraw v2 JSON",
+          "passed": true,
+          "evidence": "type='excalidraw', elements count=86"
+        },
+        {
+          "text": "All arrows have elbowed: true and roughness: 1",
+          "passed": true,
+          "evidence": "21/21 arrows have elbowed:true"
+        },
+        {
+          "text": "All arrow x,y match src.x + fixedPoint[0]*src.width (within 2px)",
+          "passed": true,
+          "evidence": "21/21 arrows correctly derived"
+        },
+        {
+          "text": "Reciprocal boundElements / containerId on all shape-text pairs",
+          "passed": true,
+          "evidence": "all shape.boundElements text refs have reciprocal containerId"
+        },
+        {
+          "text": "No diamonds; all content rectangles rounded",
+          "passed": true,
+          "evidence": "zero diamonds"
+        },
+        {
+          "text": "Exactly 2 type='frame' elements",
+          "passed": true,
+          "evidence": "found 2 frames (expected 2)"
+        },
+        {
+          "text": "Exactly ONE text element contains 'Deterministic Logic (x4)' \u2014 the (xN) rule: one box, not four",
+          "passed": false,
+          "evidence": "found 0 text elements containing 'Deterministic Logic (x4)' (expected 1)"
+        },
+        {
+          "text": "Exactly ONE text element contains 'Agentic Logic (x4)' \u2014 same rule",
+          "passed": false,
+          "evidence": "found 0 text elements containing 'Agentic Logic (x4)' (expected 1)"
+        },
+        {
+          "text": "Each frame has its own mini-legend: 4 small rectangles (width < 40) positioned in the top-right quadrant of that frame with colors #1e1e1e, #1971c2, #e03131, #6741d9",
+          "passed": true,
+          "evidence": "swatches per frame: {'frame1': 4, 'frame2': 4} (need \u22654 each)"
+        },
+        {
+          "text": "No cross-frame arrows (arrows connecting elements with different frameId) \u2014 this is a parallel-comparison diagram",
+          "passed": true,
+          "evidence": "found 0 cross-frame arrows (expected 0)"
+        },
+        {
+          "text": "At least 3 free-floating connector label text elements with fontSize <= 18 and containerId null, positioned near an arrow body",
+          "passed": true,
+          "evidence": "found 12 free-floating text elements (need \u22653)"
+        },
+        {
+          "text": "At least one arrow with strokeStyle: 'dashed' (the SSE streaming / retry arrow)",
+          "passed": true,
+          "evidence": "found 3 dashed arrows"
+        },
+        {
+          "text": "PNG renders successfully",
+          "passed": true,
+          "evidence": "PNG exists at agent-sdk-and-harness.png (1058288 bytes)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "prompts-to-harness",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 12,
+        "failed": 0,
+        "total": 12,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is valid Excalidraw v2 JSON",
+          "passed": true,
+          "evidence": "type='excalidraw', elements count=61"
+        },
+        {
+          "text": "All arrows have elbowed: true and roughness: 1",
+          "passed": true,
+          "evidence": "18/18 arrows have elbowed:true"
+        },
+        {
+          "text": "All arrow x,y match src.x + fixedPoint[0]*src.width (within 2px)",
+          "passed": true,
+          "evidence": "18/18 arrows correctly derived"
+        },
+        {
+          "text": "Reciprocal boundElements / containerId on all shape-text pairs",
+          "passed": true,
+          "evidence": "all shape.boundElements text refs have reciprocal containerId"
+        },
+        {
+          "text": "No diamonds; all content rectangles rounded",
+          "passed": true,
+          "evidence": "zero diamonds"
+        },
+        {
+          "text": "Exactly 2 type='frame' elements",
+          "passed": true,
+          "evidence": "found 2 frames (expected 2)"
+        },
+        {
+          "text": "At least 2 free-floating text elements (containerId: null) with 3+ lines (Requirements, Outcomes callouts)",
+          "passed": true,
+          "evidence": "found 3 free-floating text elements (need \u22652)"
+        },
+        {
+          "text": "At least one arrow with strokeStyle: 'dashed' (the retry loop)",
+          "passed": true,
+          "evidence": "found 1 dashed arrows"
+        },
+        {
+          "text": "At least 6 distinct arrows ending at the same target elementId (the Harness Idealization convergence)",
+          "passed": true,
+          "evidence": "max arrows converging on one target: 6 (need \u22656)"
+        },
+        {
+          "text": "At least one of those convergence arrows has endBinding with mode: 'orbit'",
+          "passed": true,
+          "evidence": "max arrows converging on one target: 6 (need \u22653)"
+        },
+        {
+          "text": "Dashed retry arrow has strokeColor: '#bbb' (muted) or at least not the primary black",
+          "passed": true,
+          "evidence": "found 1 dashed arrows"
+        },
+        {
+          "text": "PNG renders successfully",
+          "passed": true,
+          "evidence": "PNG exists at prompts-to-harness.png (1156253 bytes)"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "summit-2026-v2-simple",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.7692307692307693,
+        "passed": 10,
+        "failed": 3,
+        "total": 13,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": 0
+      },
+      "expectations": [
+        {
+          "text": "File is valid Excalidraw v2 JSON",
+          "passed": true,
+          "evidence": "type='excalidraw', elements count=97"
+        },
+        {
+          "text": "All arrows have elbowed: true and roughness: 1",
+          "passed": true,
+          "evidence": "28/28 arrows have elbowed:true"
+        },
+        {
+          "text": "All arrow x,y match src.x + fixedPoint[0]*src.width (within 2px)",
+          "passed": false,
+          "evidence": "27/28 arrows correctly derived; f1_a_sdk_html: x=820.0 y=370 but expected 900,370 (off by 80.0,0.0)"
+        },
+        {
+          "text": "Reciprocal boundElements / containerId on all shape-text pairs",
+          "passed": true,
+          "evidence": "all shape.boundElements text refs have reciprocal containerId"
+        },
+        {
+          "text": "No diamonds; all content rectangles rounded",
+          "passed": true,
+          "evidence": "zero diamonds"
+        },
+        {
+          "text": "Exactly 3 type='frame' elements",
+          "passed": true,
+          "evidence": "found 3 frames (expected 3)"
+        },
+        {
+          "text": "Exactly one hub rectangle exists with width in [260, 370] and height in [130, 210] AND frameId null (outside all frames) with text containing 'da.live'",
+          "passed": true,
+          "evidence": "MANUAL: assertion not programmatically checked"
+        },
+        {
+          "text": "Exactly ONE text element contains 'Deterministic Logic (x4)' (the (xN) rule)",
+          "passed": false,
+          "evidence": "found 0 text elements containing 'Deterministic Logic (x4)' (expected 1)"
+        },
+        {
+          "text": "Exactly ONE text element contains 'Agentic Logic (x4)' (same rule)",
+          "passed": false,
+          "evidence": "found 0 text elements containing 'Agentic Logic (x4)' (expected 1)"
+        },
+        {
+          "text": "Frame 3 has a mini-legend: 4 small rectangles (width < 40) in its top-right quadrant with colors #1e1e1e, #1971c2, #e03131, #6741d9",
+          "passed": true,
+          "evidence": "MANUAL: assertion not programmatically checked"
+        },
+        {
+          "text": "At least 2 arrows have endBinding.mode: 'orbit' OR startBinding.mode: 'orbit' on the hub element (hub-orbit pattern)",
+          "passed": true,
+          "evidence": "found 3 arrows with mode:orbit (need \u22652)"
+        },
+        {
+          "text": "At least 2 cross-frame arrows (arrows with startBinding on an element in one frame and endBinding on an element with different frameId or null frameId)",
+          "passed": true,
+          "evidence": "found 3 cross-frame arrows (need \u22652)"
+        },
+        {
+          "text": "PNG renders successfully",
+          "passed": true,
+          "evidence": "PNG exists at summit-2026-v2-simple.png (1446579 bytes)"
+        }
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.8793498168498168,
+        "stddev": 0.10112135689851008,
+        "min": 0.7692307692307693,
+        "max": 1.0
+      }
+    }
+  },
+  "notes": [
+    "Mean pass rate: 88% across 6 evals",
+    "Weak runs (<80%): [('agentic-ai-auth', 0.79), ('summit-2026-v2-simple', 0.77)]"
+  ]
+}

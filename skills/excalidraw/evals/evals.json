@@ -1,0 +1,142 @@
+{
+  "skill_name": "excalidraw",
+  "description": "Evaluates whether the excalidraw skill produces diagrams in Jack's brand style with correct Excalidraw mechanics. Each eval reads a prompt, expects a matching .excalidraw file, and checks programmatic assertions covering (1) file validity, (2) brand-style rules (palette, roughness, font, rounded corners), (3) Excalidraw mechanics (arrow x,y derivation, reciprocal boundElements/containerId, no broken bindings), and (4) diagram-specific structure (element count, frames, (xN) rule, per-frame legend, orbit convergence). Assertions are derived from observed round-1/2/3 failure modes.",
+  "executor_notes": "Each eval expects the executor to save the output as <eval_name>.excalidraw in the outputs directory and render it to <eval_name>.png using scripts/render_excalidraw.py. The grader reads the .excalidraw file and runs evals/grade_excalidraw.py to score assertions.",
+  "evals": [
+    {
+      "id": 1,
+      "eval_name": "authoring-patterns",
+      "prompt": "See evals/files/01-authoring-patterns-prompt.md. Simple left-to-right pipeline with 4 free-floating column headers, 10 content rectangles in 3 rows converging into a shared trunk, no frames, no legend, single color.",
+      "expected_output": "authoring-patterns.excalidraw + authoring-patterns.png. 10 content rectangles with rounded corners, 4 free-floating column headers (no container), 9 arrows including 3 convergence arrows sharing a target fixedPoint on Preview/Publish Listener.",
+      "files": ["evals/files/01-authoring-patterns-prompt.md"],
+      "expectations": [
+        "File is valid Excalidraw v2 JSON with 'elements' array",
+        "All type='arrow' elements have elbowed: true",
+        "All type='arrow' elements have roughness: 1",
+        "All type='arrow' elements with startBinding have x,y matching src.x + fixedPoint[0]*src.width (within 10px — absorbs gap offset) — the load-bearing rule that caused invisible arrows in round 1",
+        "All shape boundElements entries referencing a text id have a matching text element with containerId pointing back",
+        "No type='diamond' elements anywhere",
+        "All type='rectangle' used as content boxes have roundness: {type: 3}",
+        "All type='text' elements use fontFamily: 5",
+        "All rectangles have backgroundColor: 'transparent'",
+        "All elements have roughness: 1 (hand-drawn brand)",
+        "PNG renders successfully via scripts/render_excalidraw.py (smoke test)",
+        "Exactly 10 content rectangles (labeled boxes, not legend swatches)",
+        "Zero type='frame' elements (this diagram has no frames)",
+        "At least 3 free-floating text elements with containerId null (the column headers)",
+        "At least 3 arrows share the same endBinding elementId with different startBinding (convergence pattern)",
+        "Single-color palette: all strokeColor values are '#1e1e1e' (black only)"
+      ]
+    },
+    {
+      "id": 2,
+      "eval_name": "agentic-ai-auth",
+      "prompt": "See evals/files/02-agentic-ai-auth-prompt.md. Row-grid 5 rows × 4 cols with 2×2 top-left legend and title. Semantic colors per column (green=actor, red=auth, orange=member, blue=resource). Row 1 skips auth/member/resource (Local User -> Local copilot vertical arrow only).",
+      "expected_output": "agentic-ai-auth.excalidraw + agentic-ai-auth.png. ~17 content rectangles in grid, 4 legend swatches + 4 labels, 1 title, 13 arrows total.",
+      "files": ["evals/files/02-agentic-ai-auth-prompt.md"],
+      "expectations": [
+        "File is valid Excalidraw v2 JSON with 'elements' array",
+        "All type='arrow' elements have elbowed: true and roughness: 1",
+        "All type='arrow' elements with startBinding have x,y matching src.x + fixedPoint[0]*src.width (within 10px — absorbs gap offset)",
+        "All shape+text pairs have reciprocal boundElements / containerId linkage",
+        "No type='diamond' elements",
+        "All content rectangles have roundness: {type: 3}",
+        "All text elements use fontFamily: 5",
+        "Zero type='frame' elements (this diagram has no frames)",
+        "Title text element exists (fontSize >= 28) with 'Agentic' or 'Azure' in content",
+        "Arrow stroke colors cover the 3 source-semantic categories used in this diagram: #2f9e44 (green/actor), #e03131 (red/auth), #f08c00 (orange/member). Resource (blue) is never an arrow source.",
+        "Legend has 4 swatches (118-200 wide × 25-55 tall, the labeled-pill shape) with the 4 semantic colors",
+        "At least 17 content rectangles (the 5x4 grid minus skipped cells in row 1)",
+        "At least one vertical arrow (points array with dominant y-axis movement) connecting two elements in the same column",
+        "PNG renders successfully"
+      ]
+    },
+    {
+      "id": 3,
+      "eval_name": "multi-frame-process",
+      "prompt": "See evals/files/03-multi-frame-process-prompt.md. Two side-by-side frames (AI part 1, AI Inflection Point). Each has action row + outcomes row + roles row, plus Frame 1 has an aside chain top-right. 3-color legend top-left. Reqs free-floating text above Frame 2.",
+      "expected_output": "multi-frame-process.excalidraw + multi-frame-process.png. 2 frames, 20+ content rectangles, 14 arrows, 1 multi-line free-floating Reqs callout.",
+      "files": ["evals/files/03-multi-frame-process-prompt.md"],
+      "expectations": [
+        "File is valid Excalidraw v2 JSON",
+        "All arrows have elbowed: true and roughness: 1",
+        "All arrow x,y match src.x + fixedPoint[0]*src.width (within 10px — absorbs gap offset)",
+        "Reciprocal boundElements / containerId on all shape-text pairs",
+        "No diamonds; all content rectangles rounded",
+        "Exactly 2 type='frame' elements (left and right frame)",
+        "All non-title, non-legend elements inside frame bounds have frameId set to one of the two frame ids",
+        "Legend has exactly 3 swatches with strokeColors #1e1e1e (Action), #e03131 (Outcome), #1971c2 (Role)",
+        "At least one free-floating text element (containerId: null) with 3+ lines (the Reqs callout)",
+        "Action boxes (top row of each frame) have strokeColor #1e1e1e",
+        "Outcome boxes (middle row) have strokeColor #e03131",
+        "Role boxes (bottom row) have strokeColor #1971c2",
+        "PNG renders successfully"
+      ]
+    },
+    {
+      "id": 4,
+      "eval_name": "agent-sdk-and-harness",
+      "prompt": "See evals/files/04-agent-sdk-and-harness-prompt.md. Two side-by-side frames comparing Claude Agent SDK vs Agentic Harness v1. Each frame has its OWN top-right mini-legend (User/Deterministic/Agentic/Mix). (x4) labels MUST be ONE box each, not four stacked. Connector labels (SSE streaming, Batch or Single, Launch and Monitor, Human Readable Handoffs) are free-floating text next to arrows.",
+      "expected_output": "agent-sdk-and-harness.excalidraw + agent-sdk-and-harness.png. 2 frames, ~60 content rectangles, 2 per-frame mini-legends, 4+ free-floating connector labels.",
+      "files": ["evals/files/04-agent-sdk-and-harness-prompt.md"],
+      "expectations": [
+        "File is valid Excalidraw v2 JSON",
+        "All arrows have elbowed: true and roughness: 1",
+        "All arrow x,y match src.x + fixedPoint[0]*src.width (within 10px — absorbs gap offset)",
+        "Reciprocal boundElements / containerId on all shape-text pairs",
+        "No diamonds; all content rectangles rounded",
+        "Exactly 2 type='frame' elements",
+        "Exactly ONE text element contains 'Deterministic Logic (x4)' — the (xN) rule: one box, not four",
+        "Exactly ONE text element contains 'Agentic Logic (x4)' — same rule",
+        "Each frame has its own mini-legend: 4 labeled-pill swatches (canonical size) positioned in the top-right quadrant of that frame with colors #1e1e1e, #1971c2, #e03131, #6741d9",
+        "No cross-frame arrows (arrows connecting elements with different frameId) — this is a parallel-comparison diagram",
+        "At least 3 free-floating connector label text elements with fontSize <= 18 and containerId null, positioned near an arrow body",
+        "At least one arrow with strokeStyle: 'dashed' (the SSE streaming / retry arrow)",
+        "PNG renders successfully"
+      ]
+    },
+    {
+      "id": 5,
+      "eval_name": "prompts-to-harness",
+      "prompt": "See evals/files/05-prompts-to-harness-prompt.md. Two side-by-side frames (How it was built vs Agentic Harness v1). Frame 1: tree fan-out Me → 3 kids → Logged convergence + bottom comparison cards. Frame 2: 6 inputs fan-in to Harness Idealization (convergence on regular rectangle — use mode: 'orbit' on target binding). Dashed retry loop Repeat → Building. Free-floating Requirements + Outcomes multi-line callouts.",
+      "expected_output": "prompts-to-harness.excalidraw + prompts-to-harness.png. 2 frames, 60+ elements, 2 free-floating multi-line callouts, 1 dashed retry arrow, orbit-mode bindings on convergence target.",
+      "files": ["evals/files/05-prompts-to-harness-prompt.md"],
+      "expectations": [
+        "File is valid Excalidraw v2 JSON",
+        "All arrows have elbowed: true and roughness: 1",
+        "All arrow x,y match src.x + fixedPoint[0]*src.width (within 10px — absorbs gap offset)",
+        "Reciprocal boundElements / containerId on all shape-text pairs",
+        "No diamonds; all content rectangles rounded",
+        "Exactly 2 type='frame' elements",
+        "At least 2 free-floating text elements (containerId: null) with 3+ lines (Requirements, Outcomes callouts)",
+        "At least one arrow with strokeStyle: 'dashed' (the retry loop)",
+        "At least 6 distinct arrows ending at the same target elementId (the Harness Idealization convergence)",
+        "At least one of those convergence arrows has endBinding with mode: 'orbit'",
+        "Dashed retry arrow has strokeColor: '#bbb' (muted) or at least not the primary black",
+        "PNG renders successfully"
+      ]
+    },
+    {
+      "id": 6,
+      "eval_name": "summit-2026-v2-simple",
+      "prompt": "See evals/files/06-summit-2026-v2-simple-prompt.md. Hub-and-spokes: 3 framed subsystems (Mock Content Input, Content Builder, Evals Container) talking to a central 'da.live EDS site' hub rectangle (bigger than normal content boxes, 280×140 to 350×200). Frame 3 has its OWN top-right mini-legend. (x4) labels MUST be ONE box each. Hub-orbit: mode: 'orbit' on arrows converging on hub.",
+      "expected_output": "summit-2026-v2-simple.excalidraw + summit-2026-v2-simple.png. 3 frames + 1 hub rectangle (outside any frame), ~70 elements, hub-orbit arrows, Frame 3 mini-legend top-right.",
+      "files": ["evals/files/06-summit-2026-v2-simple-prompt.md"],
+      "expectations": [
+        "File is valid Excalidraw v2 JSON",
+        "All arrows have elbowed: true and roughness: 1",
+        "All arrow x,y match src.x + fixedPoint[0]*src.width (within 10px — absorbs gap offset)",
+        "Reciprocal boundElements / containerId on all shape-text pairs",
+        "No diamonds; all content rectangles rounded",
+        "Exactly 3 type='frame' elements",
+        "Exactly one hub rectangle exists with width in [260, 370] and height in [130, 210] AND frameId null (outside all frames) with text containing 'da.live'",
+        "Exactly ONE text element contains 'Deterministic Logic (x4)' (the (xN) rule)",
+        "Exactly ONE text element contains 'Agentic Logic (x4)' (same rule)",
+        "Frame 3 has a mini-legend: 4 labeled-pill swatches (canonical size) in its top-right quadrant with colors #1e1e1e, #1971c2, #e03131, #6741d9",
+        "At least 2 arrows have endBinding.mode: 'orbit' OR startBinding.mode: 'orbit' on the hub element (hub-orbit pattern)",
+        "At least 2 cross-frame arrows (arrows with startBinding on an element in one frame and endBinding on an element with different frameId or null frameId)",
+        "PNG renders successfully"
+      ]
+    }
+  ]
+}

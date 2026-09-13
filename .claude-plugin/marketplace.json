@@ -1,15 +1,261 @@
 {
   "name": "ai-builder-kit",
-  "owner": { "name": "jackzhaojin" },
+  "description": "Jack's skills for AI coding agents: diagrams, decks, demo videos, git ledger commits, conversation logging and AEM admin workflows. Every skill is installable on its own or all at once.",
+  "version": "2.0.0",
+  "owner": {
+    "name": "jackzhaojin",
+    "url": "https://github.com/jackzhaojin"
+  },
   "plugins": [
     {
-      "name": "hlx-admin-api-executor-guarded",
-      "source": {
-        "source": "git-subdir",
-        "url": "jackzhaojin/ai-builder-kit",
-        "path": "plugins/hlx-admin-api-executor-guarded"
+      "name": "ai-knowledge-harvester",
+      "source": "./skills/ai-knowledge-harvester",
+      "description": "Harvest AI docs, prompt logs and agent configs from repos or pasted AI exports into a private knowledge repo with a project-first taxonomy.",
+      "category": "knowledge",
+      "tags": [
+        "knowledge",
+        "docs",
+        "harvest",
+        "prompt-logs"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
       },
-      "description": "AEM EDS Admin API executor with PreToolUse guardrails that block destructive curl commands to admin.hlx.page",
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/ai-knowledge-harvester",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "branded-pptx",
+      "source": "./skills/branded-pptx",
+      "description": "Create on-brand PowerPoint decks from a template .pptx: analyzes themes, masters and layouts, then generates slides that match. Requires the anthropic pptx skill and Python 3.12+.",
+      "category": "documents",
+      "tags": [
+        "pptx",
+        "powerpoint",
+        "branding",
+        "slides"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/branded-pptx",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "chat-conversation-logger",
+      "source": "./skills/chat-conversation-logger",
+      "description": "Log claude.ai chat conversations as dated markdown files with verbatim prompts, attachment metadata and per-turn tool records.",
+      "category": "logging",
+      "tags": [
+        "logging",
+        "claude-ai",
+        "markdown"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/chat-conversation-logger",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "competing-pr-triage",
+      "source": "./skills/competing-pr-triage",
+      "description": "Compare two PRs or branches produced by different agents for the same goal and recommend which to adopt, with a requirements table and scope audit.",
+      "category": "workflow",
+      "tags": [
+        "git",
+        "pull-request",
+        "review",
+        "agents"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/competing-pr-triage",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "conversation-logger",
+      "source": "./skills/conversation-logger",
+      "description": "Log Claude Code and Codex sessions as per-session dated markdown files with a stage counter so folders sort chronologically.",
+      "category": "logging",
+      "tags": [
+        "logging",
+        "claude-code",
+        "codex",
+        "markdown"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/conversation-logger",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "drawio",
+      "source": "./skills/drawio",
+      "description": "Generate .drawio XML diagrams in Jack's brand style with a render-view-fix loop and versioned iterations. Requires the draw.io CLI for PNG export.",
+      "category": "diagrams",
+      "tags": [
+        "drawio",
+        "diagrams",
+        "architecture"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/drawio",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "excalidraw",
+      "source": "./skills/excalidraw",
+      "description": "Generate .excalidraw diagrams in Jack's brand style with a mandatory render-view-fix loop. Requires uv and Playwright Chromium for rendering.",
+      "category": "diagrams",
+      "tags": [
+        "excalidraw",
+        "diagrams",
+        "architecture"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/excalidraw",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "hlx-admin-api-executor",
+      "source": "./skills/hlx-admin-api-executor",
+      "description": "Interactive AEM Edge Delivery Services Admin API executor: plan, run one request at a time with human review, and document every call. Soft guardrails only; the guarded plugin adds enforced ones.",
+      "category": "aem",
+      "tags": [
+        "aem",
+        "edge-delivery",
+        "helix",
+        "admin-api"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/hlx-admin-api-executor",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "jack-git-commit",
+      "source": "./skills/jack-git-commit",
+      "description": "Conventional Commits with traceable metadata footers (Goal, Step, Worker, Skill, Tools) so git log works as a queryable work ledger. Never pushes.",
+      "category": "workflow",
+      "tags": [
+        "git",
+        "commit",
+        "conventional-commits",
+        "provenance"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/jack-git-commit",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "playwright-demo-video",
+      "source": "./skills/playwright-demo-video",
+      "description": "Generate polished demo MP4s from Playwright specs with captions, ElevenLabs voiceover and background music. Requires ffmpeg, Node 18+ and Playwright in the target project.",
+      "category": "media",
+      "tags": [
+        "playwright",
+        "video",
+        "demo",
+        "elevenlabs"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/playwright-demo-video",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "podcast-slides-video",
+      "source": "./skills/podcast-slides-video",
+      "description": "Build a YouTube-ready MP4 from narrated audio plus a slide deck, cutting slide changes to the transcript. Requires ffmpeg, uv, poppler and LibreOffice for PPTX input.",
+      "category": "media",
+      "tags": [
+        "video",
+        "podcast",
+        "slides",
+        "youtube",
+        "ffmpeg"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/skills/podcast-slides-video",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "ai-builder-kit",
+      "source": "./",
+      "description": "Every skill in this marketplace as one plugin. Install this or the individual skill plugins, not both.",
+      "category": "bundle",
+      "tags": [
+        "bundle",
+        "all-skills"
+      ],
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0",
+      "strict": false
+    },
+    {
+      "name": "hlx-admin-api-executor-guarded",
+      "source": "./plugins/hlx-admin-api-executor-guarded",
+      "description": "AEM Edge Delivery Services Admin API executor with a PreToolUse hook that blocks destructive curl commands to admin.hlx.page until the user approves.",
+      "category": "aem",
+      "tags": [
+        "aem",
+        "edge-delivery",
+        "helix",
+        "admin-api",
+        "guardrails",
+        "hooks"
+      ],
       "version": "1.0.0"
     }
   ]

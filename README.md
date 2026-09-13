@@ -1,6 +1,6 @@
 # ai-builder-kit
 
-A [Claude Code plugin marketplace](https://docs.anthropic.com/en/docs/claude-code) — a collection of plugins, skills, and hooks for AI-assisted workflows.
+A collection of skills, plugins, and hooks for AI coding agents. Works as a [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces), a [Codex plugin marketplace](https://developers.openai.com/codex/plugins), and a plain skills repo for `npx skills`. Every skill is a portable `SKILL.md`, so the same folder works in Claude Code, Codex, and any agent that follows the [Agent Skills spec](https://agentskills.io).
 
 ## Available Skills
 
@@ -13,62 +13,73 @@ A [Claude Code plugin marketplace](https://docs.anthropic.com/en/docs/claude-cod
 | [drawio](skills/drawio/) | 2026-04-27 | Generate `.drawio` XML diagrams in Jack's brand style (swimlane frames, 4-color semantic palette, rounded boxes + cylinders for data stores, orthogonal edges, dashed reserved for return/response). Step 0 interview with multiple-choice defaults; render-view-fix loop with versioned-iteration artifacts (`-v1`, `-v2`, …). Ships with two worked output examples, a sample-input reference, and an evals harness. |
 | [hlx-admin-api-executor](skills/hlx-admin-api-executor/) | 2026-03-22 | Interactive AEM Edge Delivery Services Admin API executor |
 | [playwright-demo-video](skills/playwright-demo-video/) | 2026-06-11 | Generate polished demo videos (MP4) from Playwright specs — on-screen captions, ElevenLabs AI voiceover with exact timestamp sync, freeze-frame merge, background music. Includes auto-discover mode that scans a project and generates a demo spec. **Requires**: ffmpeg, Node.js 18+, Playwright in the target project, ElevenLabs API key (for voiceover) |
+| [excalidraw](skills/excalidraw/) | 2026-06-01 | Generate `.excalidraw` diagrams in Jack's brand style (hand-drawn roughness, Nunito, 7-color semantic palette, frames for grouping) with a mandatory render-view-fix loop. Ships core references, six worked examples with PNG previews, and an evals harness. **Requires**: `uv` (installs Playwright itself on first run) plus a one-time `uv run --with playwright playwright install chromium` |
+| [podcast-slides-video](skills/podcast-slides-video/) | 2026-09-07 | Build a YouTube-ready MP4 from narrated audio (NotebookLM overview, recorded talk) plus a slide deck (PDF or PPTX), with slide changes cut to the transcript. Produces the MP4, an auditable cue sheet, a validation contact sheet, and a YouTube chapter list. **Requires**: ffmpeg/ffprobe, `uv` (runs mlx-whisper on Apple Silicon), poppler `pdftoppm`, LibreOffice `soffice` for PPTX input, Python with Pillow and numpy |
 
 ## Available Plugins
 
 | Plugin | Last Modified | Description |
 |--------|--------------|-------------|
 | [hlx-admin-api-executor-guarded](plugins/hlx-admin-api-executor-guarded/) | 2026-03-22 | AEM Edge Delivery Services Admin API executor with PreToolUse guardrails |
+| [ai-builder-kit](.claude-plugin/marketplace.json) | 2026-09-13 | Bundle of every skill above as one plugin, for Claude Code (`ai-builder-kit@ai-builder-kit`) and Codex (`.agents/plugins/marketplace.json`). Skills only, no hooks |
 
 ## Getting Started
 
-### Option A: Install with `npx skills` (Recommended)
+Pick one path. They all read the same `skills/` folder.
 
-List available skills:
-
-```bash
-npx skills add jackzhaojin/ai-builder-kit --list
-```
-
-Install a specific skill:
+### Option A: `npx skills` (any agent, one skill at a time)
 
 ```bash
-npx skills add jackzhaojin/ai-builder-kit --skill hlx-admin-api-executor
+npx skills add jackzhaojin/ai-builder-kit --list                       # see what is available
+npx skills add jackzhaojin/ai-builder-kit --skill excalidraw            # into this project
+npx skills add jackzhaojin/ai-builder-kit --skill excalidraw -g -a claude-code codex   # global, Claude Code + Codex
+npx skills add jackzhaojin/ai-builder-kit -g -y                         # everything, global
+npx skills update -g -y                                                 # pull updates later
 ```
 
-Install all skills:
+Codex reads `~/.agents/skills` directly, so a global install shows up in Codex with no extra step.
+
+### Option B: Claude Code plugin marketplace
+
+Every skill is a plugin of the same name, and `ai-builder-kit` is a bundle of all of them. Install the bundle or individual skills, not both, or the skills load twice.
 
 ```bash
-npx skills add jackzhaojin/ai-builder-kit --yes
+claude plugin marketplace add jackzhaojin/ai-builder-kit
+claude plugin install excalidraw@ai-builder-kit                # one skill
+claude plugin install ai-builder-kit@ai-builder-kit            # every skill
+claude plugin install hlx-admin-api-executor-guarded@ai-builder-kit   # skill + enforced hook
 ```
 
-### Option B: Add as a Claude Code marketplace
+Or in a session: `/plugin` > **Marketplaces** > **Add** > `jackzhaojin/ai-builder-kit`, then **Discover**. The same marketplace can be pinned for a team in `~/.claude/settings.json`:
 
-1. In Claude Code, run `/plugin` and navigate to **Marketplaces** > **+ Add Marketplace**. Enter:
+```json
+{
+  "extraKnownMarketplaces": {
+    "ai-builder-kit": {
+      "source": { "source": "git", "url": "https://github.com/jackzhaojin/ai-builder-kit.git" }
+    }
+  }
+}
+```
 
-   ```
-   https://github.com/jackzhaojin/ai-builder-kit.git
-   ```
+Plugin entries carry no pinned version, so `/plugin update` picks up every push to `main`.
 
-   Or add it directly to your `~/.claude/settings.json`:
+### Option C: Codex and the ChatGPT desktop app
 
-   ```json
-   {
-     "extraKnownMarketplaces": {
-       "ai-builder-kit": {
-         "source": {
-           "source": "git",
-           "url": "https://github.com/jackzhaojin/ai-builder-kit.git"
-         }
-       }
-     }
-   }
-   ```
+The repo ships `.agents/plugins/marketplace.json` with one plugin, `ai-builder-kit`, that bundles all skills (portable manifest in `plugin.json`).
 
-2. Run `/plugin` in Claude Code, go to **Discover**, select a plugin, and choose your install scope:
+```bash
+codex plugin marketplace add jackzhaojin/ai-builder-kit
+```
 
-   - **User scope** — available in all your projects
-   - **Project scope** — available to all collaborators on the current repo
-   - **Local scope** — available only to you in the current repo
+Then restart the ChatGPT desktop app, open the Plugins Directory, choose the **AI Builder Kit** marketplace, and install. For single skills in Codex, use Option A with `-a codex`.
 
-3. After installing, run `/reload-plugins` to activate the plugin in your current session.
+## Repo layout
+
+| Path | Purpose |
+|------|---------|
+| `skills/<name>/SKILL.md` | The skills. Flat layout, one folder per skill |
+| `plugins/` | Bundles that need hooks (Claude Code only) |
+| `.claude-plugin/marketplace.json` | Claude Code marketplace: one entry per skill, a bundle, and the hook plugins |
+| `.agents/plugins/marketplace.json` | Codex marketplace: the bundle |
+| `plugin.json` | Portable Agent Plugins manifest for the bundle |

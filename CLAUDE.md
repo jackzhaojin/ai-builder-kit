@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Repo Is
 
-A Claude Code plugin marketplace — a collection of skills, plugins, and hooks for AI-assisted workflows. Distributed via `npx skills add jackzhaojin/ai-builder-kit` or the Claude Code plugin UI.
+A collection of skills, plugins, and hooks for AI coding agents, distributed three ways from the same `skills/` folder: `npx skills add jackzhaojin/ai-builder-kit` (any agent), the Claude Code plugin marketplace (`.claude-plugin/marketplace.json`), and the Codex plugin marketplace (`.agents/plugins/marketplace.json` plus the portable `plugin.json`).
 
 ## Architecture
 
@@ -19,7 +19,9 @@ A Claude Code plugin marketplace — a collection of skills, plugins, and hooks 
 |------|---------|
 | `skills/` | Standalone skills (each has SKILL.md) |
 | `plugins/` | Bundled skill + hook packages |
-| `.claude-plugin/marketplace.json` | Anthropic plugin registry metadata |
+| `.claude-plugin/marketplace.json` | Claude Code marketplace: one entry per skill (`source: ./skills/<name>`, `strict: false`), the `ai-builder-kit` bundle (`source: ./`), and the hook plugins |
+| `.agents/plugins/marketplace.json` | Codex marketplace: the `ai-builder-kit` bundle pointing at the repo root |
+| `plugin.json` | Portable Agent Plugins manifest for the bundle. Codex discovers `skills/` from it; Claude Code ignores it |
 | `local-only/` | Local testing/scratch (gitignored) |
 | `local-ai-docs/` | Private AI prompt logs (gitignored) |
 
@@ -91,5 +93,8 @@ Requires ffmpeg/ffprobe (`brew install ffmpeg`), Node.js 18+, and a target web p
 - Edge cases go in situation → action tables, not prose
 - Safety rules in bold with "Never..." prefix
 - Skills that depend on other skills declare it in SKILL.md description and body (no formal dependency mechanism exists yet)
-- Update the README.md table when adding/modifying skills (include Last Modified date)
+- Adding a skill: create `skills/<name>/SKILL.md`, add a README.md table row (with Last Modified date), and add a marketplace entry to `.claude-plugin/marketplace.json` (copy an existing skill entry). The Codex bundle picks it up automatically.
+- Do not add `version` to skill entries in `.claude-plugin/marketplace.json`: with no version, Claude Code keys updates on the commit SHA, so every push to main reaches users on `/plugin update`
+- Validate before committing: `claude plugin validate .claude-plugin/marketplace.json --strict` and `claude plugin validate skills`
+- Keep skills Codex-compatible: only `name` and `description` in frontmatter are portable, Codex ignores Claude-only keys such as `allowed-tools` and `context`, and the SKILL.md body should not depend on Claude-only tools without a plain-shell fallback
 - Do not commit or push unless explicitly instructed

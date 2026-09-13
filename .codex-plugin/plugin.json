@@ -1,0 +1,41 @@
+{
+  "name": "ai-builder-kit",
+  "version": "2.0.0",
+  "description": "Jack's skills for AI coding agents: diagrams, decks, demo videos, git ledger commits, conversation logging and AEM admin workflows.",
+  "author": {
+    "name": "jackzhaojin",
+    "url": "https://github.com/jackzhaojin"
+  },
+  "homepage": "https://github.com/jackzhaojin/ai-builder-kit",
+  "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+  "license": "Apache-2.0",
+  "keywords": [
+    "skills",
+    "diagrams",
+    "drawio",
+    "excalidraw",
+    "pptx",
+    "video",
+    "git",
+    "logging",
+    "aem"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Builder Kit",
+    "shortDescription": "Jack's skills for AI coding agents",
+    "longDescription": "Diagrams (draw.io, Excalidraw), branded PowerPoint decks, demo and podcast videos, git ledger commits, conversation logging, PR triage, and AEM Edge Delivery admin workflows. Skills live in skills/ and are also installable one at a time with npx skills.",
+    "developerName": "Jack Jin",
+    "category": "Productivity",
+    "websiteURL": "https://github.com/jackzhaojin/ai-builder-kit",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Draw an architecture diagram in Excalidraw",
+      "Commit my changes with a traceable ledger message",
+      "Turn this podcast audio and slide deck into a video"
+    ]
+  }
+}

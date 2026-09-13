@@ -1,0 +1,5 @@
+.venv/
+*.png
+!references/examples/*.png
+uv.lock
+__pycache__/

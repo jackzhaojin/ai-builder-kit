@@ -1,0 +1,17 @@
+{
+  "skill_name": "podcast-slides-video",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I've got a NotebookLM audio overview of my conference talk in talks/2026-ColumbusAI/2026-08-30-talk-prep/local-only/ (the .m4a) and the deck I sent the organizers is in generated-decks/ as a PDF. Turn it into a YouTube video where the slides change when the hosts get to each topic. Put everything in local-only and check your own work.",
+      "expected_output": "An MP4 (1920x1080, h264, source audio stream-copied) in local-only/, a slide-timeline.json cue sheet with transcript anchors, a passing validate_video.py run with a cue-check contact sheet, an anchor re-transcription check, and youtube-chapters.txt. No upload.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "here's a 12 minute voice memo I recorded walking through my quarterly review deck (deck is review.pptx, memo is review-walkthrough.m4a, both in ~/Downloads). can you make it a video i can share with the team",
+      "expected_output": "PPTX converted to PDF and rendered, memo transcribed, cue sheet written from the transcript, MP4 rendered and validated, chapters produced; working files in a dedicated folder rather than ~/Downloads root.",
+      "files": []
+    }
+  ]
+}

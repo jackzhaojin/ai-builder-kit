@@ -1,0 +1,19 @@
+{
+  "audio": "../my-notebooklm-overview.m4a",
+  "fade": 0.6,
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "fade_in": 0.8,
+  "fade_out": 1.2,
+  "_readme": "start = output time when the crossfade INTO that slide begins (seconds or 'm:ss.s'). anchor = the transcript line the cut is timed to. chapter = YouTube chapter title (omit on cues that should not start a chapter, e.g. inside a recap montage).",
+  "cues": [
+    {"slide": "slides/slide-01.png", "start": 0,        "chapter": "Cold open (title card)",   "anchor": "00:00.0 hosts open; 00:51.9 'We're pulling from a presentation by ...'", "note": "Title card until the hosts name the speaker and event"},
+    {"slide": "slides/slide-02.png", "start": "1:29.3", "chapter": "Why this city",            "anchor": "01:30.0 'He was speaking in Columbus, Ohio'", "note": "Headline lands on the word"},
+    {"slide": "slides/slide-03.png", "start": "2:14.6", "chapter": "The four truths",          "anchor": "02:14.9 'synthesizes ... down to four fundamental truths'"},
+    {"slide": "slides/slide-02.png", "start": "11:12.0","chapter": "Big firms and small firms","anchor": "11:12.3 'favors the massive global firms'", "note": "Returning to an earlier slide is fine when the audio comes back to it"},
+    {"slide": "slides/slide-01.png", "start": "15:38.5","chapter": "Recap",                    "anchor": "15:38.8 'Let's synthesize'", "note": "Recap montage: only this first cue carries a chapter"},
+    {"slide": "slides/slide-03.png", "start": "15:56.7",                                        "anchor": "15:57.3 'But those legacy playbooks'"},
+    {"slide": "slides/slide-10.png", "start": "18:05.0","chapter": "Close",                    "anchor": "18:05.2 'What a compelling note to leave on'"}
+  ]
+}
