@@ -92,7 +92,7 @@ Requires ffmpeg/ffprobe (`brew install ffmpeg`), Node.js 18+, and a target web p
 2. Validate: `claude plugin validate skills` and `claude plugin validate .claude-plugin/marketplace.json --strict`. Optional Codex check: `python3 ~/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py .` (it reports the two skills that set `disable-model-invocation: true` and the gitignored `drawio-workspace`; both are accepted).
 3. New skill: add a README.md row with the Last Modified date and a `.claude-plugin/marketplace.json` entry (copy an existing skill entry, no `version`). Changed skill: bump its Last Modified date.
 4. Commit in Conventional Commits format with provenance footers (the `jack-git-commit` skill), push only when told.
-5. Consumers get it on their next update (see "Keeping it up to date" in README.md). Jack's laptop: run the `update-skills` skill or `~/dev/jack-dev-server-configs/local/update-skills.sh`.
+5. Consumers get it on their next update (see "Keeping it up to date" in README.md). Jack's laptop: run the `update-skills` skill or `../jack-dev-server-configs/local/update-skills.sh`.
 
 ## Conventions
 
