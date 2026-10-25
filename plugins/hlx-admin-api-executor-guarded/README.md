@@ -14,12 +14,18 @@ The skill provides the workflow structure. The hook enforces it — destructive 
 ## What Gets Guarded
 
 Any `Bash` tool call containing:
-- `curl` with `--request` or `-X` set to **POST**, **PUT**, **DELETE**, or **PATCH**
-- Targeting `admin.hlx.page` or `${BASE_URL}`
+- `curl` with a write: `-X` or `--request` set to **POST**, **PUT**, **DELETE** or **PATCH** (also `-XPOST` and `--request=DELETE`), or a request body or upload, which curl sends as POST or PUT (`-d`, `--data*`, `-F`, `--form*`, `--json`, `-T`, `--upload-file`)
+- Targeting `admin.hlx.page`, `api.aem.live` or `${BASE_URL}`
 
 GET requests pass through without prompting. The hook fails open — if JSON parsing fails, the command is allowed.
 
 ## Installation
+
+One step (Claude Code 2.1.275 or later):
+
+```
+/plugin install hlx-admin-api-executor-guarded --marketplace jackzhaojin/ai-builder-kit
+```
 
 ### From the ai-builder-kit marketplace
 
@@ -51,6 +57,40 @@ Select **Discover**, find `hlx-admin-api-executor-guarded`, and install. Run `/r
 ```bash
 claude plugin add /path/to/ai-builder-kit/plugins/hlx-admin-api-executor-guarded
 ```
+
+### Skills only, no hook
+
+Install the skill on its own (`hlx-admin-api-executor@ai-builder-kit`) or every skill in the kit (`ai-builder-kit@ai-builder-kit`). Neither registers a hook. A project can declare it in its `.claude/settings.json`, so everyone who opens the project gets it:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "ai-builder-kit": { "source": { "source": "github", "repo": "jackzhaojin/ai-builder-kit" } }
+  },
+  "enabledPlugins": { "hlx-admin-api-executor@ai-builder-kit": true }
+}
+```
+
+### Use the hook without the plugin
+
+The guard is one script. Copy `hooks/guard-admin-api.sh` to your project's `.claude/hooks/`, then register it in `.claude/settings.json` (or `settings.local.json` to keep it to yourself):
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard-admin-api.sh", "timeout": 5 }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Pair it with either skills-only install above.
 
 ## Usage
 

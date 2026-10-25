@@ -246,7 +246,7 @@
     {
       "name": "hlx-admin-api-executor-guarded",
       "source": "./plugins/hlx-admin-api-executor-guarded",
-      "description": "AEM Edge Delivery Services Admin API executor with a PreToolUse hook that blocks destructive curl commands to admin.hlx.page until the user approves.",
+      "description": "AEM Edge Delivery Services Admin API executor with a PreToolUse hook that asks before any curl write to admin.hlx.page or api.aem.live.",
       "category": "aem",
       "tags": [
         "aem",
@@ -256,7 +256,7 @@
         "guardrails",
         "hooks"
       ],
-      "version": "1.0.0"
+      "version": "1.1.0"
     }
   ]
 }

@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 # guard-admin-api.sh
-# PreToolUse hook: guards curl POST/PUT/DELETE/PATCH to admin.hlx.page
-# Returns "ask" decision so Claude Code prompts user for yes/no approval.
+# PreToolUse hook: guards curl writes to the AEM Admin API (admin.hlx.page, api.aem.live or
+# ${BASE_URL}). A write is an explicit POST/PUT/DELETE/PATCH (-X POST, -XPOST, --request=DELETE)
+# or a request body or upload, which curl sends as POST or PUT (-d, --data*, -F, --form*, --json,
+# -T, --upload-file).
+# Returns an "ask" decision so Claude Code prompts the user for yes/no approval.
+#
+# Works as a plugin hook (hooks.json) or on its own: see the plugin README, "Use the hook
+# without the plugin".
 #
 # Fails open: if parsing fails, the command is allowed through.
 
@@ -14,20 +20,26 @@ if [ -z "$COMMAND" ]; then
   exit 0
 fi
 
-# Check for destructive curl targeting admin.hlx.page or ${BASE_URL}
-IS_DESTRUCTIVE=false
+HOST_RE='(admin\.hlx\.page|api\.aem\.live|\$\{?BASE_URL\}?)'
+METHOD_RE="(-X[[:space:]]*|--request[=[:space:]]+)[\"']?(POST|PUT|DELETE|PATCH)"
+BODY_RE='(^|[[:space:]])(-d|--data[a-z-]*|-F|--form[a-z-]*|--json)([[:space:]=]|$)'
+UPLOAD_RE='(^|[[:space:]])(-T|--upload-file)([[:space:]=]|$)'
 
-if echo "$COMMAND" | grep -qiE 'curl\b'; then
-  if echo "$COMMAND" | grep -qiE '(--request|-X)\s+(POST|PUT|DELETE|PATCH)'; then
-    if echo "$COMMAND" | grep -qiE '(admin\.hlx\.page|\$\{?BASE_URL\}?)'; then
-      IS_DESTRUCTIVE=true
-    fi
+# Check for a curl write targeting an Admin API host
+METHOD=""
+
+if echo "$COMMAND" | grep -qiE 'curl\b' && echo "$COMMAND" | grep -qiE "$HOST_RE"; then
+  if echo "$COMMAND" | grep -qiE "$METHOD_RE"; then
+    METHOD=$(echo "$COMMAND" | grep -oiE "$METHOD_RE" | head -1 | grep -oiE '(POST|PUT|DELETE|PATCH)' | tr '[:lower:]' '[:upper:]')
+  elif echo "$COMMAND" | grep -qE "$UPLOAD_RE"; then
+    METHOD="PUT"
+  elif echo "$COMMAND" | grep -qE "$BODY_RE"; then
+    METHOD="POST"
   fi
 fi
 
-if [ "$IS_DESTRUCTIVE" = true ]; then
-  METHOD=$(echo "$COMMAND" | grep -oiE '(--request|-X)\s+(POST|PUT|DELETE|PATCH)' | head -1 | awk '{print toupper($NF)}')
-  URL_TARGET=$(echo "$COMMAND" | grep -oiE '(admin\.hlx\.page|BASE_URL)[^ ]*' | head -1)
+if [ -n "$METHOD" ]; then
+  URL_TARGET=$(echo "$COMMAND" | grep -oiE '(admin\.hlx\.page|api\.aem\.live|BASE_URL)[^ "'"'"']*' | head -1)
 
   jq -n \
     --arg method "$METHOD" \

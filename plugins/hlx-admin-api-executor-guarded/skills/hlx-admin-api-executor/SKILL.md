@@ -34,6 +34,10 @@ Verify: `GET https://admin.hlx.page/profile` with `X-Auth-Token` header.
 
 **Site tokens** use a different header: `Authorization: token hlx_...` (not X-Auth-Token).
 
+**Sites authored in Document Authoring** (da.live, Experience Workspace) also accept an Adobe IMS access token: `Authorization: Bearer ${IMS_TOKEN}`, no DevTools needed. The `da-auth` skill in Adobe's `aem-edge-delivery-services` plugin gets one. Checked on status, preview, publish and the site config read.
+
+**Hosts**: `admin.hlx.page` (the paths below), and `api.aem.live` with the org/sites path form (`https://api.aem.live/{ORG}/sites/{SITE}/status/{PATH}`).
+
 ## Environment Variables
 
 ```bash
