@@ -5,14 +5,31 @@ local-ai-docs/
 # IDE
 *.code-workspace
 
+# Secrets (skills read keys like ELEVENLABS_API_KEY from env files; never commit them)
+.env
+.env.*
+!.env.example
+
 # macOS
 .DS_Store
+
+# Logs
+*.log
 
 # Skills
 *.skill
 
 # Node
 node_modules/
+
+# Python (uv keeps script environments in its cache, never in the repo)
+.venv/
+__pycache__/
+*.pyc
+
+# Playwright CLI / MCP output
+.playwright-cli/
+.playwright-mcp/
 
 # Claude skill creator - workspace artifacts
 skills/*-workspace/
