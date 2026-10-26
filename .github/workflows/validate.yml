@@ -1,0 +1,51 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # the version-bump check diffs against the previous commit
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Repo conventions
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: node scripts/check-repo.mjs --base "$BASE"
+
+      - name: Claude Code plugin validator
+        run: |
+          npm install --global @anthropic-ai/claude-code@2.1.299
+          claude plugin validate .claude-plugin/marketplace.json --strict
+          claude plugin validate skills --strict
+          # Not --strict: the validator reports the symlinked skill as a warning by design.
+          # The skill itself is covered by the strict run on skills/ above.
+          for p in plugins/*/; do claude plugin validate "$p"; done
+
+      - name: Python syntax
+        run: git ls-files -z '*.py' | xargs -0 python -m py_compile
+
+      - name: ShellCheck
+        run: git ls-files -z '*.sh' | xargs -0 shellcheck --severity=warning
