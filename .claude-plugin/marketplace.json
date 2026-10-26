@@ -256,7 +256,13 @@
         "guardrails",
         "hooks"
       ],
-      "version": "1.1.0"
+      "author": {
+        "name": "jackzhaojin",
+        "url": "https://github.com/jackzhaojin"
+      },
+      "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/plugins/hlx-admin-api-executor-guarded",
+      "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+      "license": "Apache-2.0"
     }
   ]
 }

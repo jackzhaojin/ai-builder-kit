@@ -6,10 +6,10 @@ A [Claude Code plugin](https://docs.anthropic.com/en/docs/claude-code) for execu
 
 Bundles two things into a single installable plugin:
 
-1. **`hlx-admin-api-executor` skill** — interactive workflow for planning, executing, and documenting Admin API operations one step at a time (GET/SET/GET pattern, full request/response traceability)
-2. **PreToolUse guard hook** — intercepts any destructive `curl` command targeting `admin.hlx.page` and requires explicit user approval before execution
+1. **`hlx-admin-api-executor` skill**: an interactive workflow for planning, executing, and documenting Admin API operations one step at a time (GET/SET/GET pattern, full request/response traceability)
+2. **PreToolUse guard hook**: intercepts any `curl` write to `admin.hlx.page` or `api.aem.live` and asks for your approval before it runs
 
-The skill provides the workflow structure. The hook enforces it — destructive operations are blocked at the tool level regardless of what the model decides.
+The skill provides the workflow structure. The hook enforces it: every write waits for your yes at the tool level, whatever the model decides.
 
 ## What Gets Guarded
 
@@ -17,7 +17,7 @@ Any `Bash` tool call containing:
 - `curl` with a write: `-X` or `--request` set to **POST**, **PUT**, **DELETE** or **PATCH** (also `-XPOST` and `--request=DELETE`), or a request body or upload, which curl sends as POST or PUT (`-d`, `--data*`, `-F`, `--form*`, `--json`, `-T`, `--upload-file`)
 - Targeting `admin.hlx.page`, `api.aem.live` or `${BASE_URL}`
 
-GET requests pass through without prompting. The hook fails open — if JSON parsing fails, the command is allowed.
+GET requests pass through without prompting. The hook fails open: if JSON parsing fails, the command is allowed.
 
 ## Installation
 
@@ -54,9 +54,15 @@ Select **Discover**, find `hlx-admin-api-executor-guarded`, and install. Run `/r
 
 ### From a local clone
 
+Load it for one session straight from the folder, no install:
+
 ```bash
-claude plugin add /path/to/ai-builder-kit/plugins/hlx-admin-api-executor-guarded
+claude --plugin-dir /path/to/ai-builder-kit/plugins/hlx-admin-api-executor-guarded
 ```
+
+### Updating
+
+The plugin carries an explicit `version` in `.claude-plugin/plugin.json`, so an install only moves when that number changes. Pull it with `/plugin update` or `claude plugin update hlx-admin-api-executor-guarded@ai-builder-kit`.
 
 ### Skills only, no hook
 
@@ -124,8 +130,9 @@ hlx-admin-api-executor-guarded/
     hooks.json          # PreToolUse hook registration
     guard-admin-api.sh  # Guard script
   skills/
-    hlx-admin-api-executor/
-      SKILL.md          # Skill instructions
-      assets/           # Templates for execution logs, env setup, auth
-      references/       # Full endpoint catalog
+    hlx-admin-api-executor -> ../../../skills/hlx-admin-api-executor   # symlink
 ```
+
+The skill is not copied into this folder. `skills/hlx-admin-api-executor` is a symlink to the canonical skill in the repo's `skills/` folder, so the standalone skill, the `ai-builder-kit` bundle and this plugin all ship the same files. When Claude Code installs the plugin from the GitHub marketplace, it copies the symlink's target into the plugin cache, so the installed plugin is self-contained.
+
+Because the symlink keeps changes to the skill out of this folder's commit history, bump `version` in `.claude-plugin/plugin.json` whenever the hook or the skill changes. `scripts/check-repo.mjs --base <ref>` (run in CI) fails if you forget.

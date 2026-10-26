@@ -1,8 +1,12 @@
 {
   "name": "hlx-admin-api-executor-guarded",
-  "description": "AEM Edge Delivery Services (Helix 5) Admin API executor with enforced guardrails. Bundles the hlx-admin-api-executor skill with a PreToolUse hook that intercepts destructive curl commands (POST/PUT/DELETE/PATCH) targeting admin.hlx.page and blocks execution until the user explicitly approves.",
-  "version": "1.1.0",
+  "description": "AEM Edge Delivery Services (Helix 5) Admin API executor with enforced guardrails. Bundles the hlx-admin-api-executor skill (symlinked from skills/) with a PreToolUse hook that asks before any curl write (POST/PUT/DELETE/PATCH, or a request body or upload) to admin.hlx.page or api.aem.live.",
+  "version": "1.1.1",
   "author": {
-    "name": "jackzhaojin"
-  }
+    "name": "jackzhaojin",
+    "url": "https://github.com/jackzhaojin"
+  },
+  "homepage": "https://github.com/jackzhaojin/ai-builder-kit/tree/main/plugins/hlx-admin-api-executor-guarded",
+  "repository": "https://github.com/jackzhaojin/ai-builder-kit",
+  "license": "Apache-2.0"
 }
