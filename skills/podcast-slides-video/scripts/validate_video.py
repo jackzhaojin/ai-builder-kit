@@ -1,7 +1,11 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.10"
+# dependencies = ["pillow", "numpy"]
+# ///
 """Validate a rendered slides+audio MP4 against its cue sheet. Exit 1 on any failure.
 
-Usage: python3 validate_video.py slide-timeline.json out.mp4
+Usage: uv run validate_video.py slide-timeline.json out.mp4
 
 Checks, and why each exists:
  1. container: expected size, h264 yuv420p, fps, aac; duration == audio duration (+-0.1 s); both streams
@@ -15,7 +19,8 @@ Checks, and why each exists:
  4. audio: decoded PCM of the MP4 track vs the source. Stream-copied audio must be sample-identical;
     re-encoded audio must match in length (+-50 ms) and be close (mean abs error small).
  5. writes <out>.cue-check.png: one frame per cue, for a human to eyeball.
-Needs Pillow + numpy (python3 -c "import PIL, numpy" or run via: uv run --with pillow --with numpy python3 ...).
+Pillow and numpy come from the inline metadata above: uv installs them into a cached environment, never next
+to the skill.
 """
 import io, json, os, subprocess, sys, glob
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

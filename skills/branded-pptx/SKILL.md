@@ -18,7 +18,7 @@ This skill depends on the **pptx** skill (anthropic/skills) for all file operati
 **Always run this first.** The template is the single source of brand truth.
 
 ```bash
-python3.12 scripts/analyze_template.py template.pptx --output-dir ./runs --run-id
+uv run scripts/analyze_template.py template.pptx --output-dir ./runs --run-id
 ```
 
 This creates a self-contained timestamped run folder:
@@ -144,10 +144,10 @@ Compare each output slide against the closest matching example slide from the te
 This skill requires the **pptx** skill (`anthropic/skills`) or equivalent for all PPTX file operations.
 
 System dependencies:
-- **Python 3.12+** (`python3.12`) — required for native type syntax
-- `pip install defusedxml` — XML parsing for analyze_template.py
-- `pip install "markitdown[pptx]"` — text extraction (via pptx skill)
-- `pip install Pillow` — thumbnails (via pptx skill)
-- `pip install lxml` — pack.py validation (via pptx skill)
-- LibreOffice (`soffice`) — PDF conversion (`brew install --cask libreoffice`)
+- **Python 3.12+** (`python3.12`): for the pptx skill's helper scripts below
+- `uv`: runs analyze_template.py with its own Python 3.12+ and defusedxml (inline script metadata)
+- `pip install "markitdown[pptx]"`: text extraction (via pptx skill)
+- `pip install Pillow`: thumbnails (via pptx skill)
+- `pip install lxml`: pack.py validation (via pptx skill)
+- LibreOffice (`soffice`): PDF conversion (`brew install --cask libreoffice`)
 - Poppler (`pdftoppm`) — PDF to images (`brew install poppler`)

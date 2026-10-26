@@ -22,7 +22,7 @@ Working files go in a gitignored folder next to the source material (the user's 
 ## Requirements
 
 `ffmpeg`, `ffprobe`, `pdftoppm`, `pdftotext` (Homebrew ffmpeg + poppler), `uvx` (from uv) for MLX
-Whisper on demand, Python 3 with Pillow + numpy for the validator (or `uv run --with pillow --with numpy`).
+Whisper on demand, Python 3 (the validator's Pillow and numpy come from its inline metadata via `uv run`).
 LibreOffice `soffice` only if the deck arrives as PPTX. Apple Silicon assumed for whisper; see
 references/ffmpeg-notes.md item 7 otherwise.
 
@@ -68,7 +68,7 @@ stream-copied when it is AAC, so there is no generation loss.
 ### 5. Validate (2 min) - do not skip, do not hand-wave
 
 ```bash
-python3 scripts/validate_video.py <workdir>/slide-timeline.json <workdir>/<name>.mp4
+uv run scripts/validate_video.py <workdir>/slide-timeline.json <workdir>/<name>.mp4
 bash scripts/check_anchors.sh <workdir>/<name>.mp4 <workdir>/slide-timeline.json 5
 ```
 The validator must end with `ALL CHECKS PASSED`: container params, the correct slide on screen after and

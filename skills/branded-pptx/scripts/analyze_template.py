@@ -1,4 +1,8 @@
-#!/usr/bin/env python3.12
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.12"
+# dependencies = ["defusedxml"]
+# ///
 """Analyze a branded PPTX template and produce AI-readable manifests.
 
 Extracts themes, slide masters, layouts, and example slides into structured
@@ -6,7 +10,7 @@ markdown files. Includes shape dimensions, font info, text capacity estimates,
 and visual data element tracking for brand-faithful slide generation.
 
 Usage:
-    python3.12 analyze_template.py <template.pptx> [--output-dir <dir>] [--run-id]
+    uv run analyze_template.py <template.pptx> [--output-dir <dir>] [--run-id]
 
 Output (in <dir> or timestamped subfolder with --run-id):
     brand-manifest.md      - Master index with capacity reference and warnings
@@ -16,7 +20,8 @@ Output (in <dir> or timestamped subfolder with --run-id):
     slides.md              - Example slides with shape inventory and visual data flags
 
 Dependencies:
-    pip install defusedxml
+    Declared in the inline metadata above. uv fetches Python 3.12+ and defusedxml into a cached
+    environment, so nothing is installed next to the skill.
 """
 
 import argparse
