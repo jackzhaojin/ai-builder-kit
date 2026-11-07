@@ -21,8 +21,8 @@ A collection of skills, plugins, and hooks for AI coding agents, distributed thr
 | `plugins/` | Bundled skill + hook packages |
 | `.claude-plugin/marketplace.json` | Claude Code marketplace: one entry per skill (`source: ./skills/<name>`, `strict: false`), the `ai-builder-kit` bundle (`source: ./`), and the hook plugins |
 | `.agents/plugins/marketplace.json` | Codex marketplace: the `ai-builder-kit` bundle pointing at the repo root |
-| `.codex-plugin/plugin.json` | Codex manifest for the bundle. Codex finds the skills through its `"skills": "./skills/"` key |
-| `plugin.json` | The same bundle in the portable [Agent Plugins](https://agent-plugins.org) format. Neither Claude Code nor Codex reads it today; keep `name`, `version` and `description` in sync with `.codex-plugin/plugin.json` (the check script enforces it) |
+| `plugin.json` | The bundle's manifest in the portable [Agent Plugins](https://agent-plugins.org) format, with Codex's display fields under `extensions.com.openai`. Codex reads this one first (per the Codex plugin docs, checked 2026-10-25); Claude Code ignores it |
+| `.codex-plugin/plugin.json` | Codex's older manifest location, still read as a fallback. Keep `name`, `version` and `description` in sync with `plugin.json` (the check script enforces it) |
 | `scripts/check-repo.mjs` | Convention checks `claude plugin validate` does not cover (README rows, marketplace entries, frontmatter, symlinks, version bumps, manifest sync) |
 | `.github/workflows/validate.yml` | CI: check-repo, the Claude Code validator and ShellCheck on every push to `main` and every PR |
 | `local-only/` | Local testing/scratch (gitignored) |

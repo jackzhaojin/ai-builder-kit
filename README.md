@@ -81,7 +81,7 @@ Or in one step from a session (Claude Code 2.1.275 or later): `/plugin install e
 
 ### Option C: Codex and the ChatGPT desktop app
 
-The repo ships `.agents/plugins/marketplace.json` with one plugin, `ai-builder-kit`, that bundles all skills (manifest in `.codex-plugin/plugin.json`).
+The repo ships `.agents/plugins/marketplace.json` with one plugin, `ai-builder-kit`, that bundles all skills (manifest in `plugin.json`, with `.codex-plugin/plugin.json` as a fallback).
 
 ```bash
 codex plugin marketplace add jackzhaojin/ai-builder-kit
@@ -107,8 +107,8 @@ Skill plugins carry no pinned version, so Claude Code keys updates on the commit
 | `plugins/<name>/` | Plugins that add hooks (Claude Code only). Skills inside are symlinks to `skills/` |
 | `.claude-plugin/marketplace.json` | Claude Code marketplace: one entry per skill, the bundle, and the hook plugins |
 | `.agents/plugins/marketplace.json` | Codex marketplace: the bundle |
-| `.codex-plugin/plugin.json` | Codex manifest for the bundle (`"skills": "./skills/"`) |
-| `plugin.json` | The same bundle described in the portable [Agent Plugins](https://agent-plugins.org) format |
+| `plugin.json` | The bundle's manifest in the portable [Agent Plugins](https://agent-plugins.org) format, which Codex reads first |
+| `.codex-plugin/plugin.json` | Codex's older manifest location, kept as a fallback |
 | `scripts/check-repo.mjs` | Convention checks that `claude plugin validate` does not cover |
 | `.github/workflows/validate.yml` | CI: the convention checks, the Claude Code validator and ShellCheck on every push and PR |
 
