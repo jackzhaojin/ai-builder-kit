@@ -98,7 +98,7 @@ Requires ffmpeg/ffprobe (`brew install ffmpeg`), Node.js 18+, and a target web p
 1. Edit the skill. Keep `SKILL.md` under 500 lines; move detail to `references/`.
 2. Validate: `node scripts/check-repo.mjs`, `claude plugin validate skills --strict` and `claude plugin validate .claude-plugin/marketplace.json --strict`. Codex has no validator CLI; check-repo confirms the Codex and portable manifests agree. CI runs all of this plus ShellCheck.
 3. New skill: add a README.md row (alphabetical, with the Last Modified date) and a `.claude-plugin/marketplace.json` entry (copy an existing skill entry, no `version`). Changed skill: bump its Last Modified date, and if a hook plugin symlinks it, bump that plugin's `version`.
-4. Commit in Conventional Commits format with provenance footers (the `jack-git-commit` skill), push only when told.
+4. Commit in Conventional Commits format with provenance footers (the `jack-git-commit` skill), then push. This repo is public, so read the diff first.
 5. Consumers get it on their next update (see "Keeping it up to date" in README.md). Jack's laptop: run the `update-skills` skill or `../jack-dev-server-configs/local/update-skills.sh`.
 
 ## Conventions
@@ -116,4 +116,4 @@ Requires ffmpeg/ffprobe (`brew install ffmpeg`), Node.js 18+, and a target web p
 - Keep skills Codex-compatible: only `name` and `description` in frontmatter are portable, Codex ignores Claude-only keys such as `allowed-tools` and `context`, and the SKILL.md body should not depend on Claude-only tools without a plain-shell fallback
 - Python scripts in skills carry PEP 723 inline metadata (`# /// script` block) and run with `uv run <script>`; never create or commit a `.venv`, `node_modules` or `pyproject.toml` inside a skill folder. OpenCode scans every nested `SKILL.md`, and a Playwright venv once leaked three skills
 - Pin CDN imports in render templates (see `skills/excalidraw/scripts/render_template.html`); an unpinned "latest" broke rendering on 2026-09-13
-- Do not commit or push unless explicitly instructed
+- Commit and push finished work without asking. This repo is public, so read the diff for secrets and personal data first. Never force-push

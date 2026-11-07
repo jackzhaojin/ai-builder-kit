@@ -167,7 +167,7 @@
     {
       "name": "jack-git-commit",
       "source": "./skills/jack-git-commit",
-      "description": "Conventional Commits with traceable metadata footers (Goal, Step, Worker, Skill, Tools) so git log works as a queryable work ledger. Never pushes.",
+      "description": "Conventional Commits with traceable metadata footers (Goal, Step, Worker, Skill, Tools) so git log works as a queryable work ledger. Pushes when done unless the project says not to.",
       "category": "workflow",
       "tags": [
         "git",

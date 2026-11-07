@@ -1,14 +1,14 @@
 ---
 name: jack-git-commit
 description: |
-  Structured git commit skill for all agents and humans. Use when: committing code changes, the user says "commit", "/jack-git-commit", a worker completes a task and needs to commit, or any agent needs to record work in git. Generates Conventional Commit messages with traceable metadata footers (Goal, Step, Worker) so git log serves as a self-documenting work ledger. Enforces atomic commits, staged-only policy, and NEVER pushes.
+  Structured git commit skill for all agents and humans. Use when: committing code changes, the user says "commit", "/jack-git-commit", a worker completes a task and needs to commit, or any agent needs to record work in git. Generates Conventional Commit messages with traceable metadata footers (Goal, Step, Worker) so git log serves as a self-documenting work ledger. Enforces atomic commits and explicit staging, then pushes the current branch unless the project says not to.
 ---
 
 # Jack Commit
 
 Git history is the ledger. Every commit is queryable, traceable to its origin, and reviewable without external databases.
 
-**NEVER push to remote.** Only push if the human explicitly says "push" in the current message. Do not offer or suggest pushing.
+**Commit, then push.** Finished work goes to the remote on the current branch without asking, unless the project's instructions say not to. See step 7 for when to stop. **Never force-push** unless the human asks in the current message.
 
 ## Format
 
@@ -75,7 +75,7 @@ If `.gitignore` doesn't exist at all, warn and ask before proceeding — don't c
 
 ### 3. Stage
 
-- **Nothing staged?** → `git add -A` (default: commit everything)
+- **Nothing staged?** → Stage the files this work changed, by path. Other agents may share the checkout, so leave changes you didn't make alone. **Never `git add -A`.**
 - **Something already staged?** → Only commit what's staged, don't add more
 - After staging, run `git status` to show what will be committed
 
@@ -98,20 +98,7 @@ This rule exists because on 2026-04-11 a prompt log for v2.1.6 was left untracke
 
 ### 4. Check for mixed concerns
 
-Review the staged diff and group changes by logical intent. Present the analysis:
-
-```
-I see 2 separate concerns in these changes:
-
-1. docs: README rewrite + new technical highlights (README.md, docs/**)
-2. feat(skills): new jack-git-commit skill (.claude/skills/jack-git-commit/*)
-
-Split into separate commits?
-```
-
-- List each concern with its type, description, and files
-- User says no → commit as-is
-- User says yes → unstage all, then stage and commit each concern one at a time
+Review the staged diff and group changes by logical intent. If there is more than one concern, make one commit per concern, in dependency order, without asking. Only stop to ask if the split isn't clear.
 
 ### 4a. Record skills, plugins, MCP servers, and tools used
 
@@ -133,11 +120,9 @@ Add each as a footer line (`Skill:`, `Plugin:`, `MCP:`, `Tools:`). If none were 
 
 When in doubt: if the tool's *output* shaped what you wrote, record it. If it was just navigation, skip it.
 
-### 5. Generate message and present
+### 5. Generate message
 
 ```
-Proposed commit:
-
   feat(vendor): add Kimi wire protocol support
 
   Implements bidirectional streaming for Kimi agent SDK,
@@ -149,8 +134,6 @@ Proposed commit:
   Skill: jack-git-commit
   MCP: context7
   Tools: WebSearch, Bash(rg, npm test)
-
-Commit with this message?
 ```
 
 ### 6. Commit
@@ -164,20 +147,39 @@ EOF
 
 HEREDOC for multi-line. Never `--no-verify`. Hook failure → show output and stop.
 
-### 7. Confirm
+### 7. Push
+
+Push the current branch once the work is committed, without asking:
+
+```bash
+git push origin HEAD      # first push of a branch: git push -u origin HEAD
+```
+
+| Situation | Action |
+|-----------|--------|
+| Side branch | Push |
+| `main` | Push, unless the project's instructions say not to |
+| Project says not to push | Leave it local and say so |
+| Public repo | Read the diff for secrets and personal data first, then push |
+| Critical: production other people rely on, money, credentials, hard to undo | Stop and ask |
+| Still iterating live with the human | Hold the commit and push until the thread settles |
+| Remote moved | `git pull --rebase`, then push |
+| Push rejected or a hook blocks it | Show the output and stop |
+
+### 8. Confirm
 
 ```
 Committed: feat(vendor): add Kimi wire protocol support
   3 files changed, 147 insertions(+), 12 deletions(-)
-  Branch: feat-multi-vendor
+  Pushed: origin/feat-multi-vendor
 ```
 
 ## Rules
 
-1. **Never push** unless human explicitly says "push" right now
-2. **Stage smart** — nothing staged → `git add -A`; something staged → commit only that
+1. **Push by default**: follow step 7. **Never force-push** unless the human asks
+2. **Stage smart**: nothing staged → stage the paths this work changed, never `git add -A`; something staged → commit only that
 3. **Always sweep prompt logs & retros** — `ai-docs/**/prompt-log*.md`, `ai-docs/**/retro-*.md`, session records. These are provenance, not "unrelated files." Never silently exclude them.
-4. **Atomic** — one logical change per commit; flag mixed concerns
+4. **Atomic**: one logical change per commit; split mixed concerns
 5. **Respect hooks** — never `--no-verify`
 6. **Don't fabricate** — only include metadata you actually know
 7. **Always record capability provenance** — if a skill, plugin, MCP server, or notable tool/Bash command materially shaped the change, add `Skill:` / `Plugin:` / `MCP:` / `Tools:` footer lines. Never silently omit.
