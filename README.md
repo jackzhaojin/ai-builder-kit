@@ -99,6 +99,8 @@ Skill plugins carry no pinned version, so Claude Code keys updates on the commit
 | Claude Code marketplace | `/plugin update` in a session, or `claude plugin marketplace update ai-builder-kit` followed by `claude plugin update <name>@ai-builder-kit` |
 | Codex marketplace | `codex plugin marketplace upgrade ai-builder-kit`, or reinstall from the Plugins Directory in the desktop app |
 
+What changed is summed up per release in [CHANGELOG.md](CHANGELOG.md), and each release is tagged `vX.Y.Z`. The release number labels a checkpoint; it does not gate updates.
+
 ## Repo layout
 
 | Path | Purpose |
@@ -109,6 +111,7 @@ Skill plugins carry no pinned version, so Claude Code keys updates on the commit
 | `.agents/plugins/marketplace.json` | Codex marketplace: the bundle |
 | `plugin.json` | The bundle's manifest in the portable [Agent Plugins](https://agent-plugins.org) format, which Codex reads first |
 | `.codex-plugin/plugin.json` | Codex's older manifest location, kept as a fallback |
+| `CHANGELOG.md` | What changed in each release |
 | `scripts/check-repo.mjs` | Convention checks that `claude plugin validate` does not cover |
 | `.github/workflows/validate.yml` | CI: the convention checks, the Claude Code validator and ShellCheck on every push and PR |
 

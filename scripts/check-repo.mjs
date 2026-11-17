@@ -189,6 +189,10 @@ for (const key of ['name', 'version', 'description', 'license', 'homepage']) {
 }
 if (marketplace.version && marketplace.version !== codex.version)
   error(`.claude-plugin/marketplace.json version ${marketplace.version} does not match bundle version ${codex.version}`);
+// Every bundle version gets a CHANGELOG section, so a version bump cannot ship without notes.
+const changelog = existsSync(join(ROOT, 'CHANGELOG.md')) ? readFileSync(join(ROOT, 'CHANGELOG.md'), 'utf8') : '';
+const versionHeading = new RegExp(`^## ${codex.version.replaceAll('.', '\\.')} - \\d{4}-\\d{2}-\\d{2}$`, 'm');
+if (!versionHeading.test(changelog)) error(`CHANGELOG.md: no "## ${codex.version} - yyyy-mm-dd" section for the bundle version`);
 const codexMarket = readJson('.agents/plugins/marketplace.json');
 if (!codexMarket.plugins.some((p) => p.name === codex.name)) error(`.agents/plugins/marketplace.json: no entry for ${codex.name}`);
 

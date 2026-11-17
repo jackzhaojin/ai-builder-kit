@@ -23,7 +23,8 @@ A collection of skills, plugins, and hooks for AI coding agents, distributed thr
 | `.agents/plugins/marketplace.json` | Codex marketplace: the `ai-builder-kit` bundle pointing at the repo root |
 | `plugin.json` | The bundle's manifest in the portable [Agent Plugins](https://agent-plugins.org) format, with Codex's display fields under `extensions.com.openai`. Codex reads this one first (per the Codex plugin docs, checked 2026-10-25); Claude Code ignores it |
 | `.codex-plugin/plugin.json` | Codex's older manifest location, still read as a fallback. Keep `name`, `version` and `description` in sync with `plugin.json` (the check script enforces it) |
-| `scripts/check-repo.mjs` | Convention checks `claude plugin validate` does not cover (README rows, marketplace entries, frontmatter, symlinks, version bumps, manifest sync) |
+| `CHANGELOG.md` | What changed in each release, one `## X.Y.Z - yyyy-mm-dd` section per bundle version (the check script requires one for the current version) |
+| `scripts/check-repo.mjs` | Convention checks `claude plugin validate` does not cover (README rows, marketplace entries, frontmatter, symlinks, version bumps, manifest sync, changelog section) |
 | `.github/workflows/validate.yml` | CI: check-repo, the Claude Code validator and ShellCheck on every push to `main` and every PR |
 | `local-only/` | Local testing/scratch (gitignored) |
 | `local-ai-docs/` | Private AI prompt logs (gitignored) |
@@ -100,6 +101,15 @@ Requires ffmpeg/ffprobe (`brew install ffmpeg`), Node.js 18+, and a target web p
 3. New skill: add a README.md row (alphabetical, with the Last Modified date) and a `.claude-plugin/marketplace.json` entry (copy an existing skill entry, no `version`). Changed skill: bump its Last Modified date, and if a hook plugin symlinks it, bump that plugin's `version`.
 4. Commit in Conventional Commits format with provenance footers (the `jack-git-commit` skill), then push. This repo is public, so read the diff first.
 5. Consumers get it on their next update (see "Keeping it up to date" in README.md). Jack's laptop: run the `update-skills` skill or `../jack-dev-server-configs/local/update-skills.sh`.
+
+### Cutting a release
+
+Not every push is a release. Cut one when a batch of changes is worth naming, and right away for a breaking change (a `!` commit).
+
+1. Pick the number from the changes since the last tag (`git log v<last>..HEAD --oneline`): major when a skill changes behavior users have to know about, minor for a new skill or capability, patch for fixes and docs.
+2. Set it in all three places: `plugin.json`, `.codex-plugin/plugin.json` and the top-level `version` in `.claude-plugin/marketplace.json`. Never on individual skill entries.
+3. Add a `## X.Y.Z - yyyy-mm-dd` section at the top of `CHANGELOG.md`, grouped as Breaking, Added, Fixed, Changed and Repo, one bullet per skill that names it in backticks. Write it for someone who installed the skill, not for a reviewer of the code.
+4. Run `node scripts/check-repo.mjs` (it fails without the changelog section), commit as `chore(release): vX.Y.Z`, then tag and push both: `git tag -a vX.Y.Z -m "vX.Y.Z"`, `git push`, `git push origin vX.Y.Z`.
 
 ## Conventions
 
