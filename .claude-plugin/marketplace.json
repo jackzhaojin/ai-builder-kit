@@ -1,7 +1,7 @@
 {
   "name": "ai-builder-kit",
   "description": "Jack's skills for AI coding agents: diagrams, decks, demo videos, git ledger commits, conversation logging and AEM admin workflows. Every skill is installable on its own or all at once.",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "owner": {
     "name": "jackzhaojin",
     "url": "https://github.com/jackzhaojin"
